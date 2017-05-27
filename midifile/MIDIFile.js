@@ -1097,6 +1097,10 @@ MIDIFile.prototype.getContent = function() {
 MIDIFile.Header = MIDIFileHeader;
 MIDIFile.Track = MIDIFileTrack;
 
+// Hack these out too
+MIDIFile.Events = MIDIEvents;
+MIDIFile.UTF8 = UTF8;
+
 module.exports = MIDIFile;
 
 },{"./MIDIFileHeader":6,"./MIDIFileTrack":7,"midievents":1,"utf-8":4}],6:[function(require,module,exports){
