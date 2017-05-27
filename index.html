@@ -9,11 +9,11 @@
     <meta name="author" content="">
 
     <!-- Bootstrap core CSS -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap theme -->
-    <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="lib/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="lib/bootstrap/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -50,21 +50,33 @@
         <p>Select your favorite MIDI file: <input type="file" id="file" accept="audio/mid" /></p>
       </div>
 
+      <div class="well" id="step2" style="display: none;">
+        <h2>Step two</h2>
+        <p>Your song has been analyzed by our expert monkeys, and are ready to Factorify&trade; it for you. Click here to get your blueprint string:</p>
+        <p><button type="button" class="btn btn-danger" id="getbp">Do it!</button></p>
+      </div>
 
+      <div class="well" id="blueprint" style="display: none;">
+        <h2>Step three</h2>
+        <p>Copy this string into Factorio:</p>
+        <textarea  class="form-control code" rows="1" id="bpstring" wrap="soft"></textarea>
+      </div>
     </div> <!-- /container -->
-
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="bootstrap/assets/js/docs.min.js"></script>
+    <script>window.jQuery || document.write('<script src="lib/bootstrap/assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/bootstrap/assets/js/docs.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="lib/bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
 
-    <script src="midifile/MIDIFile.js"></script>
-    <script src="js/miditorio.js"></script>
+    <script src="lib/midifile/MIDIFile.js"></script>
+    <script src="lib/base64js.min.js"></script>
+    <script src="lib/pako.js"></script>
+    <script src="js/parse.js"></script>
+    <script src="js/blueprint.js"></script>
   </body>
 </html>
