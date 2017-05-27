@@ -1,4 +1,3 @@
-
 MIDIEvents = MIDIFile.Events;
 UTF8 = MIDIFile.UTF8;
 
@@ -29,6 +28,8 @@ function handleFileSelect(evt) {
 		}
 
 		reader.readAsArrayBuffer(f);
+
+		$("#step2").fadeIn().css("display","");
 	} catch (e) {
 		showError(e);
 	}
@@ -116,4 +117,4 @@ function sortMidi(events) {
 	return tracks;
 }
 
-document.getElementById("file").addEventListener("change", handleFileSelect, false);
+$("#file").change(handleFileSelect);
