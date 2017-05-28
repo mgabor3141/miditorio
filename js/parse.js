@@ -1,8 +1,24 @@
 MIDIEvents = MIDIFile.Events;
 UTF8 = MIDIFile.UTF8;
 
+var fadeoutdelay;
 function showError(e) {
-	console.log(e);
+	$("#errormsg").text(e.message);
+	$("#errorbox").css('visibility','visible').hide().fadeIn();
+	clearTimeout(fadeoutdelay);
+	fadeoutdelay = setTimeout(function(){
+		$("#errorbox").fadeOut(500, function() {
+			$(this).css({"display": "block","visibility": "hidden"});
+		});
+		//$("#errorbox").fadeOut().css("visibility","hidden")
+	}, 5000);
+}
+
+function clearError() {
+	clearTimeout(fadeoutdelay);
+	$("#errorbox").fadeOut(500, function() {
+		$(this).css({"display": "block","visibility": "hidden"});
+	});
 }
 
 if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
@@ -11,6 +27,9 @@ if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
 
 function handleFileSelect(evt) {
 	try {
+		$("#step2").hide();
+		$("#step3").hide();
+
 		if (evt.target.files.length > 1)
 			throw new Error("Multiple files selected.");
 
@@ -20,7 +39,7 @@ function handleFileSelect(evt) {
 		f = evt.target.files[0];
 
 		if (f.type != "audio/mid")
-			throw new Error("This isn't recognized as a MIDI file but instead as a(n) " + f.type);
+			throw new Error("This file isn't recognized as a MIDI file (it seems to be a(n) " + f.type + ")");
 
 		var reader = new FileReader();
 		reader.onload = function(e) {
@@ -29,6 +48,7 @@ function handleFileSelect(evt) {
 
 		reader.readAsArrayBuffer(f);
 
+		clearError();
 		$("#step2").fadeIn().css("display","");
 	} catch (e) {
 		showError(e);
@@ -47,74 +67,118 @@ function processMidi(midi) {
 	console.log(song)
 }
 
-function Instrument(time, channel, instrument) {
+function Instrument(time, instrument) {
 	this.time = time;
-	this.channel = channel;
 	this.instrument = instrument;
-	this.factorioInstrument;
+
+	this.notes = [];
+
+	this.addNote = function(id) {
+		this.notes.push(id);
+	}
+
+	this.factorioInstrument = getFactorioInstrument(instrument);
 }
 
-function Track() {
-	this.name = "";
+function Track(trackNum) {
+	this.name = "Track "+trackNum;
 	this.notes = [];
 	this.text = [];
 
-	this.addNote = function (time, channel, pitch) {
-		this.notes.push({"time": time, "channel": channel, "pitch": pitch});
+	this.addNote = function(id) {
+		this.notes.push(id);
 	}
 
-	this.addText = function (time, text) {
+	this.addText = function(time, text) {
 		this.text.push({"time": time, "text": text});
+	}
+
+	this.setName = function(name) {
+		this.name = name;
 	}
 }
 
+/*
+	Ok this is kinda tricky.
+	Note data is stored in Song.notes
+	Tracks and Instruments store the index of their respective notes within Song.notes
+	Instruments are grouped into arrays by the channel they're on 
+*/
 function Song() {
+	this.notes = [];
 	this.tracks = [];
-	this.instruments = [new Instrument(0, 9, -1)]; // Drum Track
+	this.instruments = [];
+	this.instruments[9] = [new Instrument(0, -1)]; // Drum Track
 
-	this.getTrack = function(n) {
-		if (this.tracks[n] === undefined)
-			this.tracks[n] = new Track();
+	this.addNote = function(time, channel, track, pitch, velocity) {
+		this.notes.push({"time": time, "channel": channel, "track": track, "pitch": pitch, "velocity": velocity});
 
-		return this.tracks[n];
+		if (this.tracks[track] === undefined)
+			this.tracks[track] = new Track();
+
+		this.tracks[track].addNote(this.notes.length - 1);
+
+		this.getInstrument(time, channel).addNote(this.notes.length - 1);
 	}
 
-	this.setTrackAttribute = function(n, attribute, value) {
-		if (tracks[n] === undefined)
-			this.tracks[n] = new Track();
+	this.getTrack = function(track) {
+		if (this.tracks[track] === undefined)
+			this.tracks[track] = new Track();
 
-		this.tracks[n][attribute] = value;
+		return this.tracks[track];
 	}
 
-	this.setInstrument = function(time, channel, instrument) {
-		this.instruments.push(new Instrument(time, channel, instrument));
+	this.getInstrument = function(time, channel) {
+		if (channel == 9)
+			return this.instruments[9][0];
+
+		var maximumInstrumentTime = -1;
+		var maximumInstrument;
+
+		for (i in this.instruments[channel]) {
+			var instrument = this.instruments[channel][i];
+			if (instrument.time <= time && instrument.time > maximumInstrumentTime) {
+				maximumInstrument = instrument;
+				maximumInstrumentTime = instrument.time;
+			}
+		}
+
+		return maximumInstrument;
+	}
+
+	this.addInstrumentChange = function (time, channel, instrument) {
+		if (this.instruments[channel] === undefined)
+			this.instruments[channel] = [];
+
+		this.instruments[channel].push(new Instrument(time, instrument));
 	}
 }
 
 function sortMidi(events) {
-	tracks = new Song();
+	song = new Song();
+	var channelInstruments = [];
 
 	for (i in events) {
 		var event = events[i]
 		switch (event.subtype) {
 			case MIDIEvents.EVENT_META_TRACK_NAME:
 				event.text = UTF8.getStringFromBytes(event.data, 0, event.length, true);
-				tracks.setTrackAttribute(event.track, "name", event.text);
+				song.getTrack(event.track).setName(event.text);
 				break;
 			case MIDIEvents.EVENT_META_TEXT:
 				event.text = UTF8.getStringFromBytes(event.data, 0, event.length, true);
-				tracks.getTrack(event.track).addText(event.playTime, event.text);
+				song.getTrack(event.track).addText(event.playTime, event.text);
 				break;
 			case MIDIEvents.EVENT_MIDI_PROGRAM_CHANGE:
-				tracks.setInstrument(event.playTime, event.channel, event.param1);
+				song.addInstrumentChange(event.playTime, event.channel, event.param1);
 				break;
 			case MIDIEvents.EVENT_MIDI_NOTE_ON:
-				tracks.getTrack(event.track).addNote(event.playTime, event.channel, event.param1);
+				song.addNote(event.playTime, event.channel, event.track, event.param1, event.param2);
 				break;
 		}
 	}
 
-	return tracks;
+	return song;
 }
 
 $("#file").change(handleFileSelect);

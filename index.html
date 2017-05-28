@@ -21,6 +21,17 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-100066474-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
     <link href="css/style.css" rel="stylesheet">
     <!--<link rel="icon" href="favicon.ico">-->
     <title>MIDITorio</title>
@@ -45,6 +56,10 @@
     </nav>
 
     <div class="container" role="main">
+      <div class="alert alert-danger" role="alert" id="errorbox" style="visibility: hidden;">
+        <strong>Error: </strong> <span id="errormsg"></span>
+      </div>
+
       <div class="well">
         <h2>Step one</h2>
         <p>Select your favorite MIDI file: <input type="file" id="file" accept="audio/mid" /></p>
@@ -52,7 +67,7 @@
 
       <div class="well" id="step2" style="display: none;">
         <h2>Step two</h2>
-        <p>Your song has been analyzed by our expert monkeys, and are ready to Factorify&trade; it for you. Click here to get your blueprint string:</p>
+        <p>Your song has been analyzed by our domesticated biter army, and they are ready to Factorify&trade; it for you. Click here to get your blueprint string:</p>
         <p><button type="button" class="btn btn-danger" id="getbp">Do it!</button></p>
       </div>
 
@@ -76,6 +91,7 @@
     <script src="lib/midifile/MIDIFile.js"></script>
     <script src="lib/base64js.min.js"></script>
     <script src="lib/pako.js"></script>
+    <script src="js/data.js"></script>
     <script src="js/parse.js"></script>
     <script src="js/blueprint.js"></script>
   </body>
