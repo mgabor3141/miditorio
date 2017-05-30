@@ -15,7 +15,7 @@ function placeSubstations(entities, substationHeight, substations) {
 	entities.push({
 		"entity_number": entities.length + 1,
 		"name":	"substation",
-		"position":{"x":5.5,"y":-6.5}
+		"position": {"x": 5.5, "y": -6.5}
 	});
 
 	for (var x = 0; x < substationHeight; x++) {
@@ -23,7 +23,7 @@ function placeSubstations(entities, substationHeight, substations) {
 			entities.push({
 				"entity_number": entities.length + 1,
 				"name": "substation",
-				"position": {"x": roundToHalf(5.5 + x * 18), "y":roundToHalf(11.5 + y * 18)}
+				"position": {"x": roundToHalf(5.5 + x * 18), "y": roundToHalf(11.5 + y * 18)}
 			});
 		}
 	}
@@ -46,7 +46,7 @@ function getSignals(data) {
 	var index = 13;
 	for (i in data.signals) {
 		if (data.signals[i] == 0) continue;
-		signals.push({"signal":factorio_signals[i],"count":data.signals[i],"index":index});
+		signals.push({"signal": factorio_signals[i], "count": data.signals[i], "index": index});
 		index++;
 	}
 
@@ -59,15 +59,15 @@ function addMemoryCell(entities, position, data) {
 		connections = {
 			"1": {
 				"red": [
-					{"entity_id":18,"circuit_id":2}
+					{"entity_id": 18, "circuit_id": 2}
 				],
 				"green": [
-					{"entity_id":21}
+					{"entity_id": 21}
 				]
 			},
 			"2": {
 				"green": [
-					{"entity_id":16,"circuit_id":1}
+					{"entity_id": 16, "circuit_id": 1}
 				]
 			}
 		};
@@ -75,15 +75,15 @@ function addMemoryCell(entities, position, data) {
 		connections = {
 			"1": {
 				"red": [
-					{"entity_id":entities.length-1,"circuit_id":1}
+					{"entity_id": entities.length - 1, "circuit_id": 1}
 				],
 				"green": [
-					{"entity_id":entities.length+2}
+					{"entity_id": entities.length + 2}
 				]
 			},
 			"2": {
 				"green": [
-					{"entity_id":entities.length-1,"circuit_id":2}
+					{"entity_id": entities.length - 1 , "circuit_id": 2}
 				]
 			}
 		};
@@ -96,14 +96,14 @@ function addMemoryCell(entities, position, data) {
 		"direction": 2,
 		"control_behavior": {
 			"decider_conditions": {
-				"first_signal": {"type":"virtual","name":"signal-white"},
+				"first_signal": {"type": "virtual", "name": "signal-white"},
 				"constant": data.num,
 				"comparator": "=",
-				"output_signal": {"type":"virtual","name":"signal-everything"},
-				"copy_count_from_input":true
+				"output_signal": {"type": "virtual", "name": "signal-everything"},
+				"copy_count_from_input": true
 			}
 		},
-		"connections":connections
+		"connections": connections
 	});
 
 	position2 = {"x": roundToHalf(position.x-1.5), "y": position.y};
@@ -114,11 +114,11 @@ function addMemoryCell(entities, position, data) {
 		"name": "constant-combinator",
 		"position": position2,
 		"direction": 2,
-		"control_behavior": {"filters":signals},
+		"control_behavior": {"filters": signals},
 		"connections": {
 			"1": {
 				"green": [
-					{"entity_id":entities.length,"circuit_id":1}
+					{"entity_id": entities.length, "circuit_id": 1}
 				]
 			}
 		}
@@ -141,7 +141,7 @@ function getBlueprint() {
 
 	var entities = placeSubstations(entities, substations, substationHeight);
 
-	var position = {"x":-2.5,"y":3};
+	var position = {"x": -2.5, "y": 3};
 
 	// Fill memory
 	// signals.delays.length
@@ -174,7 +174,7 @@ function getBlueprint() {
 
 	bp = {
 		"blueprint": {
-			"icons": [{"signal":{"type":"item","name":"programmable-speaker"},"index":1}],
+			"icons": [{"signal": {"type": "item", "name": "programmable-speaker"}, "index": 1}],
 			"entities": entities,
 			"item": "blueprint",
 			"label": filename.slice(0, -4),
@@ -185,7 +185,7 @@ function getBlueprint() {
 	bpstring = encode(bp);
 
 	$("#bpstring").text(bpstring);
-	$("#blueprint").fadeIn().css("display","");
+	$("#blueprint").fadeIn().css("display", "");
 }
 
 $("#getbp").click(getBlueprint);

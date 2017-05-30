@@ -4,20 +4,19 @@ UTF8 = MIDIFile.UTF8;
 var fadeoutdelay;
 function showError(e) {
 	$("#errormsg").text(e.message);
-	$("#errorbox").css('visibility','visible').hide().fadeIn();
+	$("#errorbox").css('visibility', 'visible').hide().fadeIn();
 	clearTimeout(fadeoutdelay);
 	fadeoutdelay = setTimeout(function(){
 		$("#errorbox").fadeOut(500, function() {
-			$(this).css({"display": "block","visibility": "hidden"});
+			$(this).css({"display": "block", "visibility": "hidden"});
 		});
-		//$("#errorbox").fadeOut().css("visibility","hidden")
 	}, 5000);
 }
 
 function clearError() {
 	clearTimeout(fadeoutdelay);
 	$("#errorbox").fadeOut(500, function() {
-		$(this).css({"display": "block","visibility": "hidden"});
+		$(this).css({"display": "block", "visibility": "hidden"});
 	});
 }
 
@@ -67,7 +66,7 @@ function processMidi(midi) {
 	console.log(song);
 
 	clearError();
-	$("#step2").fadeIn().css("display","");
+	$("#step2").fadeIn().css("display", "");
 }
 
 function Instrument(time, instrument) {
