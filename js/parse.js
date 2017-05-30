@@ -25,6 +25,7 @@ if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
 	showError("The File APIs are not fully supported in this browser. Please try a different browser.");
 }
 
+var filename;
 function handleFileSelect(evt) {
 	try {
 		$("#step2").hide();
@@ -41,6 +42,7 @@ function handleFileSelect(evt) {
 		if (f.type != "audio/mid")
 			throw new Error("This file isn't recognized as a MIDI file (it seems to be a(n) " + f.type + ")");
 
+		filename = f.name;
 		console.log("Reading MIDI file: " + f.name);
 
 		var reader = new FileReader();
@@ -186,7 +188,9 @@ function Song() {
 					if (factorioInstruments[factorioInstrument.name][factorioTick] === undefined)
 						factorioInstruments[factorioInstrument.name][factorioTick] = [];
 
-					factorioInstruments[factorioInstrument.name][factorioTick].push(factorioInstrument.convert(note.pitch));
+					factorioInstruments[factorioInstrument.name][factorioTick].push(
+						factorioInstrument.convert(note.pitch)
+					);
 				}
 			}
 
