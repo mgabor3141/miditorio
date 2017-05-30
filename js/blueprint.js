@@ -12,11 +12,19 @@ function roundToHalf(x) {
 
 function placeSubstations(entities, substationHeight, substations) {
 	// Single one at the top
-	entities.push({"entity_number":entities.length+1,"name":"substation","position":{"x":5.5,"y":-6.5}});
+	entities.push({
+		"entity_number": entities.length + 1,
+		"name":	"substation",
+		"position":{"x":5.5,"y":-6.5}
+	});
 
 	for (var x = 0; x < substationHeight; x++) {
 		for (var y = 0; y < substations / substationHeight; y++) {
-			entities.push({"entity_number":entities.length+1,"name":"substation","position":{"x": roundToHalf(5.5 + x * 18),"y":roundToHalf(11.5 + y * 18)}});
+			entities.push({
+				"entity_number": entities.length + 1,
+				"name": "substation",
+				"position": {"x": roundToHalf(5.5 + x * 18), "y":roundToHalf(11.5 + y * 18)}
+			});
 		}
 	}
 
@@ -24,7 +32,13 @@ function placeSubstations(entities, substationHeight, substations) {
 }
 
 function getSignals(data) {
-	var signals = [{"signal":{"type":"virtual","name":"signal-0"},"count":data.delays[0],"index":1},{"signal":{"type":"virtual","name":"signal-1"},"count":data.delays[1],"index":2},{"signal":{"type":"virtual","name":"signal-2"},"count":data.delays[2],"index":3},{"signal":{"type":"virtual","name":"signal-3"},"count":data.delays[3],"index":4},{"signal":{"type":"virtual","name":"signal-4"},"count":data.delays[4],"index":5}];
+	var signals = [
+		{"signal": {"type": "virtual", "name": "signal-0"}, "count": data.delays[0], "index": 1},
+		{"signal": {"type": "virtual", "name": "signal-1"}, "count": data.delays[1], "index": 2},
+		{"signal": {"type": "virtual", "name": "signal-2"}, "count": data.delays[2], "index": 3},
+		{"signal": {"type": "virtual", "name": "signal-3"}, "count": data.delays[3], "index": 4},
+		{"signal": {"type": "virtual", "name": "signal-4"}, "count": data.delays[4], "index": 5}
+	];
 
 	if (data.signals.length > 13)
 		throw new Error("Too many signals");
@@ -39,24 +53,76 @@ function getSignals(data) {
 	return signals;
 }
 
-function addFirstMemoryCell(entities, position, data) {
-	entities.push({"entity_number":entities.length+1,"name":"decider-combinator","position":position,"direction":2,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-white"},"constant":data.num,"comparator":"=","output_signal":{"type":"virtual","name":"signal-everything"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":18,"circuit_id":2}],"green":[{"entity_id":21}]},"2":{"green":[{"entity_id":16,"circuit_id":1}]}}})
-	position2 = {"x": roundToHalf(position.x-1.5), "y": position.y};
-	var signals = getSignals(data);
-	entities.push({"entity_number":entities.length+1,"name":"constant-combinator","position":position2,"direction":2,"control_behavior":{"filters":signals},"connections":{"1":{"green":[{"entity_id":20,"circuit_id":1}]}}});
-
-	return entities;
-}
-
 function addMemoryCell(entities, position, data) {
-	if (data.num == 0)
-		return addFirstMemoryCell(entities, position, data);
+	var connections;
+	if (data.num == 0) {
+		connections = {
+			"1": {
+				"red": [
+					{"entity_id":18,"circuit_id":2}
+				],
+				"green": [
+					{"entity_id":21}
+				]
+			},
+			"2": {
+				"green": [
+					{"entity_id":16,"circuit_id":1}
+				]
+			}
+		};
+	} else {
+		connections = {
+			"1": {
+				"red": [
+					{"entity_id":entities.length-1,"circuit_id":1}
+				],
+				"green": [
+					{"entity_id":entities.length+2}
+				]
+			},
+			"2": {
+				"green": [
+					{"entity_id":entities.length-1,"circuit_id":2}
+				]
+			}
+		};
+	}
 
-	entities.push({"entity_number":entities.length+1,"name":"decider-combinator","position":position,"direction":2,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-white"},"constant":data.num,"comparator":"=","output_signal":{"type":"virtual","name":"signal-everything"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":entities.length-1,"circuit_id":1}],"green":[{"entity_id":entities.length+2}]},"2":{"green":[{"entity_id":entities.length-1,"circuit_id":2}]}}})
+	entities.push({
+		"entity_number": entities.length + 1,
+		"name": "decider-combinator",
+		"position": position,
+		"direction": 2,
+		"control_behavior": {
+			"decider_conditions": {
+				"first_signal": {"type":"virtual","name":"signal-white"},
+				"constant": data.num,
+				"comparator": "=",
+				"output_signal": {"type":"virtual","name":"signal-everything"},
+				"copy_count_from_input":true
+			}
+		},
+		"connections":connections
+	});
+
 	position2 = {"x": roundToHalf(position.x-1.5), "y": position.y};
 
 	var signals = getSignals(data);
-	entities.push({"entity_number":entities.length+1,"name":"constant-combinator","position":position2,"direction":2,"control_behavior":{"filters":signals},"connections":{"1":{"green":[{"entity_id":entities.length,"circuit_id":1}]}}});
+	entities.push({
+		"entity_number": entities.length + 1,
+		"name": "constant-combinator",
+		"position": position2,
+		"direction": 2,
+		"control_behavior": {"filters":signals},
+		"connections": {
+			"1": {
+				"green": [
+					{"entity_id":entities.length,"circuit_id":1}
+				]
+			}
+		}
+	});
 
 	return entities;
 }
@@ -106,8 +172,15 @@ function getBlueprint() {
 	console.log(entities);
 
 
-	label = "MIDI File Name";
-	bp = {"blueprint": {"icons": [{"signal":{"type":"item","name":"programmable-speaker"},"index":1}], "entities": entities, "item": "blueprint", "label": label, "version": 64425558017}};
+	bp = {
+		"blueprint": {
+			"icons": [{"signal":{"type":"item","name":"programmable-speaker"},"index":1}],
+			"entities": entities,
+			"item": "blueprint",
+			"label": filename.slice(0, -4),
+			"version": 64425558017
+		}
+	};
 
 	bpstring = encode(bp);
 
