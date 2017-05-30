@@ -28,7 +28,7 @@ if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
 function handleFileSelect(evt) {
 	try {
 		$("#step2").hide();
-		$("#step3").hide();
+		$("#blueprint").hide();
 
 		if (evt.target.files.length > 1)
 			throw new Error("Multiple files selected.");
@@ -182,7 +182,7 @@ function Song() {
 				for (var note_i in instrument.notes) {
 					var note = this.notes[instrument.notes[note_i]];
 
-					var factorioTick = Math.round(note.time * 0.06);
+					var factorioTick = Math.round(note.time * 0.06) + 1;
 					if (factorioInstruments[factorioInstrument.name][factorioTick] === undefined)
 						factorioInstruments[factorioInstrument.name][factorioTick] = [];
 
@@ -202,7 +202,7 @@ function Song() {
 			for (delay in instrument) {
 				var chord = instrument[delay];
 
-				delays.push(delay);
+				delays.push(parseInt(delay));
 
 				for (i in chord) {
 					i = parseInt(i);
