@@ -1,6 +1,7 @@
 // Factorio instruments
 
-function FactorioInstrument(base, range_octaves) {
+function FactorioInstrument(name, base, range_octaves) {
+	this.name = name;
 	this.base = base;
 	this.range = range_octaves*12;
 
@@ -15,18 +16,18 @@ function FactorioInstrument(base, range_octaves) {
 }
 
 var factorio_instrument = {
-	"Piano":			new FactorioInstrument(40, 4),
-	"Bass":				new FactorioInstrument(28, 3),
-	"Lead":				new FactorioInstrument(28, 3),
-	"Saw":				new FactorioInstrument(28, 3),
-	"Square":			new FactorioInstrument(28, 3),
-	"Celesta":			new FactorioInstrument(64, 3),
-	"Vibraphone":		new FactorioInstrument(52, 3),
-	"Plucked":			new FactorioInstrument(52, 3),
-	"SteelDrum":		new FactorioInstrument(40, 3),
-	"ReverseCymbal":	new FactorioInstrument(),
-	"DrumKit":			new FactorioInstrument(),
-	"Exclude":			new FactorioInstrument()
+	"Piano":			new FactorioInstrument("Piano",			40, 4),
+	"Bass":				new FactorioInstrument("Bass",			28, 3),
+	"Lead":				new FactorioInstrument("Lead",			28, 3),
+	"Saw":				new FactorioInstrument("Saw",			28, 3),
+	"Square":			new FactorioInstrument("Square",		28, 3),
+	"Celesta":			new FactorioInstrument("Celesta",		64, 3),
+	"Vibraphone":		new FactorioInstrument("Vibraphone",	52, 3),
+	"Plucked":			new FactorioInstrument("Plucked",		52, 3),
+	"SteelDrum":		new FactorioInstrument("SteelDrum",		40, 3),
+	"ReverseCymbal":	new FactorioInstrument("ReverseCymbal"),
+	"DrumKit":			new FactorioInstrument("DrumKit"),
+	"Exclude":			new FactorioInstrument("Exclude")
 };
 
 factorio_instrument["ReverseCymbal"].convert = 13;
@@ -307,3 +308,32 @@ var midi_percussion = {
 	80: "Mute Triangle",
 	81: "Open Triangle"
 };
+
+var factorio_signals = [
+	"signal-A",
+	"signal-B",
+	"signal-C",
+	"signal-D",
+	"signal-E",
+	"signal-F",
+	"signal-G",
+	"signal-H",
+	"signal-I",
+	"signal-J",
+	"signal-K",
+	"signal-L",
+	"signal-M",
+	"signal-N",
+	"signal-O",
+	"signal-P",
+	"signal-Q",
+	"signal-R",
+	"signal-S",
+	"signal-T",
+	"signal-U",
+	"signal-V",
+	"signal-W",
+	"signal-X",
+	"signal-Y",
+	"signal-Z"
+];
