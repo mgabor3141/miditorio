@@ -187,9 +187,13 @@ function Song() {
 					if (factorioInstruments[factorioInstrument.name][factorioTick] === undefined)
 						factorioInstruments[factorioInstrument.name][factorioTick] = [];
 
-					factorioInstruments[factorioInstrument.name][factorioTick].push(
-						factorioInstrument.convert(note.pitch)
-					);
+					if (factorioInstrument.checkRange(note.pitch)) {
+						factorioInstruments[factorioInstrument.name][factorioTick].push(
+							factorioInstrument.convert(note.pitch)
+						);
+					} else {
+						console.log("Note outside range of " + factorioInstrument.name + " at " + factorioTick);
+					}
 				}
 			}
 
@@ -211,7 +215,7 @@ function Song() {
 					i = parseInt(i);
 					if (factorioSignals[signalsUsed + i] === undefined) {
 						factorioSignals[signalsUsed + i] = [];
-						signalInstruments.push(instrument_i);
+						signalInstruments.push(factorio_instrument[instrument_i].id);
 					}
 
 					factorioSignals[signalsUsed + i][delay] = chord[i];

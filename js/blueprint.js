@@ -18,8 +18,10 @@ function placeSubstations(entities, substationHeight, substations) {
 		"position": {"x": 5.5, "y": -6.5}
 	});
 
-	for (var x = 0; x < substationHeight; x++) {
-		for (var y = 0; y < substations / substationHeight; y++) {
+	console.log("Substation height: " + substationHeight);
+
+	for (var y = 0; y < substationHeight; y++) {
+		for (var x = 0; x < substations / substationHeight; x++) {
 			entities.push({
 				"entity_number": entities.length + 1,
 				"name": "substation",
@@ -27,10 +29,65 @@ function placeSubstations(entities, substationHeight, substations) {
 			});
 		}
 	}
-
-	return entities;
 }
 
+function placeSpeakers(entities, signalInstruments) {
+	var position = {"x": 5, "y": -4};
+	var rowLeader = entities.length + 1;
+
+	for (i in signalInstruments) {
+		var connections;
+		if (position.x == 5) {
+			if (position.y == -4) {
+				connections = {"1": {"green": [{"entity_id": 6, "circuit_id": 2}]}};
+			} else {
+				connections = {"1": {"green": [{"entity_id": rowLeader}]}};
+				rowLeader = entities.length + 1;
+			}
+		} else {
+			connections = {"1": {"green": [{"entity_id": entities.length}]}};
+		}
+
+		entities.push({
+			"entity_number": entities.length + 1,
+			"name": "programmable-speaker",
+			"position": {"x": position.x, "y": position.y},
+			"control_behavior": {
+				"circuit_condition": {
+					"first_signal": factorio_signals[i],
+					"constant": 0,
+					"comparator": ">"
+				},
+				"circuit_parameters": {
+					"signal_value_is_pitch": true,
+					"instrument_id": signalInstruments[i],
+					"note_id": 0
+				}
+			},
+			"connections": connections,
+			"parameters": {
+				"playback_volume": 1,
+				"playback_globally": true,
+				"allow_polyphony": true
+			},
+			"alert_parameters": {
+				"show_alert": false,
+				"show_on_map": true,
+				"alert_message": "MIDItorio.com"
+			}
+		});
+
+		if (position.x < 14) {
+			position.x++;
+		} else {
+			position.x = 5;
+			position.y++;
+		}
+
+	}
+}
+
+var maxsignals = 0;
 function getSignals(data) {
 	var signals = [
 		{"signal": {"type": "virtual", "name": "signal-0"}, "count": data.delays[0], "index": 1},
@@ -40,21 +97,24 @@ function getSignals(data) {
 		{"signal": {"type": "virtual", "name": "signal-4"}, "count": data.delays[4], "index": 5}
 	];
 
-	if (data.signals.length > 13)
-		throw new Error("Too many signals");
-
-	var index = 13;
+	var index = 6;
 	for (i in data.signals) {
 		if (data.signals[i] == 0) continue;
 		signals.push({"signal": factorio_signals[i], "count": data.signals[i], "index": index});
 		index++;
+		if (index > 18) {
+			console.log("Not enough signals: " + data.signals.length + " needed");
+			break;
+		}
 	}
 
 	return signals;
 }
 
+var columnHeadEntityId;
 function addMemoryCell(entities, position, data) {
 	var connections;
+
 	if (data.num == 0) {
 		connections = {
 			"1": {
@@ -71,6 +131,26 @@ function addMemoryCell(entities, position, data) {
 				]
 			}
 		};
+
+		columnHeadEntityId = entities.length + 1;
+	} else if (position.y == 3) {
+		connections = {
+			"1": {
+				"red": [
+					{"entity_id": columnHeadEntityId, "circuit_id": 1}
+				],
+				"green": [
+					{"entity_id": entities.length + 2}
+				]
+			},
+			"2": {
+				"green": [
+					{"entity_id": columnHeadEntityId, "circuit_id": 2}
+				]
+			}
+		};
+
+		columnHeadEntityId = entities.length + 1;
 	} else {
 		connections = {
 			"1": {
@@ -83,7 +163,7 @@ function addMemoryCell(entities, position, data) {
 			},
 			"2": {
 				"green": [
-					{"entity_id": entities.length - 1 , "circuit_id": 2}
+					{"entity_id": entities.length - 1, "circuit_id": 2}
 				]
 			}
 		};
@@ -123,8 +203,6 @@ function addMemoryCell(entities, position, data) {
 			}
 		}
 	});
-
-	return entities;
 }
 
 var str, obj;
@@ -134,18 +212,21 @@ function getBlueprint() {
 	console.log(signals);
 
 	var substations = Math.ceil(signals.delays.length / 5 / 106);
-	var substationHeight = Math.sqrt(substations) - 1;
+	var substationHeight = Math.floor(Math.sqrt(substations));
 
 	// Load decoder
-	var entities = decoder_entities;
+	var entities = JSON.parse(JSON.stringify(decoder_entities))
 
-	var entities = placeSubstations(entities, substations, substationHeight);
+	// Place substations
+	placeSubstations(entities, substationHeight, substations);
+
+	// Place speakers
+	placeSpeakers(entities, signals.signalInstruments);
 
 	var position = {"x": -2.5, "y": 3};
 
 	// Fill memory
-	// signals.delays.length
-	for (var i = 0; i < 16; i += 5) {
+	for (var i = 0; i < signals.delays.length; i += 5) {
 		var data = {};
 		data.delays = [];
 		data.signals = [];
@@ -153,6 +234,9 @@ function getBlueprint() {
 
 		for (var j = 0; j < 5; j++) {
 			data.delays[j] = signals.delays[i + j];
+
+			if (data.delays[j] === undefined)
+				data.delays[j] = 0;
 
 			for (var k = 0; k < signals.factorioSignals.length; k++) {
 				if (signals.factorioSignals[k][data.delays[j]] !== undefined) {
@@ -164,13 +248,19 @@ function getBlueprint() {
 			}
 		}
 
-		entities = addMemoryCell(entities, {"x": position.x, "y": position.y}, data);
+		addMemoryCell(entities, {"x": position.x, "y": position.y}, data);
 
-		position.y += 1;
+		if (position.y == 3 + 18 * substationHeight - 1) {
+			position.x += 3;
+			position.y = 3;
+		} else if (Math.round(position.x + 2.5) % 18 == 9 && (position.y - 3) % 18 == 7) {
+			position.y += 3;
+		} else {
+			position.y += 1;
+		}
 	}
 
 	console.log(entities);
-
 
 	bp = {
 		"blueprint": {

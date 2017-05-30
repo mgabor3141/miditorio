@@ -1,7 +1,8 @@
 // Factorio instruments
 
-function FactorioInstrument(name, base, range_octaves) {
+function FactorioInstrument(name, id, base, range_octaves) {
 	this.name = name;
+	this.id = id;
 	this.base = base;
 	this.range = range_octaves*12;
 
@@ -16,36 +17,43 @@ function FactorioInstrument(name, base, range_octaves) {
 }
 
 var factorio_instrument = {
-	"Piano":			new FactorioInstrument("Piano",			40, 4),
-	"Bass":				new FactorioInstrument("Bass",			28, 3),
-	"Lead":				new FactorioInstrument("Lead",			28, 3),
-	"Saw":				new FactorioInstrument("Saw",			28, 3),
-	"Square":			new FactorioInstrument("Square",		28, 3),
-	"Celesta":			new FactorioInstrument("Celesta",		64, 3),
-	"Vibraphone":		new FactorioInstrument("Vibraphone",	52, 3),
-	"Plucked":			new FactorioInstrument("Plucked",		52, 3),
-	"SteelDrum":		new FactorioInstrument("SteelDrum",		40, 3),
-	"ReverseCymbal":	new FactorioInstrument("ReverseCymbal"),
-	"DrumKit":			new FactorioInstrument("DrumKit"),
-	"Exclude":			new FactorioInstrument("Exclude")
+	"Piano":			new FactorioInstrument("Piano",			2,  40, 4),
+	"Bass":				new FactorioInstrument("Bass",			3,  28, 3),
+	"Lead":				new FactorioInstrument("Lead",			4,  28, 3),
+	"Saw":				new FactorioInstrument("Saw",			5,  28, 3),
+	"Square":			new FactorioInstrument("Square",		6,  28, 3),
+	"Celesta":			new FactorioInstrument("Celesta",		7,  64, 3),
+	"Vibraphone":		new FactorioInstrument("Vibraphone",	8,  52, 3),
+	"Plucked":			new FactorioInstrument("Plucked",		9,  52, 3),
+	"SteelDrum":		new FactorioInstrument("SteelDrum",		10, 40, 3),
+	"ReverseCymbal":	new FactorioInstrument("ReverseCymbal",	1),
+	"DrumKit":			new FactorioInstrument("DrumKit",		1),
+	"Exclude":			new FactorioInstrument("Exclude", -1)
 };
 
-factorio_instrument["ReverseCymbal"].convert = 13;
-factorio_instrument["ReverseCymbal"].checkRange = true;
+factorio_instrument["ReverseCymbal"].convert = function (note) { return 13; };
+factorio_instrument["ReverseCymbal"].checkRange = function (note) { return true; };
 
 factorio_instrument["DrumKit"].convert = function(note) {
-	return drumkit_map[note] === undefined ? 0 : drumkit_map[note];
+	if (drumkit_map[note] === undefined) {
+		console.log("GM DrumKit " + note + " not found.");
+		return 0;
+	} else {
+		return drumkit_map[note];
+	}
 }
-factorio_instrument["DrumKit"].checkRange = true;
+factorio_instrument["DrumKit"].checkRange = function (note) { return true; };
 
-factorio_instrument["Exclude"].convert = 0;
-factorio_instrument["Exclude"].checkRange = true;
+factorio_instrument["Exclude"].convert = function (note) { return 0; };
+factorio_instrument["Exclude"].checkRange = function (note) { return true; };
 
 function getFactorioInstrument(programcode) {
 	programcode++;
 	factorioInstrumentName = "Exclude";
 
-	if (programcode <= 8) {					// Piano
+	if (programcode == 0) {					// Drumkit
+		factorioInstrumentName = "DrumKit";
+	} else if (programcode <= 8) {			// Piano
 		factorioInstrumentName = "Piano";
 	} else if (programcode <= 16) {			// Chromatic Percussion
 		if (programcode == 9)
@@ -542,21 +550,21 @@ var factorio_signals = [
 var decoder_entities = [
 	{"entity_number":1,"name":"constant-combinator","position":{"x":-4,"y":-4},"direction":2,"control_behavior":{"filters":[{"signal":{"type":"virtual","name":"signal-grey"},"count":-1,"index":1}]},"connections":{"1":{"red":[{"entity_id":3,"circuit_id":2}]}}},
 	{"entity_number":2,"name":"arithmetic-combinator","position":{"x":-2.5,"y":-4},"direction":2,"control_behavior":{"arithmetic_conditions":{"first_signal":{"type":"virtual","name":"signal-each"},"constant":0,"operation":"OR","output_signal":{"type":"virtual","name":"signal-each"}}},"connections":{"1":{"green":[{"entity_id":3,"circuit_id":1}]},"2":{"green":[{"entity_id":5,"circuit_id":1}]}}},
-	{"entity_number":3,"name":"decider-combinator","position":{"x":-2.5,"y":-3},"direction":2,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-blue"},"second_signal":{"type":"virtual","name":"signal-0"},"comparator":"=","output_signal":{"type":"virtual","name":"signal-grey"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":4}],"green":[{"entity_id":2,"circuit_id":1},{"entity_id":8,"circuit_id":1}]},"2":{"red":[{"entity_id":1},{"entity_id":5,"circuit_id":1},{"entity_id":8,"circuit_id":2}]}}},
+	{"entity_number":3,"name":"decider-combinator","position":{"x":-2.5,"y":-3},"direction":2,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-green"},"second_signal":{"type":"virtual","name":"signal-0"},"comparator":"=","output_signal":{"type":"virtual","name":"signal-grey"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":4}],"green":[{"entity_id":2,"circuit_id":1},{"entity_id":8,"circuit_id":1}]},"2":{"red":[{"entity_id":1},{"entity_id":5,"circuit_id":1},{"entity_id":8,"circuit_id":2}]}}},
 	{"entity_number":4,"name":"constant-combinator","position":{"x":-4,"y":-3},"direction":2,"control_behavior":{"filters":[{"signal":{"type":"virtual","name":"signal-grey"},"count":1,"index":1}]},"connections":{"1":{"red":[{"entity_id":3,"circuit_id":1}]}}},
 	{"entity_number":5,"name":"arithmetic-combinator","position":{"x":-0.5,"y":-4},"direction":2,"control_behavior":{"arithmetic_conditions":{"first_signal":{"type":"virtual","name":"signal-each"},"second_signal":{"type":"virtual","name":"signal-grey"},"operation":">>","output_signal":{"type":"virtual","name":"signal-each"}}},"connections":{"1":{"red":[{"entity_id":3,"circuit_id":2}],"green":[{"entity_id":2,"circuit_id":2}]},"2":{"red":[{"entity_id":6,"circuit_id":1}]}}},
 	{"entity_number":6,"name":"arithmetic-combinator","position":{"x":1.5,"y":-4},"direction":2,"control_behavior":{"arithmetic_conditions":{"first_signal":{"type":"virtual","name":"signal-each"},"constant":63,"operation":"AND","output_signal":{"type":"virtual","name":"signal-each"}}},"connections":{"1":{"red":[{"entity_id":5,"circuit_id":2}]}}},
 	{"entity_number":7,"name":"constant-combinator","position":{"x":-4,"y":-2},"direction":2,"control_behavior":{"filters":[{"signal":{"type":"virtual","name":"signal-grey"},"count":7,"index":1}]},"connections":{"1":{"red":[{"entity_id":8,"circuit_id":1}]}}},
-	{"entity_number":8,"name":"decider-combinator","position":{"x":-2.5,"y":-2},"direction":2,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-blue"},"second_signal":{"type":"virtual","name":"signal-1"},"comparator":"=","output_signal":{"type":"virtual","name":"signal-grey"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":7}],"green":[{"entity_id":3,"circuit_id":1},{"entity_id":10,"circuit_id":1}]},"2":{"red":[{"entity_id":3,"circuit_id":2},{"entity_id":10,"circuit_id":2}]}}},
+	{"entity_number":8,"name":"decider-combinator","position":{"x":-2.5,"y":-2},"direction":2,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-green"},"second_signal":{"type":"virtual","name":"signal-1"},"comparator":"=","output_signal":{"type":"virtual","name":"signal-grey"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":7}],"green":[{"entity_id":3,"circuit_id":1},{"entity_id":10,"circuit_id":1}]},"2":{"red":[{"entity_id":3,"circuit_id":2},{"entity_id":10,"circuit_id":2}]}}},
 	{"entity_number":9,"name":"constant-combinator","position":{"x":-4,"y":-1},"direction":2,"control_behavior":{"filters":[{"signal":{"type":"virtual","name":"signal-grey"},"count":13,"index":1}]},"connections":{"1":{"red":[{"entity_id":10,"circuit_id":1}]}}},
-	{"entity_number":10,"name":"decider-combinator","position":{"x":-2.5,"y":-1},"direction":2,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-blue"},"second_signal":{"type":"virtual","name":"signal-2"},"comparator":"=","output_signal":{"type":"virtual","name":"signal-grey"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":9}],"green":[{"entity_id":8,"circuit_id":1},{"entity_id":15,"circuit_id":1}]},"2":{"red":[{"entity_id":8,"circuit_id":2},{"entity_id":15,"circuit_id":2}]}}},
-	{"entity_number":11,"name":"decider-combinator","position":{"x":0.5,"y":-1},"direction":6,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-black"},"constant":0,"comparator":"=","output_signal":{"type":"virtual","name":"signal-everything"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":11,"circuit_id":2}],"green":[{"entity_id":13},{"entity_id":18,"circuit_id":1}]},"2":{"red":[{"entity_id":11,"circuit_id":1},{"entity_id":18,"circuit_id":2}]}}},
-	{"entity_number":12,"name":"constant-combinator","position":{"x":3,"y":-2},"direction":6,"control_behavior":{"filters":[{"signal":{"type":"virtual","name":"signal-black"},"count":1,"index":1}],"is_on":false},"connections":{"1":{"green":[{"entity_id":13}]}}},
-	{"entity_number":13,"name":"constant-combinator","position":{"x":3,"y":-1},"direction":6,"control_behavior":{"filters":[{"signal":{"type":"virtual","name":"signal-blue"},"count":1,"index":1}],"is_on":false},"connections":{"1":{"green":[{"entity_id":12},{"entity_id":11,"circuit_id":1}]}}},
+	{"entity_number":10,"name":"decider-combinator","position":{"x":-2.5,"y":-1},"direction":2,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-green"},"second_signal":{"type":"virtual","name":"signal-2"},"comparator":"=","output_signal":{"type":"virtual","name":"signal-grey"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":9}],"green":[{"entity_id":8,"circuit_id":1},{"entity_id":15,"circuit_id":1}]},"2":{"red":[{"entity_id":8,"circuit_id":2},{"entity_id":15,"circuit_id":2}]}}},
+	{"entity_number":11,"name":"decider-combinator","position":{"x":0.5,"y":-1},"direction":6,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-red"},"constant":0,"comparator":"=","output_signal":{"type":"virtual","name":"signal-everything"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":11,"circuit_id":2}],"green":[{"entity_id":13},{"entity_id":18,"circuit_id":1}]},"2":{"red":[{"entity_id":11,"circuit_id":1},{"entity_id":18,"circuit_id":2}]}}},
+	{"entity_number":12,"name":"constant-combinator","position":{"x":3,"y":0},"direction":6,"control_behavior":{"filters":[{"signal":{"type":"virtual","name":"signal-R"},"count":0,"index":1},{"signal":{"type":"virtual","name":"signal-E"},"count":0,"index":2},{"signal":{"type":"virtual","name":"signal-S"},"count":0,"index":3},{"signal":{"type":"virtual","name":"signal-E"},"count":0,"index":4},{"signal":{"type":"virtual","name":"signal-T"},"count":0,"index":5},{"signal":{"type":"virtual","name":"signal-red"},"count":1,"index":18}],"is_on":false},"connections":{"1":{"green":[{"entity_id":13}]}}},
+	{"entity_number":13,"name":"constant-combinator","position":{"x":3,"y":-1},"direction":6,"control_behavior":{"filters":[{"signal":{"type":"virtual","name":"signal-P"},"count":0,"index":1},{"signal":{"type":"virtual","name":"signal-L"},"count":0,"index":2},{"signal":{"type":"virtual","name":"signal-A"},"count":0,"index":3},{"signal":{"type":"virtual","name":"signal-Y"},"count":0,"index":4},{"signal":{"type":"virtual","name":"signal-green"},"count":1,"index":18}],"is_on":false},"connections":{"1":{"green":[{"entity_id":12},{"entity_id":11,"circuit_id":1}]}}},
 	{"entity_number":14,"name":"constant-combinator","position":{"x":-4,"y":0},"direction":2,"control_behavior":{"filters":[{"signal":{"type":"virtual","name":"signal-grey"},"count":19,"index":1}]},"connections":{"1":{"red":[{"entity_id":15,"circuit_id":1}]}}},
-	{"entity_number":15,"name":"decider-combinator","position":{"x":-2.5,"y":0},"direction":2,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-blue"},"second_signal":{"type":"virtual","name":"signal-3"},"comparator":"=","output_signal":{"type":"virtual","name":"signal-grey"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":14}],"green":[{"entity_id":10,"circuit_id":1},{"entity_id":16,"circuit_id":1}]},"2":{"red":[{"entity_id":10,"circuit_id":2},{"entity_id":16,"circuit_id":2}]}}},
-	{"entity_number":16,"name":"decider-combinator","position":{"x":-2.5,"y":1},"direction":2,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-blue"},"second_signal":{"type":"virtual","name":"signal-4"},"comparator":"=","output_signal":{"type":"virtual","name":"signal-grey"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":17}],"green":[{"entity_id":15,"circuit_id":1},{"entity_id":19,"circuit_id":1},{"entity_id":20,"circuit_id":2}]},"2":{"red":[{"entity_id":15,"circuit_id":2}]}}},
+	{"entity_number":15,"name":"decider-combinator","position":{"x":-2.5,"y":0},"direction":2,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-green"},"second_signal":{"type":"virtual","name":"signal-3"},"comparator":"=","output_signal":{"type":"virtual","name":"signal-grey"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":14}],"green":[{"entity_id":10,"circuit_id":1},{"entity_id":16,"circuit_id":1}]},"2":{"red":[{"entity_id":10,"circuit_id":2},{"entity_id":16,"circuit_id":2}]}}},
+	{"entity_number":16,"name":"decider-combinator","position":{"x":-2.5,"y":1},"direction":2,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-green"},"second_signal":{"type":"virtual","name":"signal-4"},"comparator":"=","output_signal":{"type":"virtual","name":"signal-grey"},"copy_count_from_input":true}},"connections":{"1":{"red":[{"entity_id":17}],"green":[{"entity_id":15,"circuit_id":1},{"entity_id":19,"circuit_id":1},{"entity_id":20,"circuit_id":2}]},"2":{"red":[{"entity_id":15,"circuit_id":2}]}}},
 	{"entity_number":17,"name":"constant-combinator","position":{"x":-4,"y":1},"direction":2,"control_behavior":{"filters":[{"signal":{"type":"virtual","name":"signal-grey"},"count":25,"index":1}]},"connections":{"1":{"red":[{"entity_id":16,"circuit_id":1}]}}},
-	{"entity_number":18,"name":"decider-combinator","position":{"x":0.5,"y":0},"direction":6,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-yellow"},"constant":2,"comparator":"=","output_signal":{"type":"virtual","name":"signal-white"},"copy_count_from_input":false}},"connections":{"1":{"red":[{"entity_id":19,"circuit_id":2}],"green":[{"entity_id":11,"circuit_id":1}]},"2":{"red":[{"entity_id":11,"circuit_id":2},{"entity_id":20,"circuit_id":1}]}}},
-	{"entity_number":19,"name":"arithmetic-combinator","position":{"x":0.5,"y":1},"direction":2,"control_behavior":{"arithmetic_conditions":{"first_signal":{"type":"virtual","name":"signal-4"},"second_signal":{"type":"virtual","name":"signal-blue"},"operation":"-","output_signal":{"type":"virtual","name":"signal-yellow"}}},"connections":{"1":{"green":[{"entity_id":16,"circuit_id":1}]},"2":{"red":[{"entity_id":18,"circuit_id":1}]}}},
+	{"entity_number":18,"name":"decider-combinator","position":{"x":0.5,"y":0},"direction":6,"control_behavior":{"decider_conditions":{"first_signal":{"type":"virtual","name":"signal-yellow"},"constant":2,"comparator":"=","output_signal":{"type":"virtual","name":"signal-white"},"copy_count_from_input":false}},"connections":{"1":{"red":[{"entity_id":19,"circuit_id":2}],"green":[{"entity_id":11,"circuit_id":1}]},"2":{"red":[{"entity_id":11,"circuit_id":2}]}}},
+	{"entity_number":19,"name":"arithmetic-combinator","position":{"x":0.5,"y":1},"direction":2,"control_behavior":{"arithmetic_conditions":{"first_signal":{"type":"virtual","name":"signal-4"},"second_signal":{"type":"virtual","name":"signal-green"},"operation":"-","output_signal":{"type":"virtual","name":"signal-yellow"}}},"connections":{"1":{"green":[{"entity_id":16,"circuit_id":1}]},"2":{"red":[{"entity_id":18,"circuit_id":1}]}}},
 ];
