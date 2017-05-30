@@ -41,15 +41,14 @@ function handleFileSelect(evt) {
 		if (f.type != "audio/mid")
 			throw new Error("This file isn't recognized as a MIDI file (it seems to be a(n) " + f.type + ")");
 
+		console.log("Reading MIDI file: " + f.name);
+
 		var reader = new FileReader();
 		reader.onload = function(e) {
 			processMidi(reader.result);
 		}
 
 		reader.readAsArrayBuffer(f);
-
-		clearError();
-		$("#step2").fadeIn().css("display","");
 	} catch (e) {
 		showError(e);
 	}
@@ -59,12 +58,14 @@ var song;
 function processMidi(midi) {
 	var midiFile = new MIDIFile(midi);
 
-	console.log("Reading MIDI file");
 	console.log("Format: " + midiFile.header.getFormat() + ", Resolution: " + midiFile.header.getTicksPerBeat());
 
 	song = sortMidi(midiFile.getEvents());
 
-	console.log(song)
+	console.log(song);
+
+	clearError();
+	$("#step2").fadeIn().css("display","");
 }
 
 function Instrument(time, instrument) {
@@ -118,6 +119,9 @@ function Song() {
 
 		this.tracks[track].addNote(this.notes.length - 1);
 
+		if (this.getInstrument(time, channel) === undefined)
+			this.addInstrumentChange(time, channel, 0);
+
 		this.getInstrument(time, channel).addNote(this.notes.length - 1);
 	}
 
@@ -147,10 +151,74 @@ function Song() {
 	}
 
 	this.addInstrumentChange = function (time, channel, instrument) {
-		if (this.instruments[channel] === undefined)
+		if (this.instruments[channel] === undefined) {
 			this.instruments[channel] = [];
+			this.instruments[channel].push(new Instrument(time, instrument)); // add new
+		} else {
+			var existing = this.instruments[channel].find(
+				function(value, index) {
+					return (value.time == time);
+				}
+			);
 
-		this.instruments[channel].push(new Instrument(time, instrument));
+			if (existing !== undefined)
+				existing.instrument = instrument;
+			else
+				this.instruments[channel].push(new Instrument(time, instrument)); // add new
+		}
+	}
+
+	this.toFactorio = function() {
+		var factorioInstruments = [];
+
+		for (var instrument_channel in this.instruments)
+			for (var instrument_i in this.instruments[instrument_channel]) {
+				var instrument = this.instruments[instrument_channel][instrument_i];
+				var factorioInstrument = instrument.factorioInstrument;
+
+				if (factorioInstruments[factorioInstrument.name] === undefined)
+					factorioInstruments[factorioInstrument.name] = [];
+
+				for (var note_i in instrument.notes) {
+					var note = this.notes[instrument.notes[note_i]];
+
+					var factorioTick = Math.round(note.time * 0.06);
+					if (factorioInstruments[factorioInstrument.name][factorioTick] === undefined)
+						factorioInstruments[factorioInstrument.name][factorioTick] = [];
+
+					factorioInstruments[factorioInstrument.name][factorioTick].push(factorioInstrument.convert(note.pitch));
+				}
+			}
+
+		var delays = [];
+		var factorioSignals = [];
+		var signalInstruments = [];
+
+		var signalsUsed = 0;
+
+		for (instrument_i in factorioInstruments) {
+			var instrument = factorioInstruments[instrument_i];
+
+			for (delay in instrument) {
+				var chord = instrument[delay];
+
+				delays.push(delay);
+
+				for (i in chord) {
+					i = parseInt(i);
+					if (factorioSignals[signalsUsed + i] === undefined) {
+						factorioSignals[signalsUsed + i] = [];
+						signalInstruments.push(instrument_i);
+					}
+
+					factorioSignals[signalsUsed + i][delay] = chord[i];
+				}
+			}
+
+			signalsUsed = factorioSignals.length;
+		}
+
+		return {"delays": delays, "factorioSignals": factorioSignals, "signalInstruments": signalInstruments};
 	}
 }
 
@@ -159,7 +227,7 @@ function sortMidi(events) {
 	var channelInstruments = [];
 
 	for (i in events) {
-		var event = events[i]
+		var event = events[i];
 		switch (event.subtype) {
 			case MIDIEvents.EVENT_META_TRACK_NAME:
 				event.text = UTF8.getStringFromBytes(event.data, 0, event.length, true);
