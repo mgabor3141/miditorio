@@ -225,7 +225,14 @@ function Song() {
 			signalsUsed = factorioSignals.length;
 		}
 
-		return {"delays": delays, "factorioSignals": factorioSignals, "signalInstruments": signalInstruments};
+		// This can be done better performance-wise
+		var uniqueDelays = [];
+		$.each(delays, function(i, el){
+			if($.inArray(el, uniqueDelays) === -1) uniqueDelays.push(el);
+		});
+		uniqueDelays.sort(function(a,b){return a - b});
+
+		return {"delays": uniqueDelays, "factorioSignals": factorioSignals, "signalInstruments": signalInstruments};
 	}
 }
 
