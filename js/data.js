@@ -1,18 +1,27 @@
 // Factorio instruments
 
-function FactorioInstrument(name, id, base, range_octaves) {
+function FactorioInstrument(name, id, base, range_octaves, default_volume) {
 	this.name = name;
 	this.id = id;
 	this.base = base;
 	this.range = range_octaves*12;
+	if (default_volume !== undefined)
+		this.default_volume = default_volume;
+	else
+		this.default_volume = 1;
 
 	this.convert = function(note) {
 		return note - this.base;
 	}
 
-	this.checkRange = function(note) {
+	this.checkRange = function(note, getDirection) {
 		note = this.convert(note);
-		return (note > 0 && note <= this.range);
+		if (getDirection == false || getDirection == undefined)
+			return (note > 0 && note <= this.range);
+		
+		if (note <= 0) return {"direction": "below", "delta": -note + 1};
+		if (note > this.range) return {"direction": "above", "delta": note - this.range};
+		return true;
 	}
 }
 
@@ -20,8 +29,8 @@ var factorio_instrument = {
 	"Piano":			new FactorioInstrument("Piano",			2,  40, 4),
 	"Bass":				new FactorioInstrument("Bass",			3,  28, 3),
 	"Lead":				new FactorioInstrument("Lead",			4,  28, 3),
-	"Saw":				new FactorioInstrument("Saw",			5,  28, 3),
-	"Square":			new FactorioInstrument("Square",		6,  28, 3),
+	"Saw":				new FactorioInstrument("Saw",			5,  28, 3, 0.8),
+	"Square":			new FactorioInstrument("Square",		6,  28, 3, 0.5),
 	"Celesta":			new FactorioInstrument("Celesta",		7,  64, 3),
 	"Vibraphone":		new FactorioInstrument("Vibraphone",	8,  52, 3),
 	"Plucked":			new FactorioInstrument("Plucked",		9,  52, 3),
@@ -32,7 +41,7 @@ var factorio_instrument = {
 };
 
 factorio_instrument["ReverseCymbal"].convert = function (note) { return 13; };
-factorio_instrument["ReverseCymbal"].checkRange = function (note) { return true; };
+factorio_instrument["ReverseCymbal"].checkRange = function (note, getDirection) { return true; };
 
 factorio_instrument["DrumKit"].convert = function(note) {
 	if (drumkit_map[note] === undefined) {
@@ -42,10 +51,10 @@ factorio_instrument["DrumKit"].convert = function(note) {
 		return drumkit_map[note];
 	}
 }
-factorio_instrument["DrumKit"].checkRange = function (note) { return true; };
+factorio_instrument["DrumKit"].checkRange = function (note, getDirection) { return true; };
 
 factorio_instrument["Exclude"].convert = function (note) { return 0; };
-factorio_instrument["Exclude"].checkRange = function (note) { return true; };
+factorio_instrument["Exclude"].checkRange = function (note, getDirection) { return true; };
 
 function getFactorioInstrument(programcode) {
 	programcode++;

@@ -1,52 +1,41 @@
 MIDIEvents = MIDIFile.Events;
 UTF8 = MIDIFile.UTF8;
 
-var fadeoutdelay;
-function showError(e) {
-	$("#errormsg").text(e.message);
-	$("#errorbox").css('visibility', 'visible').hide().fadeIn();
-	clearTimeout(fadeoutdelay);
-	fadeoutdelay = setTimeout(function(){
-		$("#errorbox").fadeOut(500, function() {
-			$(this).css({"display": "block", "visibility": "hidden"});
-		});
-	}, 5000);
-}
-
-function clearError() {
-	clearTimeout(fadeoutdelay);
-	$("#errorbox").fadeOut(500, function() {
-		$(this).css({"display": "block", "visibility": "hidden"});
-	});
-}
-
 if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
 	showError("The File APIs are not fully supported in this browser. Please try a different browser.");
 }
 
-var filename;
-function handleFileSelect(evt) {
+function handleFileSelect(event) {
+	var files;
+	if (event.target.files !== undefined) {
+		files = event.target.files;
+	} else {
+		files =	event.originalEvent.dataTransfer.files;
+	}
+
 	try {
-		$("#step2").hide();
-		$("#blueprint").hide();
+		if (files == 0)
+			return;
 
-		if (evt.target.files.length > 1)
-			throw new Error("Multiple files selected.");
-
-		if (evt.target.files.length == 0)
-			throw new Error("No files selected.");
-
-		f = evt.target.files[0];
+		f = files[0];
 
 		if (f.type != "audio/mid")
-			throw new Error("This file isn't recognized as a MIDI file (it seems to be a(n) " + f.type + ")");
+			throw new Error("This file isn't recognized as a MIDI file! "+
+				"(It's type seems to be " + f.type + ")");
 
-		filename = f.name;
+		song = new Song();
+		song.name = f.name.slice(0, -4);
 		console.log("Reading MIDI file: " + f.name);
 
 		var reader = new FileReader();
 		reader.onload = function(e) {
-			processMidi(reader.result);
+			try {
+				processMidi(reader.result);
+			} catch (e) {
+				e = "There seems to be something wrong with this file. "+
+				"Please try a different file. (" + e + ")";
+				showError(e);
+			}
 		}
 
 		reader.readAsArrayBuffer(f);
@@ -65,8 +54,7 @@ function processMidi(midi) {
 
 	console.log(song);
 
-	clearError();
-	$("#step2").fadeIn().css("display", "");
+	generateSettingsPanel();
 }
 
 function Instrument(time, instrument) {
@@ -83,7 +71,7 @@ function Instrument(time, instrument) {
 }
 
 function Track(trackNum) {
-	this.name = "Track "+trackNum;
+	this.name = "Track " + trackNum;
 	this.notes = [];
 	this.text = [];
 
@@ -98,6 +86,23 @@ function Track(trackNum) {
 	this.setName = function(name) {
 		this.name = name;
 	}
+
+	this.getRangeData = function() {
+		var data = {"above": 0, "below": 0, "max": {"above": 0, "below": 0}};
+
+		for (var note_i in this.notes) {
+			var note = song.notes[this.notes[note_i]];
+
+			var range = note.instrument.factorioInstrument.checkRange(note.pitch, true);
+			if (range != true) {
+				data[range.direction]++;
+				if (range.delta > data.max[range.direction])
+					data.max[range.direction] = range.delta;
+			}
+		}
+
+		return data;
+	}
 }
 
 /*
@@ -107,23 +112,32 @@ function Track(trackNum) {
 	Instruments are grouped into arrays by the channel they're on 
 */
 function Song() {
+	this.name = "";
 	this.notes = [];
 	this.tracks = [];
 	this.instruments = [];
 	this.instruments[9] = [new Instrument(0, -1)]; // Drum Track
 
 	this.addNote = function(time, channel, track, pitch, velocity) {
-		this.notes.push({"time": time, "channel": channel, "track": track, "pitch": pitch, "velocity": velocity});
-
 		if (this.tracks[track] === undefined)
-			this.tracks[track] = new Track();
+			this.tracks[track] = new Track(this.tracks.length);
 
-		this.tracks[track].addNote(this.notes.length - 1);
+		this.tracks[track].addNote(this.notes.length);
 
 		if (this.getInstrument(time, channel) === undefined)
 			this.addInstrumentChange(time, channel, 0);
 
-		this.getInstrument(time, channel).addNote(this.notes.length - 1);
+		var instrument = this.getInstrument(time, channel);
+		instrument.addNote(this.notes.length);
+
+		this.notes.push({
+			"time": time,
+			"channel": channel,
+			"track": track,
+			"pitch": pitch,
+			"velocity": velocity,
+			"instrument": instrument
+		});
 	}
 
 	this.getTrack = function(track) {
@@ -191,8 +205,6 @@ function Song() {
 						factorioInstruments[factorioInstrument.name][factorioTick].push(
 							factorioInstrument.convert(note.pitch)
 						);
-					} else {
-						console.log("Note outside range of " + factorioInstrument.name + " at " + factorioTick);
 					}
 				}
 			}
@@ -215,7 +227,7 @@ function Song() {
 					i = parseInt(i);
 					if (factorioSignals[signalsUsed + i] === undefined) {
 						factorioSignals[signalsUsed + i] = [];
-						signalInstruments.push(factorio_instrument[instrument_i].id);
+						signalInstruments.push(factorio_instrument[instrument_i]);
 					}
 
 					factorioSignals[signalsUsed + i][delay] = chord[i];
@@ -230,14 +242,13 @@ function Song() {
 		$.each(delays, function(i, el){
 			if($.inArray(el, uniqueDelays) === -1) uniqueDelays.push(el);
 		});
-		uniqueDelays.sort(function(a,b){return a - b});
+		uniqueDelays.sort( function(a,b){return a - b} );
 
 		return {"delays": uniqueDelays, "factorioSignals": factorioSignals, "signalInstruments": signalInstruments};
 	}
 }
 
 function sortMidi(events) {
-	song = new Song();
 	var channelInstruments = [];
 
 	for (i in events) {
@@ -262,5 +273,3 @@ function sortMidi(events) {
 
 	return song;
 }
-
-$("#file").change(handleFileSelect);
