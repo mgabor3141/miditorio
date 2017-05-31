@@ -1,24 +1,31 @@
 body {
-  padding-top: 70px;
-  padding-bottom: 30px;
+	padding-top: 70px;
+	padding-bottom: 30px;
+	overflow-y: scroll;
 }
 
 .theme-dropdown .dropdown-menu {
-  position: static;
-  display: block;
-  margin-bottom: 20px;
+	position: static;
+	display: block;
+	margin-bottom: 20px;
 }
 
 .theme-showcase > p > .btn {
-  margin: 5px 0;
+	margin: 5px 0;
 }
 
 .theme-showcase .navbar .container {
-  width: auto;
+	width: auto;
 }
 
 .code {
 	font-family: Courier New;
+}
+
+.navbar-brand {
+	font-family: 'Suez One', serif;
+	font-size: 2em;
+	letter-spacing: 0.03em;
 }
 
 #container {
@@ -41,12 +48,12 @@ body {
 
 #graphics {
 	width: 600px;
-	height: 328px;
+	height: 350px;
 	margin: 15px auto;
 	position: relative;
 
-	background-image: url("../assets/placeholder.png");
-	background-size: 600px 328px;
+	background-image: url("../assets/base.png");
+	background-size: 600px 350px;
 	background-repeat: no-repeat;
 
 	-moz-box-shadow:	inset 0 0 25px #000000;
@@ -60,8 +67,8 @@ body {
 	width: 110px;
 	height: 110px;
 	position: absolute;
-	top: 110px;
-	left: 45px;
+	top: 129px;
+	left: 55px;
 	opacity: 0.2;
 	border: 5px solid #EEE;
 	border-radius: 15px;
@@ -100,23 +107,23 @@ body {
 }
 
 #settings .list-group {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 0;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 0;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 0;
 
-    width: 250px;
-    float: left;
+	width: 250px;
+	float: left;
 }
 
 #settings .list-group-item:first-child {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 0;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 0;
 }
 
 #settings .list-group-item:last-child {
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 0;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 0;
 }
 
 .trackinfo {
@@ -129,4 +136,37 @@ body {
 
 .trackinfo.bad {
 	color: #F00;
+}
+
+#inserter {
+	background: transparent url(../assets/inserter.png) 0 0 no-repeat;
+	width: 184px;
+	height: 150px;
+	position: absolute;
+	top: 55px;
+	left: 84px;
+
+	background-position-x: 100000px;
+}
+
+#assembler {
+	background: transparent url(../assets/assembler.png) 0 0 no-repeat;
+	width: 233px;
+	height: 184px;
+	position: absolute;
+	top: 71px;
+	left: 232px;
+
+	background-position-x: 100000px; 
+}
+
+#insertertake {
+	background: transparent url(../assets/insertertake.png) 0 0 no-repeat;
+	width: 185px;
+	height: 147px;
+	position: absolute;
+	top: 59px;
+	left: 333px;
+
+	background-position-x: 100000px;
 }
