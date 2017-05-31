@@ -279,5 +279,3 @@ function getBlueprint() {
 	$("#bpstring").text(bpstring);
 	$("#blueprint").fadeIn().css("display", "");
 }
-
-$("#getbp").click(getBlueprint);

@@ -33,8 +33,9 @@
     </script>
 
     <link href="css/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Suez+One" rel="stylesheet">
     <!--<link rel="icon" href="favicon.ico">-->
-    <title>MIDITorio</title>
+    <title>MIDItorio</title>
   </head>
 
   <body>
@@ -43,13 +44,13 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">MIDItorio.com</a>
+          <a class="navbar-brand" href="#"><strong>MIDI</strong>torio.com</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#guide">Guide</a></li>
+            <li><a href="#about">Addons</a></li>
+            <li><a href="#contact">About</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -57,6 +58,9 @@
 
     <div class="container" role="main">
       <div class="well" id="graphics">
+        <div id="assembler"></div>
+        <div id="inserter"></div>
+        <div id="insertertake"></div>
         <div id="droparea"></div>
         <div id="tooltip">Drag a MIDI file into the Requester Chest to begin!</div>
       </div>
@@ -89,6 +93,7 @@
     <script src="lib/midifile/MIDIFile.js"></script>
     <script src="lib/base64js.min.js"></script>
     <script src="lib/pako.js"></script>
+    <script src="lib/jquery.spritely.js"></script>
 
     <script src="js/data.js"></script>
     <script src="js/parse.js"></script>

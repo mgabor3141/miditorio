@@ -21,13 +21,8 @@ function showError(e) {
 
 // ### File selection
 
-$("#file").change(handleFileSelect);
-
-$("#droparea").on("drop", function(event) {
-	event.preventDefault();
-	event.stopPropagation();
-
-	$("#blueprint").hide();
+function fileChosen(event) {
+	$("#inserter").spSet("fps", 30);
 
 	$("#droparea").stop(true).animate({
 		opacity: 0,
@@ -41,10 +36,23 @@ $("#droparea").on("drop", function(event) {
 		$("#droparea").css("width", "-=20");
 		$("#droparea").css("height", "-=20");
 
-		$("#droparea").delay(200).fadeTo(300, 0.2);
+		$("#droparea").delay(2200).fadeTo(300, 0.2);
 	});
 
-	handleFileSelect(event);
+	$("#blueprint").hide();
+
+	$("#settings").fadeOut(100, function () {
+		handleFileSelect(event);
+	});
+}
+
+$("#file").change(fileChosen);
+
+$("#droparea").on("drop", function(event) {
+	event.preventDefault();
+	event.stopPropagation();
+
+	fileChosen(event);
 });
 
 $("#droparea").on("dragenter", function(event){
@@ -93,9 +101,14 @@ function generateSettingsPanel() {
 
 	$("#settings").append("<div id='clearfix' style='clear: both;'>");
 
-	updateTrackInfos();
+	$("#getbp").click(function(event) {
+		$('#assembler').spSet("fps", 0);
+		$('#insertertake').spSet("fps", 30);
 
-	$("#settings").fadeIn().css("display", "");
+		getBlueprint();
+	});
+
+	updateTrackInfos();
 }
 
 function updateTrackInfos() {
@@ -121,3 +134,34 @@ function updateTrackInfos() {
 		}
 	}
 }
+
+// ### Animations
+
+$('#inserter').sprite({
+	fps: 0,
+	no_of_frames: 71,
+	on_frame: {
+		32: function() {
+			$('#assembler').spSet("fps", 30);
+		},
+		60: function() {
+			$("#settings").fadeIn();
+		},
+		70: function() {
+			$('#inserter').spStop(true);
+		}
+	}
+});
+
+$('#insertertake').sprite({
+	fps: 0,
+	no_of_frames: 69,
+	on_frame: {
+		68: function() {
+			$('#insertertake').spStop(true);
+			$('#insertertake').css("background-position-x", -100000);
+		}
+	}
+});
+
+$('#assembler').sprite({fps: 0, no_of_frames: 25});
