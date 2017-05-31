@@ -72,6 +72,7 @@ body {
 	opacity: 0.2;
 	border: 5px solid #EEE;
 	border-radius: 15px;
+	cursor: pointer;
 }
 
 #tooltip {

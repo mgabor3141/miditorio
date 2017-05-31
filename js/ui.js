@@ -2,6 +2,7 @@
 
 var fadeoutdelay;
 function showError(e) {
+	console.log(e);
 	if (e.message !== undefined)
 		e = e.message;
 
@@ -21,22 +22,27 @@ function showError(e) {
 
 // ### File selection
 
+var filechosen = false;
 function fileChosen(event) {
+	filechosen = true;
+
 	$("#inserter").spSet("fps", 30);
 
 	$("#droparea").stop(true).animate({
 		opacity: 0,
-		left: "-=10",
-		top: "-=10",
-		width: "+=20",
-		height: "+=20",
+		left: "-=20",
+		top: "-=20",
+		width: "+=40",
+		height: "+=40",
 	}, 400, function() {
-		$("#droparea").css("top", "+=10");
-		$("#droparea").css("left", "+=10");
-		$("#droparea").css("width", "-=20");
-		$("#droparea").css("height", "-=20");
+		$("#droparea").css("top", "+=20");
+		$("#droparea").css("left", "+=20");
+		$("#droparea").css("width", "-=40");
+		$("#droparea").css("height", "-=40");
 
-		$("#droparea").delay(2200).fadeTo(300, 0.2);
+		$("#droparea").delay(5000).fadeTo(300, 0.2, function() {
+			filechosen = false;
+		});
 	});
 
 	$("#blueprint").hide();
@@ -60,8 +66,13 @@ $("#droparea").on("dragenter", function(event){
 	$("#droparea").stop(true).fadeTo(200, 0.8);
 });
 
-$("#droparea").on("dragleave", function(event){
-	$("#droparea").stop(true).fadeTo(200, 0.2);
+$("#droparea").on("mouseover", function(event){
+	$("#droparea").stop(true).fadeTo(200, 0.8);
+});
+
+$("#droparea").on("dragleave mouseout", function(event){
+	if (!filechosen)
+		$("#droparea").stop(true).fadeTo(200, 0.2);
 });
 
 $("#droparea").on("dragover", function(event){

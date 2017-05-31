@@ -24,7 +24,8 @@ function handleFileSelect(event) {
 				"(It's type seems to be " + f.type + ")");
 
 		song = new Song();
-		song.name = f.name.slice(0, -4);
+		song.name = f.name.charAt(0).toUpperCase() + f.name.slice(1, -4);
+		song.name = song.name.replace(new RegExp("_", 'g'), " ");
 		console.log("Reading MIDI file: " + f.name);
 
 		var reader = new FileReader();
@@ -32,6 +33,7 @@ function handleFileSelect(event) {
 			try {
 				processMidi(reader.result);
 			} catch (e) {
+				console.log(e);
 				e = "There seems to be something wrong with this file. "+
 				"Please try a different file. (" + e + ")";
 				showError(e);
@@ -120,7 +122,7 @@ function Song() {
 
 	this.addNote = function(time, channel, track, pitch, velocity) {
 		if (this.tracks[track] === undefined)
-			this.tracks[track] = new Track(this.tracks.length);
+			this.tracks[track] = new Track(this.tracks.length + 1);
 
 		this.tracks[track].addNote(this.notes.length);
 
