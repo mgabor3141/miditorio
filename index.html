@@ -56,27 +56,25 @@
     </nav>
 
     <div class="container" role="main">
-      <div class="alert alert-danger" role="alert" id="errorbox" style="visibility: hidden;">
-        <strong>Error: </strong> <span id="errormsg"></span>
+      <div class="well" id="graphics">
+        <div id="droparea"></div>
+        <div id="tooltip">Drag a MIDI file into the Requester Chest to begin!</div>
       </div>
 
-      <div class="well">
-        <h2>Step one</h2>
-        <p>Select your favorite MIDI file: <input type="file" id="file" accept="audio/mid" /></p>
-      </div>
-
-      <div class="well" id="step2" style="display: none;">
-        <h2>Step two</h2>
-        <p>Your song has been analyzed by our domesticated biter army, and they are ready to Factorify&trade; it for you. Click here to get your blueprint string:</p>
-        <p><button type="button" class="btn btn-danger" id="getbp">Do it!</button></p>
-      </div>
+      <div class="well" id="settings" style="display: none;"></div>
 
       <div class="well" id="blueprint" style="display: none;">
         <h2>Step three</h2>
         <p>Copy this string into Factorio:</p>
         <textarea  class="form-control code" rows="1" id="bpstring" wrap="soft"></textarea>
       </div>
+
+      <div class="alert alert-danger" role="alert" id="errorbox">
+        <strong>Error: </strong> <span id="errormsg"></span>
+      </div>
     </div> <!-- /container -->
+
+    <input type="file" id="file" accept="audio/mid" />
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -95,5 +93,6 @@
     <script src="js/data.js"></script>
     <script src="js/parse.js"></script>
     <script src="js/blueprint.js"></script>
+    <script src="js/ui.js"></script>
   </body>
 </html>

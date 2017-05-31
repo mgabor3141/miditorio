@@ -36,6 +36,8 @@ function placeSpeakers(entities, signalInstruments) {
 	var rowLeader = entities.length + 1;
 
 	for (i in signalInstruments) {
+		if (signalInstruments[i].id < 0) continue;
+
 		var connections;
 		if (position.x == 5) {
 			if (position.y == -4) {
@@ -60,13 +62,13 @@ function placeSpeakers(entities, signalInstruments) {
 				},
 				"circuit_parameters": {
 					"signal_value_is_pitch": true,
-					"instrument_id": signalInstruments[i],
+					"instrument_id": signalInstruments[i].id,
 					"note_id": 0
 				}
 			},
 			"connections": connections,
 			"parameters": {
-				"playback_volume": 1,
+				"playback_volume": signalInstruments[i].default_volume,
 				"playback_globally": true,
 				"allow_polyphony": true
 			},
@@ -267,7 +269,7 @@ function getBlueprint() {
 			"icons": [{"signal": {"type": "item", "name": "programmable-speaker"}, "index": 1}],
 			"entities": entities,
 			"item": "blueprint",
-			"label": filename.slice(0, -4),
+			"label": song.name,
 			"version": 64425558017
 		}
 	};
