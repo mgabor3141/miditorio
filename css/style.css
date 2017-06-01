@@ -171,3 +171,57 @@ body {
 
 	background-position-x: 100000px;
 }
+
+#bpbox {
+	width: 160px;
+	top: 220px;
+	left: 390px;
+	padding: 5px;
+	border-radius: 5px;
+	display: table;
+	position: relative;
+	box-sizing: border-box;
+	background-image: linear-gradient(to bottom, #6DA6C7 0, #1B71A3 100%);
+	border-color: #124B6B;
+	opacity: 0;
+	display: none;
+}
+#bpoutput {
+	font-family: monospace;
+	color: #333;
+	padding: 8px;
+	padding-right: 0;
+	height: 34px;
+	width: 100%;
+	display: table-cell;
+	box-sizing: border-box;
+	background-image: linear-gradient(to bottom, #A7D7F2 0, #E8F7FF 100%);
+	border-color: #175E87;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+#bpbox span {
+	width: 1%;
+	display: table-cell;
+	box-sizing: border-box;
+	vertical-align: middle;
+}
+
+#bpbox span button {
+	margin-left: -1px;
+	background-image: linear-gradient(to bottom, #A7D7F2 0, #E8F7FF 100%);
+	border-color: #175E87;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	position: relative;
+}
+
+#bpbox span button img#clippy {
+	position: relative;
+}
+
+#bpbox span button img#tick {
+	position: relative;
+	display: none;
+}

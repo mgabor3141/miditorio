@@ -1,6 +1,6 @@
 // ### Error box
 
-var fadeoutdelay;
+var fadeOutDelay;
 function showError(e) {
 	if (e.message !== undefined)
 		e = e.message;
@@ -10,8 +10,8 @@ function showError(e) {
 		opacity: 1,
 		top: 60
 	});
-	clearTimeout(fadeoutdelay);
-	fadeoutdelay = setTimeout(function(){
+	clearTimeout(fadeOutDelay);
+	fadeOutDelay = setTimeout(function(){
 		$("#errorbox").animate({
 			opacity: 0,
 			top: -5
@@ -26,6 +26,9 @@ function fileChosen(event) {
 	filechosen = true;
 
 	$("#inserter").spSet("fps", 30);
+	$("#bpbox").animate({opacity: 0}, 200, function(){
+		$("#bpbox").hide();
+	});
 
 	$("#droparea").stop(true).animate({
 		opacity: 0,
@@ -43,8 +46,6 @@ function fileChosen(event) {
 			filechosen = false;
 		});
 	});
-
-	$("#blueprint").hide();
 
 	$("#settings").fadeOut(100, function () {
 		handleFileSelect(event);
@@ -93,7 +94,7 @@ function generateSettingsPanel() {
 	$("#settings").append("<p><button type='button' class='btn btn-primary' "+
 		"id='getbp'>Get Blueprint</button></p>");
 
-	$("#settings").append("<div id='clearfix' style='clear: both;'>");
+	$("#settings").append("<div class='clearfix' style='clear: both;'>");
 
 	var tracksTmp = "<div class='list-group'>";
 
@@ -109,7 +110,7 @@ function generateSettingsPanel() {
 
 	$("#settings").append(tracksTmp);
 
-	$("#settings").append("<div id='clearfix' style='clear: both;'>");
+	$("#settings").append("<div class='clearfix' style='clear: both;'>");
 
 	$("#getbp").click(function(event) {
 		$('#assembler').spSet("fps", 0);
@@ -145,6 +146,23 @@ function updateTrackInfos() {
 	}
 }
 
+// ### Blueprint Textbox
+
+var clipboard = new Clipboard('#bpbox span button');
+
+var fadeBackDelay;
+clipboard.on('success', function(e) {
+	$("img#clippy").hide();
+	$("img#tick").show();
+	clearTimeout(fadeOutDelay);
+	fadeOutDelay = setTimeout(function(){
+		$("img#tick").fadeOut(200, function(){
+			$("img#clippy").attr("src", "assets/clippy.svg").fadeIn(200);
+		});
+	}, 1000);
+	e.clearSelection();
+});
+
 // ### Animations
 
 $('#inserter').sprite({
@@ -167,6 +185,9 @@ $('#insertertake').sprite({
 	fps: 0,
 	no_of_frames: 69,
 	on_frame: {
+		34: function() {
+			$("#bpbox").css("display", "table").animate({opacity: 1});
+		},
 		68: function() {
 			$('#insertertake').spStop(true);
 			$('#insertertake').css("background-position-x", -100000);
