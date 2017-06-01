@@ -305,6 +305,5 @@ function getBlueprint() {
 
 	bpstring = encode(bp);
 
-	$("#bpstring").text(bpstring);
-	$("#blueprint").fadeIn().css("display", "");
+	$("#bpoutput").val(bpstring);
 }
