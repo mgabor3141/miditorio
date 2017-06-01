@@ -2,7 +2,6 @@
 
 var fadeoutdelay;
 function showError(e) {
-	console.log(e);
 	if (e.message !== undefined)
 		e = e.message;
 
