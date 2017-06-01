@@ -25,11 +25,6 @@ var filechosen = false;
 function fileChosen(event) {
 	filechosen = true;
 
-	$("#inserter").spSet("fps", 30);
-	$("#bpbox").animate({opacity: 0}, 200, function(){
-		$("#bpbox").hide();
-	});
-
 	$("#droparea").stop(true).animate({
 		opacity: 0,
 		left: "-=20",
@@ -42,14 +37,19 @@ function fileChosen(event) {
 		$("#droparea").css("width", "-=40");
 		$("#droparea").css("height", "-=40");
 
-		$("#droparea").delay(5000).fadeTo(300, 0.2, function() {
+		$("#droparea").delay(500).fadeTo(300, 0.2, function() {
 			filechosen = false;
 		});
 	});
 
-	$("#settings").fadeOut(100, function () {
-		handleFileSelect(event);
+	if (!handleFileSelect(event)) return;
+
+	$("#inserter").spSet("fps", 30);
+	$("#bpbox").animate({opacity: 0}, 200, function(){
+		$("#bpbox").hide();
 	});
+
+	$("#settings").fadeOut();
 }
 
 $("#file").change(fileChosen);
@@ -67,7 +67,8 @@ $("#droparea").on("dragenter", function(event){
 });
 
 $("#droparea").on("mouseover", function(event){
-	$("#droparea").stop(true).fadeTo(200, 0.8);
+	if (!filechosen)
+		$("#droparea").stop(true).fadeTo(200, 0.8);
 });
 
 $("#droparea").on("dragleave mouseout", function(event){
@@ -86,29 +87,85 @@ $('#droparea').click(function(){
 
 // ### Settings
 
+// https://stackoverflow.com/a/9763769/846349
+function msToTime(s) {
+  // Pad to 2 or 3 digits, default is 2
+  function pad(n, z) {
+    z = z || 2;
+    return ('00' + n).slice(-z);
+  }
+
+  var ms = s % 1000;
+  s = (s - ms) / 1000;
+  var secs = s % 60;
+  s = (s - secs) / 60;
+  var mins = s;
+
+  return pad(mins, 1) + ':' + pad(secs);
+}
+
+console.log(msToTime(55018))
+
 function generateSettingsPanel() {
 	$("#settings").text("");
 
-	$("#settings").append("<h2>" + song.name + "</h2>");
+	$("#settings").append("<h2>" + song.name + " <span class='time'>" + msToTime(song.time) + "</span></h2>");
 
 	$("#settings").append("<p><button type='button' class='btn btn-primary' "+
 		"id='getbp'>Get Blueprint</button></p>");
 
 	$("#settings").append("<div class='clearfix' style='clear: both;'>");
 
-	var tracksTmp = "<div class='list-group'>";
+	// Tracks (there aren't necessarily any)
+	if (song.tracks.length > 0) {
+		$("#settings").append("<h3>Tracks</h3>");
 
-	for(tracknum in song.tracks) {
-		if (song.tracks[tracknum].notes.length == 0 && song.tracks[tracknum].text.length == 0)
-			continue;
+		var tracksTmp = "<div class='row' id='tracks'>";
 
-		tracksTmp += "<a href='#' class='list-group-item'>" + song.tracks[tracknum].name +
-			" <span id='track" + tracknum + "'></span></a>";
+		tracksTmp += "<div class='list-group col-sm-4'>";
+
+		for(tracknum in song.tracks) {
+			if (song.tracks[tracknum].notes.length == 0 && song.tracks[tracknum].text.length == 0)
+				continue;
+
+			tracksTmp += "<a href='#' class='list-group-item' id='track" + tracknum + "'>" + song.tracks[tracknum].name +
+				" <span class='rangeinfo'></span></a>";
+		}
+
+		tracksTmp += "</div>";
+
+		tracksTmp += "<div class='settingsPanel col-sm-8' id='trackinfo'>Track Info</div></div>";
+
+		$("#settings").append(tracksTmp);
+		$(".list-group-item").click(selectTrack);
+
+		$("#settings").append("<div class='clearfix' style='clear: both;'>");
 	}
 
-	tracksTmp += "</div>";
+	// Instruments (you have to have them)
+	$("#settings").append("<h3>Instruments</h3>");
 
-	$("#settings").append(tracksTmp);
+	var textTmp = "<div class='row' id='instruments'>";
+
+	textTmp += "<div class='list-group col-sm-4'>";
+
+	for (channel in song.instruments) {
+		for (instrument in song.instruments[channel]) {
+			if (song.instruments[channel][instrument].notes.length == 0)
+				continue;
+
+			textTmp += "<a href='#' class='list-group-item' id='instrument" + instrument + "'>" +
+				midi_instrument[song.instruments[channel][instrument].instrument] +
+				" <span class='channel'>[CH" + channel + "]</span>" +
+				" <span class='rangeinfo'></span></a>";
+		}
+	}
+
+	textTmp += "</div>";
+
+	textTmp += "<div class='settingsPanel col-sm-8' id='instrumentinfo'>Instrument Info</div></div>";
+
+	$("#settings").append(textTmp);
 
 	$("#settings").append("<div class='clearfix' style='clear: both;'>");
 
@@ -122,15 +179,43 @@ function generateSettingsPanel() {
 	updateTrackInfos();
 }
 
+function getTrackDetails(id) {
+	var track = song.tracks[id];
+
+	$(".settingsPanel#trackinfo").text("");
+
+	if (track.name != ("Track " + (id+1)))
+		$(".settingsPanel#trackinfo").append("<div class='trackid'>Track " + (id+1) + "</div>");
+	else
+		$(".settingsPanel#trackinfo").append("<div class='trackid'></div>");
+
+	$(".settingsPanel#trackinfo").append("<h3>" + track.name + "</h3>");
+
+	if (track.text.length > 0) {
+		for (i in track.text) {
+			$(".settingsPanel#trackinfo").append("<div class='detailsText'>" + track.text[i].text + "</div>");
+		}
+	}
+}
+
+function selectTrack(event) {
+	var trackId = parseInt($(this).attr("id").substr("track".length));
+
+	$(".list-group-item").removeClass("active");
+	$(this).addClass("active");
+
+	getTrackDetails(trackId);
+}
+
 function updateTrackInfos() {
 	for(tracknum in song.tracks) {
 		rangeData = song.tracks[tracknum].getRangeData();
 
 		if (rangeData.below  == 0 && rangeData.above == 0) {
-			$("#track" + tracknum).attr("class", "trackinfo good");
-			$("#track" + tracknum).text("✔");
+			$("#track" + tracknum + " span.rangeinfo").attr("class", "rangeinfo good");
+			$("#track" + tracknum + " span.rangeinfo").text("✔");
 		} else {
-			$("#track" + tracknum).attr("class", "trackinfo bad");
+			$("#track" + tracknum + " span.rangeinfo").attr("class", "rangeinfo bad");
 
 			var tmpText = "";
 			if (rangeData.below > 0) {
@@ -141,7 +226,7 @@ function updateTrackInfos() {
 				tmpText += "▲ " + rangeData.above + " notes ";
 			}
 
-			$("#track" + tracknum).text(tmpText.slice(0, -1));
+			$("#track" + tracknum + " span.rangeinfo").text(tmpText.slice(0, -1));
 		}
 	}
 }
@@ -172,8 +257,12 @@ $('#inserter').sprite({
 		32: function() {
 			$('#assembler').spSet("fps", 30);
 		},
-		60: function() {
+		45: function() {
+			generateSettingsPanel();
 			$("#settings").fadeIn();
+			$(".settingsPanel#trackinfo").css("min-height", $("#tracks .list-group").height());
+			$(".settingsPanel#instrumentinfo").css("min-height", $("#instruments .list-group").height());
+			$("#settings .list-group-item:first-child").click();
 		},
 		70: function() {
 			$('#inserter').spStop(true);

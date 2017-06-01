@@ -97,46 +97,89 @@ body {
 }
 
 #settings h2 {
-	margin-top: 0;
-	margin-bottom: 30px;
+	margin: 0;
 
 	float: left;
+}
+
+#settings h2 .time {
+	font-size: 0.9em;
+	color: #666;
+	margin-left: 10px;
 }
 
 #settings #getbp {
 	float: right;
 }
 
-#settings .list-group {
+.list-group {
 	border-top-left-radius: 8px;
 	border-top-right-radius: 0;
 	border-bottom-left-radius: 8px;
 	border-bottom-right-radius: 0;
 
-	width: 250px;
-	float: left;
+	margin: 0; 
+	padding: 0; 
 }
 
-#settings .list-group-item:first-child {
+.list-group-item:first-child {
 	border-top-left-radius: 8px;
 	border-top-right-radius: 0;
 }
 
-#settings .list-group-item:last-child {
+.list-group-item:last-child {
 	border-bottom-left-radius: 8px;
 	border-bottom-right-radius: 0;
 }
 
-.trackinfo {
-	font-size: 0.8em	;
+.rangeinfo {
+	font-size: 0.8em;
 }
 
-.trackinfo.good {
-	color: #0F0;
+.rangeinfo.good {
+	color: #00c700;
 }
 
-.trackinfo.bad {
-	color: #F00;
+.rangeinfo.bad {
+	color: #e00000;
+}
+
+.list-group-item.active .rangeinfo.good {
+	color: #b1ffb1;
+}
+
+.list-group-item.active .rangeinfo.bad {
+	color: #ff7474;
+}
+
+.list-group-item .channel {
+	color: #666;
+}
+
+.settingsPanel {
+	margin-left: 0;
+	padding: 0 20px;
+	background-color: white;
+
+	border: 1px solid rgb(221, 221, 221);
+	border-left-width: 0;
+	box-shadow: inset 5px 0 9px -6px;
+
+	border-top-right-radius: 8px;
+	border-bottom-right-radius: 8px;
+}
+
+.settingsPanel .trackid {
+	color: #666;
+	margin: 20px 0 2px 0;
+}
+
+.settingsPanel h3 {
+	margin: 0 0 10px 0;
+}
+
+.settingsPanel .detailsText {
+	padding-left:  30px;
 }
 
 #inserter {
