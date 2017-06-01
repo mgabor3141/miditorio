@@ -41,8 +41,10 @@ function handleFileSelect(event) {
 		}
 
 		reader.readAsArrayBuffer(f);
+		return true;
 	} catch (e) {
 		showError(e);
+		return false;
 	}
 }
 
@@ -50,13 +52,9 @@ var song;
 function processMidi(midi) {
 	var midiFile = new MIDIFile(midi);
 
-	console.log("Format: " + midiFile.header.getFormat() + ", Resolution: " + midiFile.header.getTicksPerBeat());
-
 	song = sortMidi(midiFile.getEvents());
 
 	console.log(song);
-
-	generateSettingsPanel();
 }
 
 function Instrument(time, instrument) {
@@ -115,6 +113,7 @@ function Track(trackNum) {
 */
 function Song() {
 	this.name = "";
+	this.time = 0;
 	this.notes = [];
 	this.tracks = [];
 	this.instruments = [];
@@ -140,6 +139,8 @@ function Song() {
 			"velocity": velocity,
 			"instrument": instrument
 		});
+
+		if (time > this.time) this.time = time;
 	}
 
 	this.getTrack = function(track) {
