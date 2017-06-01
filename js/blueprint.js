@@ -10,23 +10,27 @@ function roundToHalf(x) {
 	return Math.round(x*2)/2;
 }
 
-function placeSubstations(entities, substationHeight, substations) {
+function addSubstation(entities, position) {
+	entities.push({
+		"entity_number": entities.length + 1,
+		"name": "substation",
+		"position": position
+	});
+}
+
+function placeSubstations(entities, substationHeight, xMax) {
 	// Single one at the top
 	entities.push({
 		"entity_number": entities.length + 1,
 		"name":	"substation",
-		"position": {"x": 5.5, "y": -6.5}
+		"position": {"x": 6.5, "y": -6.5}
 	});
 
 	console.log("Substation height: " + substationHeight);
 
 	for (var y = 0; y < substationHeight; y++) {
-		for (var x = 0; x < substations / substationHeight; x++) {
-			entities.push({
-				"entity_number": entities.length + 1,
-				"name": "substation",
-				"position": {"x": roundToHalf(5.5 + x * 18), "y": roundToHalf(11.5 + y * 18)}
-			});
+		for (var x = 0; x < xMax + 18 - 6.5; x += 18) {
+			addSubstation(entities, {"x": roundToHalf(6.5 + x), "y": roundToHalf(11.5 + y * 18)});
 		}
 	}
 }
@@ -91,7 +95,11 @@ function placeSpeakers(entities, signalInstruments) {
 
 var maxsignals = 0;
 function getSignals(data) {
-	var signals = [
+	var signals = [];
+	var constantNum = 0;
+	var index = 6;
+
+	signals[constantNum] = [
 		{"signal": {"type": "virtual", "name": "signal-0"}, "count": data.delays[0], "index": 1},
 		{"signal": {"type": "virtual", "name": "signal-1"}, "count": data.delays[1], "index": 2},
 		{"signal": {"type": "virtual", "name": "signal-2"}, "count": data.delays[2], "index": 3},
@@ -99,20 +107,31 @@ function getSignals(data) {
 		{"signal": {"type": "virtual", "name": "signal-4"}, "count": data.delays[4], "index": 5}
 	];
 
-	var index = 6;
+	var signalPlaced = 0;
+
 	for (i in data.signals) {
 		if (data.signals[i] == 0) continue;
-		signals.push({"signal": factorio_signals[i], "count": data.signals[i], "index": index});
+
+		if (signals[constantNum] === undefined)
+			signals[constantNum] = [];
+
+		signals[constantNum].push({"signal": factorio_signals[i], "count": data.signals[i], "index": index});
+
 		index++;
+		signalPlaced++;
+
 		if (index > 18) {
-			console.log("Not enough signals: " + data.signals.length + " needed");
-			break;
+			constantNum++;
+			index = 1;
 		}
 	}
+
+	if (signalPlaced > maxsignals) maxsignals = signalPlaced;
 
 	return signals;
 }
 
+var lastPlacedDeciderEntityId;
 var columnHeadEntityId;
 function addMemoryCell(entities, position, data) {
 	var connections;
@@ -135,6 +154,7 @@ function addMemoryCell(entities, position, data) {
 		};
 
 		columnHeadEntityId = entities.length + 1;
+		lastPlacedDeciderEntityId = columnHeadEntityId;
 	} else if (position.y == 3) {
 		connections = {
 			"1": {
@@ -153,11 +173,12 @@ function addMemoryCell(entities, position, data) {
 		};
 
 		columnHeadEntityId = entities.length + 1;
+		lastPlacedDeciderEntityId = columnHeadEntityId;
 	} else {
 		connections = {
 			"1": {
 				"red": [
-					{"entity_id": entities.length - 1, "circuit_id": 1}
+					{"entity_id": lastPlacedDeciderEntityId, "circuit_id": 1}
 				],
 				"green": [
 					{"entity_id": entities.length + 2}
@@ -165,16 +186,17 @@ function addMemoryCell(entities, position, data) {
 			},
 			"2": {
 				"green": [
-					{"entity_id": entities.length - 1, "circuit_id": 2}
+					{"entity_id": lastPlacedDeciderEntityId, "circuit_id": 2}
 				]
 			}
 		};
+		lastPlacedDeciderEntityId = entities.length + 1;
 	}
 
 	entities.push({
 		"entity_number": entities.length + 1,
 		"name": "decider-combinator",
-		"position": position,
+		"position": {"x": position.x, "y": position.y},
 		"direction": 2,
 		"control_behavior": {
 			"decider_conditions": {
@@ -188,23 +210,29 @@ function addMemoryCell(entities, position, data) {
 		"connections": connections
 	});
 
-	position2 = {"x": roundToHalf(position.x-1.5), "y": position.y};
+	position.x = roundToHalf(position.x-1.5);
 
 	var signals = getSignals(data);
-	entities.push({
-		"entity_number": entities.length + 1,
-		"name": "constant-combinator",
-		"position": position2,
-		"direction": 2,
-		"control_behavior": {"filters": signals},
-		"connections": {
-			"1": {
-				"green": [
-					{"entity_id": entities.length, "circuit_id": 1}
-				]
+
+	for (var constantNum in signals) {
+		entities.push({
+			"entity_number": entities.length + 1,
+			"name": "constant-combinator",
+			"position": {"x": position.x, "y": position.y},
+			"direction": 2,
+			"control_behavior": {"filters": signals[constantNum]},
+			"connections": {
+				"1": {
+					"green": [
+						{"entity_id": entities.length, "circuit_id": 1}
+					]
+				}
 			}
-		}
-	});
+		});
+		position.y++;
+	}
+
+	return signals.length;
 }
 
 var str, obj;
@@ -214,13 +242,10 @@ function getBlueprint() {
 	console.log(signals);
 
 	var substations = Math.ceil(signals.delays.length / 5 / 106);
-	var substationHeight = Math.floor(Math.sqrt(substations));
+	var substationHeight = Math.ceil(Math.sqrt(substations));
 
 	// Load decoder
 	var entities = JSON.parse(JSON.stringify(decoder_entities))
-
-	// Place substations
-	placeSubstations(entities, substationHeight, substations);
 
 	// Place speakers
 	placeSpeakers(entities, signals.signalInstruments);
@@ -240,7 +265,7 @@ function getBlueprint() {
 			if (data.delays[j] === undefined)
 				data.delays[j] = 0;
 
-			for (var k = 0; k < signals.factorioSignals.length; k++) {
+			for (var k in signals.factorioSignals) {
 				if (signals.factorioSignals[k][data.delays[j]] !== undefined) {
 					if (data.signals[k] === undefined)
 						data.signals[k] = 0;
@@ -250,18 +275,22 @@ function getBlueprint() {
 			}
 		}
 
-		addMemoryCell(entities, {"x": position.x, "y": position.y}, data);
+		position.y += addMemoryCell(entities, {"x": position.x, "y": position.y}, data);
 
-		if (position.y == 3 + 18 * substationHeight - 1) {
+		if (position.y > 3 + 18 * substationHeight - 1) {
 			position.x += 3;
 			position.y = 3;
-		} else if (Math.round(position.x + 2.5) % 18 == 9 && (position.y - 3) % 18 == 7) {
-			position.y += 3;
-		} else {
+		} else if (Math.round(position.x + 2.5) % 18 == 9 && (position.y - 3) % 18 == 8) {
+			position.y += 2;
+		} else if (Math.round(position.x + 2.5) % 18 == 9 && (position.y - 3) % 18 == 9) {
 			position.y += 1;
 		}
 	}
 
+	// Place substations
+	placeSubstations(entities, substationHeight, position.x);
+
+	console.log("Maximum signals: " + maxsignals);
 	console.log(entities);
 
 	bp = {

@@ -14,17 +14,17 @@ function handleFileSelect(event) {
 	}
 
 	try {
-		if (files == 0)
+		if (files.length == 0)
 			return;
 
 		f = files[0];
 
-		if (f.type != "audio/mid")
+		if (f.type != "audio/mid" && f.type != "audio/midi")
 			throw new Error("This file isn't recognized as a MIDI file! "+
 				"(It's type seems to be " + f.type + ")");
 
 		song = new Song();
-		song.name = f.name.charAt(0).toUpperCase() + f.name.slice(1, -4);
+		song.name = f.name.charAt(0).toUpperCase() + f.name.substring(1, f.name.lastIndexOf("."));
 		song.name = song.name.replace(new RegExp("_", 'g'), " ");
 		console.log("Reading MIDI file: " + f.name);
 
