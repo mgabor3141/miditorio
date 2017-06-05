@@ -60,50 +60,85 @@ function processMidi(midi) {
 function Instrument(time, instrument) {
 	this.time = time;
 	this.instrument = instrument;
+	this.shift = 0;
 
 	this.notes = [];
 
-	this.addNote = function(id) {
-		this.notes.push(id);
-	}
-
 	this.factorioInstrument = getFactorioInstrument(instrument);
+}
+
+Instrument.prototype.addNote = function(id) {
+	this.notes.push(id);
+}
+
+Instrument.prototype.setShift = function(shift) {
+	this.shift = shift;
+
+	updateTrackInfos();
 }
 
 function Track(trackNum) {
 	this.name = "Track " + trackNum;
 	this.notes = [];
 	this.text = [];
-
-	this.addNote = function(id) {
-		this.notes.push(id);
-	}
-
-	this.addText = function(time, text) {
-		this.text.push({"time": time, "text": text});
-	}
-
-	this.setName = function(name) {
-		this.name = name;
-	}
-
-	this.getRangeData = function() {
-		var data = {"above": 0, "below": 0, "max": {"above": 0, "below": 0}};
-
-		for (var note_i in this.notes) {
-			var note = song.notes[this.notes[note_i]];
-
-			var range = note.instrument.factorioInstrument.checkRange(note.pitch, true);
-			if (range != true) {
-				data[range.direction]++;
-				if (range.delta > data.max[range.direction])
-					data.max[range.direction] = range.delta;
-			}
-		}
-
-		return data;
-	}
+	this.shift = 0;
 }
+
+Track.prototype.addNote = function(id) {
+	this.notes.push(id);
+}
+
+Track.prototype.addText = function(time, text) {
+	this.text.push({"time": time, "text": text});
+}
+
+Track.prototype.setName = function(name) {
+	this.name = name;
+}
+
+Track.prototype.getRangeData = function() {
+	var data = {"above": 0, "below": 0, "max": {"above": 0, "below": 0}};
+
+	for (var note_i in this.notes) {
+		var note = song.notes[this.notes[note_i]];
+
+		var range = note.instrument.factorioInstrument.checkRange(note, true);
+		if (range != true) {
+			data[range.direction]++;
+			if (range.delta > data.max[range.direction])
+				data.max[range.direction] = range.delta;
+		}
+	}
+
+	return data;
+}
+
+Track.prototype.setShift = function(shift) {
+	this.shift = shift;
+
+	updateTrackInfos();
+}
+
+function Note(time, channel, track, pitch, velocity, instrument) {
+	this.time = time;
+	this.channel = channel;
+	this.track = track;
+	this.pitch = pitch;
+	this.velocity = velocity;
+	this.instrument = instrument;
+}
+
+Note.prototype.convert = function() {
+	pitch = this.instrument.factorioInstrument.convert(this.pitch);
+
+	pitch += this.instrument.shift;
+
+	pitch += this.track.shift;
+
+	pitch += song.globalshift;
+
+	return pitch;
+};
 
 /*
 	Ok this is kinda tricky.
@@ -114,141 +149,133 @@ function Track(trackNum) {
 function Song() {
 	this.name = "";
 	this.time = 0;
+	this.globalshift = 0;
 	this.notes = [];
 	this.tracks = [];
 	this.instruments = [];
 	this.instruments[9] = [new Instrument(0, -1)]; // Drum Track
+}
 
-	this.addNote = function(time, channel, track, pitch, velocity) {
-		if (this.tracks[track] === undefined)
-			this.tracks[track] = new Track(this.tracks.length + 1);
+Song.prototype.addNote = function(time, channel, track, pitch, velocity) {
+	if (this.tracks[track] === undefined)
+		this.tracks[track] = new Track(this.tracks.length + 1);
 
-		this.tracks[track].addNote(this.notes.length);
+	this.tracks[track].addNote(this.notes.length);
 
-		if (this.getInstrument(time, channel) === undefined)
-			this.addInstrumentChange(time, channel, 0);
+	if (this.getInstrument(time, channel) === undefined)
+		this.addInstrumentChange(time, channel, 0);
 
-		var instrument = this.getInstrument(time, channel);
-		instrument.addNote(this.notes.length);
+	var instrument = this.getInstrument(time, channel);
+	instrument.addNote(this.notes.length);
 
-		this.notes.push({
-			"time": time,
-			"channel": channel,
-			"track": track,
-			"pitch": pitch,
-			"velocity": velocity,
-			"instrument": instrument
-		});
+	this.notes.push(new Note(time, channel, this.tracks[track], pitch, velocity, instrument));
 
-		if (time > this.time) this.time = time;
-	}
+	if (time > this.time) this.time = time;
+}
 
-	this.getTrack = function(track) {
-		if (this.tracks[track] === undefined)
-			this.tracks[track] = new Track();
+Song.prototype.getTrack = function(track) {
+	if (this.tracks[track] === undefined)
+		this.tracks[track] = new Track();
 
-		return this.tracks[track];
-	}
+	return this.tracks[track];
+}
 
-	this.getInstrument = function(time, channel) {
-		if (channel == 9)
-			return this.instruments[9][0];
+Song.prototype.getInstrument = function(time, channel) {
+	if (channel == 9)
+		return this.instruments[9][0];
 
-		var maximumInstrumentTime = -1;
-		var maximumInstrument;
+	var maximumInstrumentTime = -1;
+	var maximumInstrument;
 
-		for (i in this.instruments[channel]) {
-			var instrument = this.instruments[channel][i];
-			if (instrument.time <= time && instrument.time > maximumInstrumentTime) {
-				maximumInstrument = instrument;
-				maximumInstrumentTime = instrument.time;
-			}
+	for (i in this.instruments[channel]) {
+		var instrument = this.instruments[channel][i];
+		if (instrument.time <= time && instrument.time > maximumInstrumentTime) {
+			maximumInstrument = instrument;
+			maximumInstrumentTime = instrument.time;
 		}
-
-		return maximumInstrument;
 	}
 
-	this.addInstrumentChange = function (time, channel, instrument) {
-		if (this.instruments[channel] === undefined) {
-			this.instruments[channel] = [];
+	return maximumInstrument;
+}
+
+Song.prototype.addInstrumentChange = function (time, channel, instrument) {
+	if (this.instruments[channel] === undefined) {
+		this.instruments[channel] = [];
+		this.instruments[channel].push(new Instrument(time, instrument)); // add new
+	} else {
+		var existing = this.instruments[channel].find(
+			function(value, index) {
+				return (value.time == time);
+			}
+		);
+
+		if (existing !== undefined)
+			existing.instrument = instrument;
+		else
 			this.instruments[channel].push(new Instrument(time, instrument)); // add new
-		} else {
-			var existing = this.instruments[channel].find(
-				function(value, index) {
-					return (value.time == time);
-				}
-			);
-
-			if (existing !== undefined)
-				existing.instrument = instrument;
-			else
-				this.instruments[channel].push(new Instrument(time, instrument)); // add new
-		}
 	}
+}
 
-	this.toFactorio = function() {
-		var factorioInstruments = [];
+Song.prototype.toFactorio = function() {
+	var factorioInstruments = [];
 
-		for (var instrument_channel in this.instruments)
-			for (var instrument_i in this.instruments[instrument_channel]) {
-				var instrument = this.instruments[instrument_channel][instrument_i];
-				var factorioInstrument = instrument.factorioInstrument;
+	for (var instrument_channel in this.instruments)
+		for (var instrument_i in this.instruments[instrument_channel]) {
+			var instrument = this.instruments[instrument_channel][instrument_i];
+			var factorioInstrument = instrument.factorioInstrument;
 
-				if (factorioInstruments[factorioInstrument.name] === undefined)
-					factorioInstruments[factorioInstrument.name] = [];
+			if (factorioInstruments[factorioInstrument.name] === undefined)
+				factorioInstruments[factorioInstrument.name] = [];
 
-				for (var note_i in instrument.notes) {
-					var note = this.notes[instrument.notes[note_i]];
+			for (var note_i in instrument.notes) {
+				var note = this.notes[instrument.notes[note_i]];
 
-					var factorioTick = Math.round(note.time * 0.06) + 1;
-					if (factorioInstruments[factorioInstrument.name][factorioTick] === undefined)
-						factorioInstruments[factorioInstrument.name][factorioTick] = [];
+				var factorioTick = Math.round(note.time * 0.06) + 1;
+				if (factorioInstruments[factorioInstrument.name][factorioTick] === undefined)
+					factorioInstruments[factorioInstrument.name][factorioTick] = [];
 
-					if (factorioInstrument.checkRange(note.pitch)) {
-						factorioInstruments[factorioInstrument.name][factorioTick].push(
-							factorioInstrument.convert(note.pitch)
-						);
-					}
+				if (factorioInstrument.checkRange(note)) {
+					factorioInstruments[factorioInstrument.name][factorioTick].push(note.convert());
 				}
 			}
-
-		var delays = [];
-		var factorioSignals = [];
-		var signalInstruments = [];
-
-		var signalsUsed = 0;
-
-		for (instrument_i in factorioInstruments) {
-			var instrument = factorioInstruments[instrument_i];
-
-			for (delay in instrument) {
-				var chord = instrument[delay];
-
-				delays.push(parseInt(delay));
-
-				for (i in chord) {
-					i = parseInt(i);
-					if (factorioSignals[signalsUsed + i] === undefined) {
-						factorioSignals[signalsUsed + i] = [];
-						signalInstruments.push(factorio_instrument[instrument_i]);
-					}
-
-					factorioSignals[signalsUsed + i][delay] = chord[i];
-				}
-			}
-
-			signalsUsed = factorioSignals.length;
 		}
 
-		// This can be done better performance-wise
-		var uniqueDelays = [];
-		$.each(delays, function(i, el){
-			if($.inArray(el, uniqueDelays) === -1) uniqueDelays.push(el);
-		});
-		uniqueDelays.sort( function(a,b){return a - b} );
+	var delays = [];
+	var factorioSignals = [];
+	var signalInstruments = [];
 
-		return {"delays": uniqueDelays, "factorioSignals": factorioSignals, "signalInstruments": signalInstruments};
+	var signalsUsed = 0;
+
+	for (instrument_i in factorioInstruments) {
+		var instrument = factorioInstruments[instrument_i];
+
+		for (delay in instrument) {
+			var chord = instrument[delay];
+
+			delays.push(parseInt(delay));
+
+			for (i in chord) {
+				i = parseInt(i);
+				if (factorioSignals[signalsUsed + i] === undefined) {
+					factorioSignals[signalsUsed + i] = [];
+					signalInstruments.push(factorio_instrument[instrument_i]);
+				}
+
+				factorioSignals[signalsUsed + i][delay] = chord[i];
+			}
+		}
+
+		signalsUsed = factorioSignals.length;
 	}
+
+	// This can be done better performance-wise
+	var uniqueDelays = [];
+	$.each(delays, function(i, el){
+		if($.inArray(el, uniqueDelays) === -1) uniqueDelays.push(el);
+	});
+	uniqueDelays.sort( function(a,b){return a - b} );
+
+	return {"delays": uniqueDelays, "factorioSignals": factorioSignals, "signalInstruments": signalInstruments};
 }
 
 function sortMidi(events) {
