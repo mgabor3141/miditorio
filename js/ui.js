@@ -126,7 +126,7 @@ function generateSettingsPanel() {
 			if (song.tracks[tracknum].notes.length == 0 && song.tracks[tracknum].text.length == 0)
 				continue;
 
-			tracksTmp += "<a href='#' class='list-group-item' id='track" + tracknum + "'>" + song.tracks[tracknum].name +
+			tracksTmp += "<a class='list-group-item' id='track" + tracknum + "'>" + song.tracks[tracknum].name +
 				" <span class='rangeinfo'></span></a>";
 		}
 
@@ -181,8 +181,8 @@ function getTrackDetails(id) {
 
 	$(".settingsPanel#trackinfo").text("");
 
-	if (track.name != ("Track " + (id+1)))
-		$(".settingsPanel#trackinfo").append("<div class='trackid'>Track " + (id+1) + "</div>");
+	if (track.name != ("Track " + id))
+		$(".settingsPanel#trackinfo").append("<div class='trackid'>Track " + id + "</div>");
 	else
 		$(".settingsPanel#trackinfo").append("<div class='trackid'></div>");
 
@@ -193,13 +193,65 @@ function getTrackDetails(id) {
 			$(".settingsPanel#trackinfo").append("<div class='detailsText'>" + track.text[i].text + "</div>");
 		}
 	}
+
+	$(".settingsPanel#trackinfo").append("<div id='notenum'>Notes: " + track.notes.length + "</div>");
+
+	if (track.notes.length > 0) {
+		$(".settingsPanel#trackinfo").append("<div id='shift'>Shift track (octaves): " + shiftUi(track) + "</div>");
+
+		$(".settingsPanel#trackinfo").append("<div id='selectedTrackRangeInfo'></div>");
+	}
+
+	updateSelectedTrackRangeInfo();
 }
 
+var shiftUiId = 0;
+function shiftUi(object) {
+	var tmpText = "";
+
+	tmpText +=	"<button type='button' class='btn btn-xs btn-default' id='shift " + shiftUiId + "down'>&lt;</button>"+
+				"<span class='shiftText'> " + object.shift + " </span>" +
+				"<button type='button' class='btn btn-xs btn-default' id='shift " + shiftUiId + "up'>&gt;</button>";
+
+	$("#shift" + shiftUiId + "down").click();
+
+	return tmpText;
+
+	shiftUiId++;
+}
+
+function updateSelectedTrackRangeInfo() {
+	$(".settingsPanel#trackinfo #selectedTrackRangeInfo").text("");
+
+	rangeData = song.tracks[selectedTrack].getRangeData();
+
+	if (rangeData.below  == 0 && rangeData.above == 0) {
+		$(".settingsPanel#trackinfo #selectedTrackRangeInfo").append(
+			"<span class='rangeinfo good'>✔ All notes are within range of their instrument</span>"
+		);
+	} else {
+		if (rangeData.below > 0) {
+			$(".settingsPanel#trackinfo #selectedTrackRangeInfo").append(
+				"<span class='rangeinfo bad'>▼ " + rangeData.below + " notes are lower than the range of their instrument.</span><br/>"
+			);
+		}
+
+		if (rangeData.above > 0) {
+			$(".settingsPanel#trackinfo #selectedTrackRangeInfo").append(
+				"<span class='rangeinfo bad'>▲ " + rangeData.above + " notes are higher than the range of their instrument.</span>"
+			);
+		}
+	}
+}
+
+var selectedTrack;
 function selectTrack(event) {
 	var trackId = parseInt($(this).attr("id").substr("track".length));
 
 	$(".list-group-item").removeClass("active");
 	$(this).addClass("active");
+
+	selectedTrack = trackId;
 
 	getTrackDetails(trackId);
 }
