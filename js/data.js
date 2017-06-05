@@ -5,24 +5,26 @@ function FactorioInstrument(name, id, base, range_octaves, default_volume) {
 	this.id = id;
 	this.base = base;
 	this.range = range_octaves*12;
+	
 	if (default_volume !== undefined)
 		this.default_volume = default_volume;
 	else
 		this.default_volume = 1;
+}
 
-	this.convert = function(note) {
-		return note - this.base;
-	}
+FactorioInstrument.prototype.convert = function(note) {
+	return note - this.base;
+}
 
-	this.checkRange = function(note, getDirection) {
-		note = this.convert(note);
-		if (getDirection == false || getDirection == undefined)
-			return (note > 0 && note <= this.range);
-		
-		if (note <= 0) return {"direction": "below", "delta": -note + 1};
-		if (note > this.range) return {"direction": "above", "delta": note - this.range};
-		return true;
-	}
+FactorioInstrument.prototype.checkRange = function(note, getDirection) {
+	pitch = note.convert();
+
+	if (getDirection == false || getDirection == undefined)
+		return (pitch > 0 && pitch <= this.range);
+	
+	if (pitch <= 0) return {"direction": "below", "delta": -pitch + 1};
+	if (pitch > this.range) return {"direction": "above", "delta": pitch - this.range};
+	return true;
 }
 
 var factorio_instrument = {

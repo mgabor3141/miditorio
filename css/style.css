@@ -229,6 +229,7 @@ body {
 	opacity: 0;
 	display: none;
 }
+
 #bpoutput {
 	font-family: monospace;
 	color: #333;

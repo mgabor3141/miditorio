@@ -104,8 +104,6 @@ function msToTime(s) {
   return pad(mins, 1) + ':' + pad(secs);
 }
 
-console.log(msToTime(55018))
-
 function generateSettingsPanel() {
 	$("#settings").text("");
 
@@ -156,7 +154,6 @@ function generateSettingsPanel() {
 
 			textTmp += "<a href='#' class='list-group-item' id='instrument" + instrument + "'>" +
 				midi_instrument[song.instruments[channel][instrument].instrument] +
-				" <span class='channel'>[CH" + channel + "]</span>" +
 				" <span class='rangeinfo'></span></a>";
 		}
 	}
