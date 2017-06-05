@@ -119,7 +119,9 @@ body {
 	border-bottom-right-radius: 0;
 
 	margin: 0; 
-	padding: 0; 
+	padding: 0;
+
+	cursor: pointer;
 }
 
 .list-group-item:first-child {
@@ -158,7 +160,7 @@ body {
 
 .settingsPanel {
 	margin-left: 0;
-	padding: 0 20px;
+	padding: 20px;
 	background-color: white;
 
 	border: 1px solid rgb(221, 221, 221);
@@ -171,16 +173,31 @@ body {
 
 .settingsPanel .trackid {
 	color: #666;
-	margin: 20px 0 2px 0;
 }
 
 .settingsPanel h3 {
-	margin: 0 0 10px 0;
+	margin: 0 0 7px 0;
 }
 
 .settingsPanel .detailsText {
 	padding-left:  30px;
+	font-style: italic;
 }
+
+#notenum {
+	margin: 7px 0;
+}
+
+#shift {
+	margin-top: 
+}
+
+.shiftText {
+	font-family: monospace;
+	font-weight: bold;
+}
+
+/* ### Animations  */
 
 #inserter {
 	background: transparent url(../assets/inserter.png) 0 0 no-repeat;
@@ -214,6 +231,8 @@ body {
 
 	background-position-x: 100000px;
 }
+
+/* ### Blueprint output */
 
 #bpbox {
 	width: 160px;

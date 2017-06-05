@@ -16,7 +16,7 @@ function Song() {
 
 Song.prototype.addNote = function(time, channel, track, pitch, velocity) {
 	if (this.tracks[track] === undefined)
-		this.tracks[track] = new Track(this.tracks.length + 1);
+		this.tracks[track] = new Track(track);
 
 	this.tracks[track].addNote(this.notes.length);
 
@@ -33,7 +33,7 @@ Song.prototype.addNote = function(time, channel, track, pitch, velocity) {
 
 Song.prototype.getTrack = function(track) {
 	if (this.tracks[track] === undefined)
-		this.tracks[track] = new Track();
+		this.tracks[track] = new Track(track);
 
 	return this.tracks[track];
 }
