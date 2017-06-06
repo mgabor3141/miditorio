@@ -16,7 +16,7 @@ function showError(e) {
 			opacity: 0,
 			top: -5
 		});
-	}, 5000);
+	}, 10000);
 }
 
 // ### File selection
@@ -172,7 +172,11 @@ function generateSettingsPanel() {
 		$('#assembler').spSet("fps", 0);
 		$('#insertertake').spSet("fps", 30);
 
-		getBlueprint();
+		$("#bpbox").animate({opacity: 0}, 200, function(){
+			$("#bpbox").hide();
+
+			getBlueprint();
+		});
 	});
 
 	updateTrackInfos();
@@ -358,15 +362,19 @@ function getInstrumentDetails(channelId, instrumentId) {
 
 	$(".settingsPanel#instrumentinfo").append("<div id='notenum'>Notes: " + instrument.notes.length + "</div>");
 
-	$(".settingsPanel#instrumentinfo").append("<div id='shiftinstrument" + instrumentId + "c" + channelId + "'>Shift instrument (octaves): </div>");
-	shiftUi($(".settingsPanel#instrumentinfo #shiftinstrument" + instrumentId + "c" + channelId), instrument);
+	if (channelId != 9) {
+		$(".settingsPanel#instrumentinfo").append("<div id='shiftinstrument" + instrumentId + "c" + channelId + "'>Shift instrument (octaves): </div>");
+		shiftUi($(".settingsPanel#instrumentinfo #shiftinstrument" + instrumentId + "c" + channelId), instrument);
 
-	$(".settingsPanel#instrumentinfo").append("<div id='selectedRangeInfo'></div>");
+		$(".settingsPanel#instrumentinfo").append("<div id='selectedRangeInfo'></div>");
 
-	updateRangeInfo(instrument, $(".settingsPanel#instrumentinfo #selectedRangeInfo"));
+		updateRangeInfo(instrument, $(".settingsPanel#instrumentinfo #selectedRangeInfo"));
 
-	$(".settingsPanel#instrumentinfo").append("<div id='instrumentbind'>Factorio instrument: </div>")
-	instrumentUi($(".settingsPanel #instrumentbind"), instrument);
+		$(".settingsPanel#instrumentinfo").append("<div id='instrumentbind'>Factorio instrument: </div>")
+		instrumentUi($(".settingsPanel #instrumentbind"), instrument);
+	} else {
+		$(".settingsPanel#instrumentinfo").append("<div id='instrumentbind'>Factorio instrument: DrumKit</div>")
+	}
 }
 
 var instrumentUiId = 0;
