@@ -10,14 +10,6 @@ function roundToHalf(x) {
 	return Math.round(x*2)/2;
 }
 
-function addSubstation(entities, position) {
-	entities.push({
-		"entity_number": entities.length + 1,
-		"name": "substation",
-		"position": position
-	});
-}
-
 function placeSubstations(entities, substationHeight, xMax) {
 	// Single one at the top
 	entities.push({
@@ -26,11 +18,13 @@ function placeSubstations(entities, substationHeight, xMax) {
 		"position": {"x": 6.5, "y": -6.5}
 	});
 
-	console.log("Substation height: " + substationHeight);
-
 	for (var y = 0; y < substationHeight; y++) {
-		for (var x = 0; x < xMax + 18 - 6.5; x += 18) {
-			addSubstation(entities, {"x": roundToHalf(6.5 + x), "y": roundToHalf(11.5 + y * 18)});
+		for (var x = 0; x + 6.5 < Math.ceil(xMax/18)*18; x += 18) {
+			entities.push({
+				"entity_number": entities.length + 1,
+				"name": "substation",
+				"position": {"x": roundToHalf(6.5 + x), "y": roundToHalf(11.5 + y * 18)}
+			});
 		}
 	}
 }
@@ -45,7 +39,7 @@ function placeSpeakers(entities, signalInstruments) {
 		var connections;
 		if (position.x == 5) {
 			if (position.y == -4) {
-				connections = {"1": {"green": [{"entity_id": 6, "circuit_id": 2}]}};
+				connections = {"1": {"green": [{"entity_id": 4, "circuit_id": 2}]}};
 			} else {
 				connections = {"1": {"green": [{"entity_id": rowLeader}]}};
 				rowLeader = entities.length + 1;
@@ -140,15 +134,12 @@ function addMemoryCell(entities, position, data) {
 		connections = {
 			"1": {
 				"red": [
-					{"entity_id": 18, "circuit_id": 2}
-				],
-				"green": [
-					{"entity_id": 21}
+					{"entity_id": 19, "circuit_id": 2}
 				]
 			},
 			"2": {
 				"green": [
-					{"entity_id": 16, "circuit_id": 1}
+					{"entity_id": 17, "circuit_id": 1}
 				]
 			}
 		};
@@ -160,9 +151,6 @@ function addMemoryCell(entities, position, data) {
 			"1": {
 				"red": [
 					{"entity_id": columnHeadEntityId, "circuit_id": 1}
-				],
-				"green": [
-					{"entity_id": entities.length + 2}
 				]
 			},
 			"2": {
@@ -179,9 +167,6 @@ function addMemoryCell(entities, position, data) {
 			"1": {
 				"red": [
 					{"entity_id": lastPlacedDeciderEntityId, "circuit_id": 1}
-				],
-				"green": [
-					{"entity_id": entities.length + 2}
 				]
 			},
 			"2": {
@@ -239,8 +224,6 @@ var str, obj;
 function getBlueprint() {
 	var signals = song.toFactorio();
 
-	console.log(signals);
-
 	var substations = Math.ceil(signals.delays.length / 5 / 106);
 	var substationHeight = Math.ceil(Math.sqrt(substations));
 
@@ -290,8 +273,7 @@ function getBlueprint() {
 	// Place substations
 	placeSubstations(entities, substationHeight, position.x);
 
-	console.log("Maximum signals: " + maxsignals);
-	console.log(entities);
+	entities[9].control_behavior.filters[4].count = signals.delays[signals.delays.length - 1] + 1;
 
 	bp = {
 		"blueprint": {

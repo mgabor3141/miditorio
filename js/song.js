@@ -88,7 +88,7 @@ Song.prototype.toFactorio = function() {
 			for (var note_i in instrument.notes) {
 				var note = this.notes[instrument.notes[note_i]];
 
-				var factorioTick = Math.round(note.time * 0.06) + 1;
+				var factorioTick = Math.round(note.time * 0.06) + 10;
 				if (factorioInstruments[factorioInstrument.name][factorioTick] === undefined)
 					factorioInstruments[factorioInstrument.name][factorioTick] = [];
 

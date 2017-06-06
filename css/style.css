@@ -208,6 +208,15 @@ p.rangeinfo {
 	padding: 0 8px;
 }
 
+#instrumentbind {
+	padding: 7px 0;
+}
+
+select.form-control {
+	display: inline;
+	width: 150px;
+}
+
 /* ### Animations  */
 
 #inserter {

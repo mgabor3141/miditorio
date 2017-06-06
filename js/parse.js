@@ -26,7 +26,6 @@ function handleFileSelect(event) {
 		song = new Song();
 		song.name = f.name.charAt(0).toUpperCase() + f.name.substring(1, f.name.lastIndexOf("."));
 		song.name = song.name.replace(new RegExp("_", 'g'), " ");
-		console.log("Reading MIDI file: " + f.name);
 
 		var reader = new FileReader();
 		reader.onload = function(e) {
@@ -53,8 +52,6 @@ function processMidi(midi) {
 	var midiFile = new MIDIFile(midi);
 
 	song = sortMidi(midiFile.getEvents());
-
-	console.log(song);
 }
 
 function sortMidi(events) {

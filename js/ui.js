@@ -362,6 +362,38 @@ function getInstrumentDetails(channelId, instrumentId) {
 	$(".settingsPanel#instrumentinfo").append("<div id='selectedRangeInfo'></div>");
 
 	updateRangeInfo(instrument, $(".settingsPanel#instrumentinfo #selectedRangeInfo"));
+
+	$(".settingsPanel#instrumentinfo").append("<div id='instrumentbind'>Factorio instrument: </div>")
+	instrumentUi($(".settingsPanel #instrumentbind"), instrument);
+}
+
+var instrumentUiId = 0;
+function instrumentUi(parent, object) {
+	var tmpText = "<select class='form-control' id='instrumentUi" + instrumentUiId + "'>";
+
+	for (fi in factorio_instrument) {
+		tmpText += "<option" +
+		(object.factorioInstrument.id == factorio_instrument[fi].id ? " selected" : "") +
+		" value='" + factorio_instrument[fi].name + "'>" + factorio_instrument[fi].name + "</option>"
+	}
+
+	tmpText += "</option>";
+
+	parent.append(tmpText);
+
+	$("#instrumentUi" + instrumentUiId).change({"object": object}, instrumentCb);
+
+	instrumentUiId++;
+}
+
+function instrumentCb(event) {
+	var object = event.data.object;
+
+	object.factorioInstrument = factorio_instrument[this.value];
+
+	updateTrackInfos();
+	updateRangeInfo(song.tracks[selectedTrack], $(".settingsPanel#trackinfo #selectedRangeInfo"));
+	updateRangeInfo(song.instruments[selectedInstrumentChannel][selectedInstrument], $(".settingsPanel#instrumentinfo #selectedRangeInfo"));
 }
 
 // ### Blueprint Textbox
