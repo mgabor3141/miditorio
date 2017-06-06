@@ -57,6 +57,8 @@ Song.prototype.getInstrument = function(time, channel) {
 }
 
 Song.prototype.addInstrumentChange = function (time, channel, instrument) {
+	if (channel == 9) return;
+	
 	if (this.instruments[channel] === undefined) {
 		this.instruments[channel] = [];
 		this.instruments[channel].push(new Instrument(time, instrument)); // add new
