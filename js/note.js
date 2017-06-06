@@ -10,9 +10,9 @@ function Note(time, channel, track, pitch, velocity, instrument) {
 Note.prototype.convert = function() {
 	pitch = this.instrument.factorioInstrument.convert(this.pitch);
 
-	pitch += this.instrument.shift;
+	pitch += this.instrument.shift * 12;
 
-	pitch += this.track.shift;
+	pitch += this.track.shift * 12;
 
 	pitch += song.globalshift;
 

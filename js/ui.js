@@ -126,7 +126,7 @@ function generateSettingsPanel() {
 			if (song.tracks[tracknum].notes.length == 0 && song.tracks[tracknum].text.length == 0)
 				continue;
 
-			tracksTmp += "<a class='list-group-item' id='track" + tracknum + "'>" + song.tracks[tracknum].name +
+			tracksTmp += "<a class='list-group-item track' data-track='" + tracknum + "'>" + song.tracks[tracknum].name +
 				" <span class='rangeinfo'></span></a>";
 		}
 
@@ -135,7 +135,7 @@ function generateSettingsPanel() {
 		tracksTmp += "<div class='settingsPanel col-sm-8' id='trackinfo'>Track Info</div></div>";
 
 		$("#settings").append(tracksTmp);
-		$(".list-group-item").click(selectTrack);
+		$(".list-group-item.track").click(selectTrack);
 
 		$("#settings").append("<div class='clearfix' style='clear: both;'>");
 	}
@@ -152,7 +152,7 @@ function generateSettingsPanel() {
 			if (song.instruments[channel][instrument].notes.length == 0)
 				continue;
 
-			textTmp += "<a href='#' class='list-group-item' id='instrument" + instrument + "'>" +
+			textTmp += "<a class='list-group-item instrument' data-instrument='" + instrument + "' data-channel='" + channel + "'>" +
 				midi_instrument[song.instruments[channel][instrument].instrument] +
 				" <span class='rangeinfo'></span></a>";
 		}
@@ -163,6 +163,8 @@ function generateSettingsPanel() {
 	textTmp += "<div class='settingsPanel col-sm-8' id='instrumentinfo'>Instrument Info</div></div>";
 
 	$("#settings").append(textTmp);
+
+	$(".list-group-item.instrument").click(selectInstrument);
 
 	$("#settings").append("<div class='clearfix' style='clear: both;'>");
 
@@ -176,15 +178,17 @@ function generateSettingsPanel() {
 	updateTrackInfos();
 }
 
+// ### Tracks
+
 function getTrackDetails(id) {
 	var track = song.tracks[id];
 
 	$(".settingsPanel#trackinfo").text("");
 
 	if (track.name != ("Track " + id))
-		$(".settingsPanel#trackinfo").append("<div class='trackid'>Track " + id + "</div>");
+		$(".settingsPanel#trackinfo").append("<div class='info'>Track " + id + "</div>");
 	else
-		$(".settingsPanel#trackinfo").append("<div class='trackid'></div>");
+		$(".settingsPanel#trackinfo").append("<div class='info'></div>");
 
 	$(".settingsPanel#trackinfo").append("<h3>" + track.name + "</h3>");
 
@@ -197,48 +201,63 @@ function getTrackDetails(id) {
 	$(".settingsPanel#trackinfo").append("<div id='notenum'>Notes: " + track.notes.length + "</div>");
 
 	if (track.notes.length > 0) {
-		$(".settingsPanel#trackinfo").append("<div id='shift'>Shift track (octaves): " + shiftUi(track) + "</div>");
+		$(".settingsPanel#trackinfo").append("<div id='shifttrack" + id + "'>Shift track (octaves): </div>");
+		shiftUi($(".settingsPanel#trackinfo #shifttrack" + id), track);
 
-		$(".settingsPanel#trackinfo").append("<div id='selectedTrackRangeInfo'></div>");
+		$(".settingsPanel#trackinfo").append("<div id='selectedRangeInfo'></div>");
 	}
 
-	updateSelectedTrackRangeInfo();
+	updateRangeInfo(track, $(".settingsPanel#trackinfo #selectedRangeInfo"));
 }
 
 var shiftUiId = 0;
-function shiftUi(object) {
-	var tmpText = "";
+function shiftUi(parent, object) {
+	var elements= $("<button type='button' class='btn btn-xs btn-default' id='shift" + shiftUiId + "down'>&lt;</button>"+
+					"<span class='shiftText'>" + object.shift + "</span>" +
+					"<button type='button' class='btn btn-xs btn-default' id='shift" + shiftUiId + "up'>&gt;</button>");
 
-	tmpText +=	"<button type='button' class='btn btn-xs btn-default' id='shift " + shiftUiId + "down'>&lt;</button>"+
-				"<span class='shiftText'> " + object.shift + " </span>" +
-				"<button type='button' class='btn btn-xs btn-default' id='shift " + shiftUiId + "up'>&gt;</button>";
+	parent.append(elements);
 
-	$("#shift" + shiftUiId + "down").click();
-
-	return tmpText;
+	$("#shift" + shiftUiId + "down").click({"object": object, "by": -1}, shiftCb);
+	$("#shift" + shiftUiId + "up").click({"object": object, "by": 1}, shiftCb);
 
 	shiftUiId++;
 }
 
-function updateSelectedTrackRangeInfo() {
-	$(".settingsPanel#trackinfo #selectedTrackRangeInfo").text("");
+function shiftCb(event) {
+	var object = event.data.object;
+	var by = event.data.by;
 
-	rangeData = song.tracks[selectedTrack].getRangeData();
+	object.setShift(object.shift + by);
+
+	$("#" + this.parentElement.id + " span").text(object.shift);
+
+	updateTrackInfos();
+	updateRangeInfo(song.tracks[selectedTrack], $(".settingsPanel#trackinfo #selectedRangeInfo"));
+	updateRangeInfo(song.instruments[selectedInstrumentChannel][selectedInstrument], $(".settingsPanel#instrumentinfo #selectedRangeInfo"));
+}
+
+function updateRangeInfo(object, DOM) {
+	DOM.text("");
+
+	rangeData = object.getRangeData();
 
 	if (rangeData.below  == 0 && rangeData.above == 0) {
-		$(".settingsPanel#trackinfo #selectedTrackRangeInfo").append(
+		DOM.append(
 			"<span class='rangeinfo good'>✔ All notes are within range of their instrument</span>"
 		);
 	} else {
-		if (rangeData.below > 0) {
-			$(".settingsPanel#trackinfo #selectedTrackRangeInfo").append(
-				"<span class='rangeinfo bad'>▼ " + rangeData.below + " notes are lower than the range of their instrument.</span><br/>"
+		if (rangeData.above > 0) {
+			DOM.append(
+				"<p class='rangeinfo bad'>▲ " + rangeData.above + " notes are higher than the range of their instrument.<br/>"+
+				"Highest note is " + rangeData.max.above + " semitones above the range</p>"
 			);
 		}
 
-		if (rangeData.above > 0) {
-			$(".settingsPanel#trackinfo #selectedTrackRangeInfo").append(
-				"<span class='rangeinfo bad'>▲ " + rangeData.above + " notes are higher than the range of their instrument.</span>"
+		if (rangeData.below > 0) {
+			DOM.append(
+				"<p class='rangeinfo bad'>▼ " + rangeData.below + " notes are lower than the range of their instrument.<br/>"+
+				"Lowest note is " + rangeData.max.below + " semitones below the range</p>"
 			);
 		}
 	}
@@ -246,9 +265,10 @@ function updateSelectedTrackRangeInfo() {
 
 var selectedTrack;
 function selectTrack(event) {
-	var trackId = parseInt($(this).attr("id").substr("track".length));
+	//var trackId = parseInt($(this).attr("id").substr("track".length));
+	var trackId = parseInt($(this).data("track"));
 
-	$(".list-group-item").removeClass("active");
+	$(".list-group-item.track").removeClass("active");
 	$(this).addClass("active");
 
 	selectedTrack = trackId;
@@ -257,27 +277,91 @@ function selectTrack(event) {
 }
 
 function updateTrackInfos() {
+	// tracks and instruments
 	for(tracknum in song.tracks) {
 		rangeData = song.tracks[tracknum].getRangeData();
 
-		if (rangeData.below  == 0 && rangeData.above == 0) {
-			$("#track" + tracknum + " span.rangeinfo").attr("class", "rangeinfo good");
-			$("#track" + tracknum + " span.rangeinfo").text("✔");
-		} else {
-			$("#track" + tracknum + " span.rangeinfo").attr("class", "rangeinfo bad");
+		rangeInfoObject = $(".track[data-track='" + tracknum + "'] span.rangeinfo");
 
+		if (rangeData.below  == 0 && rangeData.above == 0) {
+			rangeInfoObject.attr("class", "rangeinfo good");
+			rangeInfoObject.text("✔");
+		} else {
+			rangeInfoObject.attr("class", "rangeinfo bad");
 			var tmpText = "";
-			if (rangeData.below > 0) {
-				tmpText += "▼ " + rangeData.below + " notes ";
-			}
 
 			if (rangeData.above > 0) {
 				tmpText += "▲ " + rangeData.above + " notes ";
 			}
 
-			$("#track" + tracknum + " span.rangeinfo").text(tmpText.slice(0, -1));
+			if (rangeData.below > 0) {
+				tmpText += "▼ " + rangeData.below + " notes ";
+			}
+
+			rangeInfoObject.text(tmpText.slice(0, -1));
 		}
 	}
+
+	for (channel in song.instruments) {
+		for (instrumentnum in song.instruments[channel]) {
+			rangeData = song.instruments[channel][instrumentnum].getRangeData();
+
+			rangeInfoObject = $(".instrument[data-instrument='" + instrumentnum + "'][data-channel='" + channel + "'] span.rangeinfo");
+
+			if (rangeData.below  == 0 && rangeData.above == 0) {
+				rangeInfoObject.attr("class", "rangeinfo good");
+				rangeInfoObject.text("✔");
+			} else {
+				rangeInfoObject.attr("class", "rangeinfo bad");
+				var tmpText = "";
+
+				if (rangeData.above > 0) {
+					tmpText += "▲ " + rangeData.above + " notes ";
+				}
+
+				if (rangeData.below > 0) {
+					tmpText += "▼ " + rangeData.below + " notes ";
+				}
+
+				rangeInfoObject.text(tmpText.slice(0, -1));
+			}
+		}
+	}
+}
+
+// ### Instruments
+
+var selectedInstrumtinfo;
+function selectInstrument(event) {
+	var channelId = parseInt($(this).data("channel"));
+	var instrumentId = parseInt($(this).data("instrument"));
+
+	$(".list-group-item.instrument").removeClass("active");
+	$(this).addClass("active");
+
+	selectedInstrumentChannel = channelId;
+	selectedInstrument = instrumentId;
+
+	getInstrumentDetails(channelId, instrumentId);
+}
+
+function getInstrumentDetails(channelId, instrumentId) {
+	var instrument = song.instruments[channelId][instrumentId];
+
+	$(".settingsPanel#instrumentinfo").text("");
+
+	$(".settingsPanel#instrumentinfo").append("<h3>" + midi_instrument[instrument.instrument] + "</h3>");
+
+	$(".settingsPanel#instrumentinfo").append("<div class='info'>At " + msToTime(instrument.time) + " on channel " + channelId + "</div>");
+
+	$(".settingsPanel#instrumentinfo").append("<div id='notenum'>Notes: " + instrument.notes.length + "</div>");
+
+	$(".settingsPanel#instrumentinfo").append("<div id='shiftinstrument" + instrumentId + "c" + channelId + "'>Shift instrument (octaves): </div>");
+	shiftUi($(".settingsPanel#instrumentinfo #shiftinstrument" + instrumentId + "c" + channelId), instrument);
+
+	$(".settingsPanel#instrumentinfo").append("<div id='selectedRangeInfo'></div>");
+
+	updateRangeInfo(instrument, $(".settingsPanel#instrumentinfo #selectedRangeInfo"));
 }
 
 // ### Blueprint Textbox
