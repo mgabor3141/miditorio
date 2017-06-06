@@ -240,6 +240,8 @@ function shiftCb(event) {
 function updateRangeInfo(object, DOM) {
 	DOM.text("");
 
+	if (object.getRangeData === undefined) return;
+
 	rangeData = object.getRangeData();
 
 	if (rangeData.below  == 0 && rangeData.above == 0) {
