@@ -10,6 +10,9 @@ function Note(time, channel, track, pitch, velocity, instrument) {
 Note.prototype.convert = function() {
 	pitch = this.instrument.factorioInstrument.convert(this.pitch);
 
+	// Don't shift DrumKits
+	if (this.instrument.instrument == -1) return pitch;
+
 	pitch += this.instrument.shift * 12;
 
 	pitch += this.track.shift * 12;
