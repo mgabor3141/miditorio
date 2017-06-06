@@ -50,8 +50,8 @@
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="guide.html">Guide</a></li>
+          <li><a href="/">Home</a></li>
+          <li class="active"><a href="#">Guide</a></li>
           <li><a href="addons.html">Addons</a></li>
           <li><a href="about.html">About</a></li>
         </ul>
@@ -60,33 +60,8 @@
   </nav>
 
   <div class="container" role="main">
-    <div class="well" id="graphics">
-      <div id="assembler"></div>
-      <div id="inserter"></div>
-      <div id="insertertake"></div>
-      <div id="droparea"></div>
-      <div id="tooltip">Drag a MIDI file into the Requester Chest to begin!</div>
-      <div id="bpbox">
-        <input id="bpoutput" class="form-control" value="Blueprint" readonly>
-
-        <span>
-          <button class="btn btn-default" data-clipboard-target="#bpoutput">
-            <img id="clippy" src="assets/clippy.svg" width="16" alt="Copy to clipboard">
-            <img id="tick" src="assets/tick.svg" width="16" alt="Done">
-          </button>
-        </span>
-        <div class='clearfix' style='clear: both;'></div>
-      </div>
-    </div>
-
-    <div class="well" id="settings" style="display: none;"></div>
-
-    <div class="alert alert-danger" role="alert" id="errorbox">
-      <strong>Error: </strong> <span id="errormsg"></span>
-    </div>
-  </div> <!-- /container -->
-
-  <input type="file" id="file" accept="audio/mid" />
+    <h1>Guide</h1>
+  </div>
 
   <!-- Bootstrap core JavaScript
   ================================================== -->
@@ -97,23 +72,5 @@
   <script src="lib/bootstrap/assets/js/docs.min.js"></script>
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <script src="lib/bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
-
-  <!-- Libraries Used -->
-  <script src="lib/MIDIFile.js"></script>
-  <script src="lib/base64js.min.js"></script>
-  <script src="lib/pako.js"></script>
-  <script src="lib/jquery.spritely.js"></script>
-
-  <!-- MIDItorio Scripts -->
-  <script src="js/data.js"></script>
-
-  <script src="js/instrument.js"></script>
-  <script src="js/track.js"></script>
-  <script src="js/note.js"></script>
-  <script src="js/song.js"></script>
-  <script src="js/parse.js"></script>
-
-  <script src="js/blueprint.js"></script>
-  <script src="js/ui.js"></script>
 </body>
 </html>

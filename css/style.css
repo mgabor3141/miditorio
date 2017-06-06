@@ -308,3 +308,46 @@ select.form-control {
 	position: relative;
 	display: none;
 }
+
+/* ### About */
+
+.about {
+	text-align: center;
+}
+
+.about .logo {
+	font-family: 'Suez One', serif;
+}
+
+.about p {
+	font-size: 1.5em;
+	margin: 35px 0 3px 0;
+}
+
+.about h3 {
+	font-size: 1.8em;
+	font-family: 'Suez One', serif;
+	margin: 5px 0;
+}
+
+.about h3 a {
+	color: #333;
+}
+
+.about .well {
+	margin: 60px auto 0 auto;
+	width: 400px;
+	text-align: left;
+	font-size: 1.1em;
+	padding: 20px 30px;
+	text-shadow: 0px 1px 0 rgb(255, 255, 255);
+}
+
+.about .well p {
+	margin: 10px 0;
+	font-size: 1em;
+}
+
+.about form {
+	text-align: center;
+}
