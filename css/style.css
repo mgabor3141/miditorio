@@ -4,6 +4,10 @@ body {
 	overflow-y: scroll;
 }
 
+p {
+	margin: 0;
+}
+
 .theme-dropdown .dropdown-menu {
 	position: static;
 	display: block;
@@ -158,6 +162,12 @@ body {
 	color: #666;
 }
 
+p.rangeinfo {
+	text-indent: -15px;
+	padding-left: 15px;
+	margin: 7px 0;
+}
+
 .settingsPanel {
 	margin-left: 0;
 	padding: 20px;
@@ -171,8 +181,12 @@ body {
 	border-bottom-right-radius: 8px;
 }
 
-.settingsPanel .trackid {
+.settingsPanel .info {
 	color: #666;
+}
+
+.settingsPanel#instrumentinfo .info {
+	margin-top: -7px;
 }
 
 .settingsPanel h3 {
@@ -188,13 +202,10 @@ body {
 	margin: 7px 0;
 }
 
-#shift {
-	margin-top: 
-}
-
 .shiftText {
 	font-family: monospace;
 	font-weight: bold;
+	padding: 0 8px;
 }
 
 /* ### Animations  */
