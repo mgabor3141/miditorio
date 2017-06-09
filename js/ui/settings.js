@@ -14,7 +14,7 @@ function msToTime(s) {
   s = (s - secs) / 60;
   var mins = s;
 
-  return pad(mins, 1) + ':' + pad(secs);
+  return mins + ':' + pad(secs);
 }
 
 function generateSettingsPanel() {
