@@ -21,7 +21,7 @@ function handleFileSelect(event) {
 
 		if (f.type != "audio/mid" && f.type != "audio/midi")
 			throw new Error("This file isn't recognized as a MIDI file! "+
-				"(It's type seems to be " + f.type + ")");
+				"(Its type seems to be " + f.type + ")");
 
 		song = new Song();
 		song.name = f.name.charAt(0).toUpperCase() + f.name.substring(1, f.name.lastIndexOf("."));
