@@ -281,7 +281,7 @@ function getBlueprint() {
 			"entities": entities,
 			"item": "blueprint",
 			"label": song.name,
-			"version": 64425558017
+			"version": 64425754627
 		}
 	};
 

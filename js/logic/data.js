@@ -28,17 +28,17 @@ FactorioInstrument.prototype.checkRange = function(note, getDirection) {
 }
 
 var factorio_instrument = {
-	"Piano":			new FactorioInstrument("Piano",			2,  40, 4),
-	"Bass":				new FactorioInstrument("Bass",			3,  28, 3),
-	"Lead":				new FactorioInstrument("Lead",			4,  28, 3),
-	"Saw":				new FactorioInstrument("Saw",			5,  28, 3, 0.8),
-	"Square":			new FactorioInstrument("Square",		6,  28, 3, 0.5),
-	"Celesta":			new FactorioInstrument("Celesta",		7,  64, 3),
-	"Vibraphone":		new FactorioInstrument("Vibraphone",	8,  52, 3),
-	"Plucked":			new FactorioInstrument("Plucked",		9,  52, 3),
-	"SteelDrum":		new FactorioInstrument("SteelDrum",		10, 40, 3),
-	"ReverseCymbal":	new FactorioInstrument("ReverseCymbal",	1),
-	"DrumKit":			new FactorioInstrument("DrumKit",		1),
+	"Piano":			new FactorioInstrument("Piano",			3,  40, 4),
+	"Bass":				new FactorioInstrument("Bass",			4,  28, 3),
+	"Lead":				new FactorioInstrument("Lead",			5,  28, 3),
+	"Saw":				new FactorioInstrument("Saw",			6,  28, 3, 0.8),
+	"Square":			new FactorioInstrument("Square",		7,  28, 3, 0.5),
+	"Celesta":			new FactorioInstrument("Celesta",		8,  64, 3),
+	"Vibraphone":		new FactorioInstrument("Vibraphone",	9,  52, 3),
+	"Plucked":			new FactorioInstrument("Plucked",		10,  52, 3),
+	"SteelDrum":		new FactorioInstrument("SteelDrum",		11, 40, 3),
+	"ReverseCymbal":	new FactorioInstrument("ReverseCymbal",	2),
+	"DrumKit":			new FactorioInstrument("DrumKit",		2),
 	"Exclude":			new FactorioInstrument("Exclude", -1)
 };
 
