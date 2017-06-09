@@ -32,8 +32,6 @@
 
   </script>
 
-  <script src="lib/clipboard.min.js"></script>
-
   <link href="css/style.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Suez+One" rel="stylesheet">
   <link rel="icon" href="assets/favicon.ico">
@@ -66,16 +64,16 @@
       <div id="insertertake"></div>
       <div id="droparea"></div>
       <div id="tooltip">Drag a MIDI file into the Requester Chest to begin!</div>
-      <div id="bpbox">
+      <div id="bpbox" style="display: none; top: 220px; left: 390px; width: 160px;">
         <input id="bpoutput" class="form-control" value="Blueprint" readonly>
 
         <span>
-          <button class="btn btn-default" data-clipboard-target="#bpoutput">
+          <button class="btn btn-default">
             <img id="clippy" src="assets/clippy.svg" width="16" alt="Copy to clipboard">
             <img id="tick" src="assets/tick.svg" width="16" alt="Done">
           </button>
         </span>
-        <div class='clearfix' style='clear: both;'></div>
+        <div class="clearfix"></div>
       </div>
     </div>
 
@@ -103,17 +101,21 @@
   <script src="lib/base64js.min.js"></script>
   <script src="lib/pako.js"></script>
   <script src="lib/jquery.spritely.js"></script>
+  <script src="lib/clipboard.min.js"></script>
 
   <!-- MIDItorio Scripts -->
-  <script src="js/data.js"></script>
+  <script src="js/logic/data.js"></script>
+  <script src="js/logic/instrument.js"></script>
+  <script src="js/logic/track.js"></script>
+  <script src="js/logic/note.js"></script>
+  <script src="js/logic/song.js"></script>
+  <script src="js/logic/parse.js"></script>
+  <script src="js/logic/blueprint.js"></script>
 
-  <script src="js/instrument.js"></script>
-  <script src="js/track.js"></script>
-  <script src="js/note.js"></script>
-  <script src="js/song.js"></script>
-  <script src="js/parse.js"></script>
-
-  <script src="js/blueprint.js"></script>
-  <script src="js/ui.js"></script>
+  <script src="js/ui/errorbox.js"></script>
+  <script src="js/ui/fileselection.js"></script>
+  <script src="js/ui/settings.js"></script>
+  <script src="js/ui/bpbox.js"></script>
+  <script src="js/ui/animations.js"></script>
 </body>
 </html>

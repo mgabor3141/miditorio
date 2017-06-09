@@ -1,90 +1,3 @@
-// ### Error box
-
-var fadeOutDelay;
-function showError(e) {
-	if (e.message !== undefined)
-		e = e.message;
-
-	$("#errormsg").text(e);
-	$("#errorbox").show().animate({
-		opacity: 1,
-		top: 60
-	});
-	clearTimeout(fadeOutDelay);
-	fadeOutDelay = setTimeout(function(){
-		$("#errorbox").animate({
-			opacity: 0,
-			top: -5
-		});
-	}, 10000);
-}
-
-// ### File selection
-
-var filechosen = false;
-function fileChosen(event) {
-	filechosen = true;
-
-	$("#droparea").stop(true).animate({
-		opacity: 0,
-		left: "-=20",
-		top: "-=20",
-		width: "+=40",
-		height: "+=40",
-	}, 400, function() {
-		$("#droparea").css("top", "+=20");
-		$("#droparea").css("left", "+=20");
-		$("#droparea").css("width", "-=40");
-		$("#droparea").css("height", "-=40");
-
-		$("#droparea").delay(500).fadeTo(300, 0.2, function() {
-			filechosen = false;
-		});
-	});
-
-	if (!handleFileSelect(event)) return;
-
-	$("#inserter").spSet("fps", 30);
-	$("#bpbox").animate({opacity: 0}, 200, function(){
-		$("#bpbox").hide();
-	});
-
-	$("#settings").fadeOut();
-}
-
-$("#file").change(fileChosen);
-
-$("#droparea").on("drop", function(event) {
-	event.preventDefault();
-	event.stopPropagation();
-
-	fileChosen(event);
-});
-
-$("#droparea").on("dragenter", function(event){
-	$("#tooltip").fadeTo(300, 0);
-	$("#droparea").stop(true).fadeTo(200, 0.8);
-});
-
-$("#droparea").on("mouseover", function(event){
-	if (!filechosen)
-		$("#droparea").stop(true).fadeTo(200, 0.8);
-});
-
-$("#droparea").on("dragleave mouseout", function(event){
-	if (!filechosen)
-		$("#droparea").stop(true).fadeTo(200, 0.2);
-});
-
-$("#droparea").on("dragover", function(event){
-	event.preventDefault();
-	event.stopPropagation();
-});
-
-$('#droparea').click(function(){
-	$('#file').click();
-});
-
 // ### Settings
 
 // https://stackoverflow.com/a/9763769/846349
@@ -113,6 +26,8 @@ function generateSettingsPanel() {
 		"id='getbp'>Get Blueprint</button></p>");
 
 	$("#settings").append("<div class='clearfix' style='clear: both;'>");
+
+	$("#settings").append("<p class='guidelink'>The following tracks and instruments have been extracted from your MIDI file. Notes can be aligned to the Factorio note ranges below. For more information check the <a href='guide.html' target='_blank'>Guide!</a></p>")
 
 	// Tracks (there aren't necessarily any)
 	if (song.tracks.length > 0) {
@@ -405,58 +320,3 @@ function instrumentCb(event) {
 	updateRangeInfo(song.tracks[selectedTrack], $(".settingsPanel#trackinfo #selectedRangeInfo"));
 	updateRangeInfo(song.instruments[selectedInstrumentChannel][selectedInstrument], $(".settingsPanel#instrumentinfo #selectedRangeInfo"));
 }
-
-// ### Blueprint Textbox
-
-var clipboard = new Clipboard('#bpbox span button');
-
-var fadeBackDelay;
-clipboard.on('success', function(e) {
-	$("img#clippy").hide();
-	$("img#tick").show();
-	clearTimeout(fadeOutDelay);
-	fadeOutDelay = setTimeout(function(){
-		$("img#tick").fadeOut(200, function(){
-			$("img#clippy").attr("src", "assets/clippy.svg").fadeIn(200);
-		});
-	}, 1000);
-	e.clearSelection();
-});
-
-// ### Animations
-
-$('#inserter').sprite({
-	fps: 0,
-	no_of_frames: 71,
-	on_frame: {
-		32: function() {
-			$('#assembler').spSet("fps", 30);
-		},
-		45: function() {
-			generateSettingsPanel();
-			$("#settings").fadeIn();
-			$(".settingsPanel#trackinfo").css("min-height", $("#tracks .list-group").height());
-			$(".settingsPanel#instrumentinfo").css("min-height", $("#instruments .list-group").height());
-			$("#settings .list-group-item:first-child").click();
-		},
-		70: function() {
-			$('#inserter').spStop(true);
-		}
-	}
-});
-
-$('#insertertake').sprite({
-	fps: 0,
-	no_of_frames: 69,
-	on_frame: {
-		34: function() {
-			$("#bpbox").css("display", "table").animate({opacity: 1});
-		},
-		68: function() {
-			$('#insertertake').spStop(true);
-			$('#insertertake').css("background-position-x", -100000);
-		}
-	}
-});
-
-$('#assembler').sprite({fps: 0, no_of_frames: 25});

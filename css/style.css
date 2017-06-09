@@ -6,6 +6,7 @@ body {
 
 p {
 	margin: 0;
+	font-size: 16px;
 }
 
 .theme-dropdown .dropdown-menu {
@@ -114,6 +115,11 @@ p {
 
 #settings #getbp {
 	float: right;
+}
+
+#settings p.guidelink {
+	margin: 15px 0 0 0;
+	color: #666;
 }
 
 .list-group {
@@ -255,9 +261,7 @@ select.form-control {
 /* ### Blueprint output */
 
 #bpbox {
-	width: 160px;
-	top: 220px;
-	left: 390px;
+	width: 200px;
 	padding: 5px;
 	border-radius: 5px;
 	display: table;
@@ -265,8 +269,6 @@ select.form-control {
 	box-sizing: border-box;
 	background-image: linear-gradient(to bottom, #6DA6C7 0, #1B71A3 100%);
 	border-color: #124B6B;
-	opacity: 0;
-	display: none;
 }
 
 #bpoutput {
@@ -307,6 +309,54 @@ select.form-control {
 #bpbox span button img#tick {
 	position: relative;
 	display: none;
+}
+
+/* ### Guide */
+
+.tldr {
+	width: 500px;
+	margin: 20px auto;
+	text-align: justify;
+}
+
+.tldr h3 {
+	margin-top: 0;
+}
+
+.guidecontainer {
+	text-align: justify;
+	font-size: 16px;
+}
+
+ol p {
+	margin: 8px 0;
+}
+
+/* ### Addons */
+
+.addons .subtitle {
+	margin-top: -15px;
+	margin-bottom: 40px;
+}
+
+.addon {
+	margin: 15px 0;
+	position: relative;
+}
+
+.addon .img-thumbnail {
+	float: left;
+	max-width: 350px;
+	margin-right: 25px;
+}
+
+.addon h3 {
+	padding-top: 0;
+}
+
+.addon h3 .detailsText {
+	font-size: 0.8em;
+	color: #666;
 }
 
 /* ### About */
@@ -350,4 +400,5 @@ select.form-control {
 
 .about form {
 	text-align: center;
+	padding-top: 5px;
 }
