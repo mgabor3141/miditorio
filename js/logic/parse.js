@@ -54,6 +54,16 @@ function processMidi(midi) {
 	song = sortMidi(midiFile.getEvents());
 }
 
+function getStringFromBytes(data, offset, length) {
+	try {
+		return UTF8.getStringFromBytes(data, offset, length, true);
+	} catch (e) {
+		return data.slice(offset, offset + length).map(function(e) {
+			 return String.fromCharCode(e);
+		}).join('');
+	}
+}
+
 function sortMidi(events) {
 	var channelInstruments = [];
 
@@ -61,11 +71,11 @@ function sortMidi(events) {
 		var event = events[i];
 		switch (event.subtype) {
 			case MIDIEvents.EVENT_META_TRACK_NAME:
-				event.text = UTF8.getStringFromBytes(event.data, 0, event.length, true);
+				event.text = getStringFromBytes(event.data, 0, event.length);
 				song.getTrack(event.track).setName(event.text);
 				break;
 			case MIDIEvents.EVENT_META_TEXT:
-				event.text = UTF8.getStringFromBytes(event.data, 0, event.length, true);
+				event.text = getStringFromBytes(event.data, 0, event.length);
 				song.getTrack(event.track).addText(event.playTime, event.text);
 				break;
 			case MIDIEvents.EVENT_MIDI_PROGRAM_CHANGE:
