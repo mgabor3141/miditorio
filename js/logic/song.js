@@ -128,7 +128,9 @@ Song.prototype.toFactorio = function() {
 		signalsUsed = factorioSignals.length;
 	}
 
-	// This can be done better performance-wise
+	signalInstruments = signalInstruments.slice(0, 77);
+
+	// This could be done better performance-wise
 	var uniqueDelays = [];
 	$.each(delays, function(i, el){
 		if($.inArray(el, uniqueDelays) === -1) uniqueDelays.push(el);

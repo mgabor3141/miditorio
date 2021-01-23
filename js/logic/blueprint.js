@@ -77,7 +77,7 @@ function placeSpeakers(entities, signalInstruments) {
 			}
 		});
 
-		if (position.x < 14) {
+		if (position.x < 15) {
 			position.x++;
 		} else {
 			position.x = 5;
@@ -105,6 +105,9 @@ function getSignals(data) {
 
 	for (i in data.signals) {
 		if (data.signals[i] == 0) continue;
+
+		// Wires couldn't connect
+		if (constantNum >= 9) break;
 
 		if (signals[constantNum] === undefined)
 			signals[constantNum] = [];
