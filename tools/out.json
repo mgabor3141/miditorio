@@ -1,0 +1,2863 @@
+{
+  "blueprint": {
+    "icons": [
+      {
+        "signal": {
+          "name": "constant-combinator"
+        },
+        "index": 1
+      }
+    ],
+    "entities": [
+      {
+        "entity_number": 1,
+        "name": "constant-combinator",
+        "position": {
+          "x": 169.5,
+          "y": -42.5
+        },
+        "control_behavior": {
+          "sections": {
+            "sections": [
+              {
+                "index": 1,
+                "filters": [
+                  {
+                    "index": 1,
+                    "name": "wooden-chest",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 2,
+                    "name": "wooden-chest",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 3,
+                    "name": "iron-chest",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 4,
+                    "name": "iron-chest",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 5,
+                    "name": "steel-chest",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 6,
+                    "name": "steel-chest",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 7,
+                    "name": "storage-tank",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 8,
+                    "name": "storage-tank",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 9,
+                    "name": "transport-belt",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 10,
+                    "name": "transport-belt",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 11,
+                    "name": "fast-transport-belt",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 12,
+                    "name": "fast-transport-belt",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 13,
+                    "name": "express-transport-belt",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 14,
+                    "name": "express-transport-belt",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 15,
+                    "name": "underground-belt",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 16,
+                    "name": "underground-belt",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 17,
+                    "name": "fast-underground-belt",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 18,
+                    "name": "fast-underground-belt",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 19,
+                    "name": "express-underground-belt",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 20,
+                    "name": "express-underground-belt",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 21,
+                    "name": "splitter",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 22,
+                    "name": "splitter",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 23,
+                    "name": "fast-splitter",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 24,
+                    "name": "fast-splitter",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 25,
+                    "name": "express-splitter",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 26,
+                    "name": "express-splitter",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 27,
+                    "name": "burner-inserter",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 28,
+                    "name": "burner-inserter",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 29,
+                    "name": "inserter",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 30,
+                    "name": "inserter",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 31,
+                    "name": "long-handed-inserter",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 32,
+                    "name": "long-handed-inserter",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 33,
+                    "name": "fast-inserter",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 34,
+                    "name": "fast-inserter",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 35,
+                    "name": "bulk-inserter",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 36,
+                    "name": "bulk-inserter",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 37,
+                    "name": "small-electric-pole",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 38,
+                    "name": "small-electric-pole",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 39,
+                    "name": "medium-electric-pole",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 40,
+                    "name": "medium-electric-pole",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 41,
+                    "name": "big-electric-pole",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 42,
+                    "name": "big-electric-pole",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 43,
+                    "name": "substation",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 44,
+                    "name": "substation",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 45,
+                    "name": "pipe",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 46,
+                    "name": "pipe",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 47,
+                    "name": "pipe-to-ground",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 48,
+                    "name": "pipe-to-ground",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 49,
+                    "name": "pump",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 50,
+                    "name": "pump",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 51,
+                    "name": "rail",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 52,
+                    "name": "rail",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 53,
+                    "name": "train-stop",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 54,
+                    "name": "train-stop",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 55,
+                    "name": "rail-signal",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 56,
+                    "name": "rail-signal",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 57,
+                    "name": "rail-chain-signal",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 58,
+                    "name": "rail-chain-signal",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 59,
+                    "name": "locomotive",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 60,
+                    "name": "locomotive",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 61,
+                    "name": "cargo-wagon",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 62,
+                    "name": "cargo-wagon",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 63,
+                    "name": "fluid-wagon",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 64,
+                    "name": "fluid-wagon",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 65,
+                    "name": "artillery-wagon",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 66,
+                    "name": "artillery-wagon",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 67,
+                    "name": "car",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 68,
+                    "name": "car",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 69,
+                    "name": "tank",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 70,
+                    "name": "tank",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 71,
+                    "name": "spidertron",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 72,
+                    "name": "spidertron",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 73,
+                    "name": "logistic-robot",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 74,
+                    "name": "logistic-robot",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 75,
+                    "name": "construction-robot",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 76,
+                    "name": "construction-robot",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 77,
+                    "name": "active-provider-chest",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 78,
+                    "name": "active-provider-chest",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 79,
+                    "name": "passive-provider-chest",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 80,
+                    "name": "passive-provider-chest",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 81,
+                    "name": "storage-chest",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 82,
+                    "name": "storage-chest",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 83,
+                    "name": "buffer-chest",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 84,
+                    "name": "buffer-chest",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 85,
+                    "name": "requester-chest",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 86,
+                    "name": "requester-chest",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 87,
+                    "name": "roboport",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 88,
+                    "name": "roboport",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 89,
+                    "name": "small-lamp",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 90,
+                    "name": "small-lamp",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 91,
+                    "name": "arithmetic-combinator",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 92,
+                    "name": "arithmetic-combinator",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 93,
+                    "name": "decider-combinator",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 94,
+                    "name": "decider-combinator",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 95,
+                    "name": "constant-combinator",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 96,
+                    "name": "constant-combinator",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 97,
+                    "name": "power-switch",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 98,
+                    "name": "power-switch",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 99,
+                    "name": "programmable-speaker",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 100,
+                    "name": "programmable-speaker",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 101,
+                    "name": "display-panel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 102,
+                    "name": "display-panel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 103,
+                    "name": "stone-brick",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 104,
+                    "name": "stone-brick",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 105,
+                    "name": "concrete",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 106,
+                    "name": "concrete",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 107,
+                    "name": "hazard-concrete",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 108,
+                    "name": "hazard-concrete",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 109,
+                    "name": "refined-concrete",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 110,
+                    "name": "refined-concrete",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 111,
+                    "name": "refined-hazard-concrete",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 112,
+                    "name": "refined-hazard-concrete",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 113,
+                    "name": "landfill",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 114,
+                    "name": "landfill",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 115,
+                    "name": "cliff-explosives",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 116,
+                    "name": "cliff-explosives",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 117,
+                    "name": "repair-pack",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 118,
+                    "name": "repair-pack",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 119,
+                    "name": "blueprint",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 120,
+                    "name": "blueprint",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 121,
+                    "name": "deconstruction-planner",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 122,
+                    "name": "deconstruction-planner",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 123,
+                    "name": "upgrade-planner",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 124,
+                    "name": "upgrade-planner",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 125,
+                    "name": "blueprint-book",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 126,
+                    "name": "blueprint-book",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 127,
+                    "name": "boiler",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 128,
+                    "name": "boiler",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 129,
+                    "name": "steam-engine",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 130,
+                    "name": "steam-engine",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 131,
+                    "name": "solar-panel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 132,
+                    "name": "solar-panel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 133,
+                    "name": "accumulator",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 134,
+                    "name": "accumulator",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 135,
+                    "name": "nuclear-reactor",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 136,
+                    "name": "nuclear-reactor",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 137,
+                    "name": "heat-pipe",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 138,
+                    "name": "heat-pipe",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 139,
+                    "name": "heat-exchanger",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 140,
+                    "name": "heat-exchanger",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 141,
+                    "name": "steam-turbine",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 142,
+                    "name": "steam-turbine",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 143,
+                    "name": "burner-mining-drill",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 144,
+                    "name": "burner-mining-drill",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 145,
+                    "name": "electric-mining-drill",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 146,
+                    "name": "electric-mining-drill",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 147,
+                    "name": "offshore-pump",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 148,
+                    "name": "offshore-pump",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 149,
+                    "name": "pumpjack",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 150,
+                    "name": "pumpjack",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 151,
+                    "name": "stone-furnace",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 152,
+                    "name": "stone-furnace",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 153,
+                    "name": "steel-furnace",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 154,
+                    "name": "steel-furnace",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 155,
+                    "name": "electric-furnace",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 156,
+                    "name": "electric-furnace",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 157,
+                    "name": "assembling-machine-1",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 158,
+                    "name": "assembling-machine-1",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 159,
+                    "name": "assembling-machine-2",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 160,
+                    "name": "assembling-machine-2",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 161,
+                    "name": "assembling-machine-3",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 162,
+                    "name": "assembling-machine-3",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 163,
+                    "name": "oil-refinery",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 164,
+                    "name": "oil-refinery",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 165,
+                    "name": "chemical-plant",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 166,
+                    "name": "chemical-plant",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 167,
+                    "name": "centrifuge",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 168,
+                    "name": "centrifuge",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 169,
+                    "name": "lab",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 170,
+                    "name": "lab",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 171,
+                    "name": "beacon",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 172,
+                    "name": "beacon",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 173,
+                    "name": "speed-module",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 174,
+                    "name": "speed-module",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 175,
+                    "name": "speed-module-2",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 176,
+                    "name": "speed-module-2",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 177,
+                    "name": "speed-module-3",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 178,
+                    "name": "speed-module-3",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 179,
+                    "name": "efficiency-module",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 180,
+                    "name": "efficiency-module",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 181,
+                    "name": "efficiency-module-2",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 182,
+                    "name": "efficiency-module-2",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 183,
+                    "name": "efficiency-module-3",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 184,
+                    "name": "efficiency-module-3",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 185,
+                    "name": "productivity-module",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 186,
+                    "name": "productivity-module",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 187,
+                    "name": "productivity-module-2",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 188,
+                    "name": "productivity-module-2",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 189,
+                    "name": "productivity-module-3",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 190,
+                    "name": "productivity-module-3",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 191,
+                    "name": "rocket-silo",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 192,
+                    "name": "rocket-silo",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 193,
+                    "name": "cargo-landing-pad",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 194,
+                    "name": "cargo-landing-pad",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 195,
+                    "name": "wood",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 196,
+                    "name": "wood",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 197,
+                    "name": "coal",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 198,
+                    "name": "coal",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 199,
+                    "name": "stone",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 200,
+                    "name": "stone",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 201,
+                    "name": "iron-ore",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 202,
+                    "name": "iron-ore",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 203,
+                    "name": "copper-ore",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 204,
+                    "name": "copper-ore",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 205,
+                    "name": "uranium-ore",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 206,
+                    "name": "uranium-ore",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 207,
+                    "name": "raw-fish",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 208,
+                    "name": "raw-fish",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 209,
+                    "name": "iron-plate",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 210,
+                    "name": "iron-plate",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 211,
+                    "name": "copper-plate",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 212,
+                    "name": "copper-plate",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 213,
+                    "name": "steel-plate",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 214,
+                    "name": "steel-plate",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 215,
+                    "name": "solid-fuel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 216,
+                    "name": "solid-fuel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 217,
+                    "name": "plastic-bar",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 218,
+                    "name": "plastic-bar",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 219,
+                    "name": "sulfur",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 220,
+                    "name": "sulfur",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 221,
+                    "name": "battery",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 222,
+                    "name": "battery",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 223,
+                    "name": "explosives",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 224,
+                    "name": "explosives",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 225,
+                    "name": "water-barrel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 226,
+                    "name": "water-barrel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 227,
+                    "name": "crude-oil-barrel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 228,
+                    "name": "crude-oil-barrel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 229,
+                    "name": "petroleum-gas-barrel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 230,
+                    "name": "petroleum-gas-barrel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 231,
+                    "name": "light-oil-barrel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 232,
+                    "name": "light-oil-barrel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 233,
+                    "name": "heavy-oil-barrel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 234,
+                    "name": "heavy-oil-barrel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 235,
+                    "name": "lubricant-barrel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 236,
+                    "name": "lubricant-barrel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 237,
+                    "name": "sulfuric-acid-barrel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 238,
+                    "name": "sulfuric-acid-barrel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 239,
+                    "name": "iron-gear-wheel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 240,
+                    "name": "iron-gear-wheel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 241,
+                    "name": "iron-stick",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 242,
+                    "name": "iron-stick",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 243,
+                    "name": "copper-cable",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 244,
+                    "name": "copper-cable",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 245,
+                    "name": "barrel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 246,
+                    "name": "barrel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 247,
+                    "name": "electronic-circuit",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 248,
+                    "name": "electronic-circuit",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 249,
+                    "name": "advanced-circuit",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 250,
+                    "name": "advanced-circuit",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 251,
+                    "name": "processing-unit",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 252,
+                    "name": "processing-unit",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 253,
+                    "name": "engine-unit",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 254,
+                    "name": "engine-unit",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 255,
+                    "name": "electric-engine-unit",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 256,
+                    "name": "electric-engine-unit",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 257,
+                    "name": "flying-robot-frame",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 258,
+                    "name": "flying-robot-frame",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 259,
+                    "name": "low-density-structure",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 260,
+                    "name": "low-density-structure",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 261,
+                    "name": "rocket-fuel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 262,
+                    "name": "rocket-fuel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 263,
+                    "name": "uranium-235",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 264,
+                    "name": "uranium-235",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 265,
+                    "name": "uranium-238",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 266,
+                    "name": "uranium-238",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 267,
+                    "name": "uranium-fuel-cell",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 268,
+                    "name": "uranium-fuel-cell",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 269,
+                    "name": "used-up-uranium-fuel-cell",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 270,
+                    "name": "used-up-uranium-fuel-cell",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 271,
+                    "name": "nuclear-fuel",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 272,
+                    "name": "nuclear-fuel",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 273,
+                    "name": "automation-science-pack",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 274,
+                    "name": "automation-science-pack",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 275,
+                    "name": "logistic-science-pack",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 276,
+                    "name": "logistic-science-pack",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 277,
+                    "name": "military-science-pack",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 278,
+                    "name": "military-science-pack",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 279,
+                    "name": "chemical-science-pack",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 280,
+                    "name": "chemical-science-pack",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 281,
+                    "name": "production-science-pack",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 282,
+                    "name": "production-science-pack",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 283,
+                    "name": "utility-science-pack",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 284,
+                    "name": "utility-science-pack",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 285,
+                    "name": "space-science-pack",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 286,
+                    "name": "space-science-pack",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 287,
+                    "name": "pistol",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 288,
+                    "name": "pistol",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 289,
+                    "name": "submachine-gun",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 290,
+                    "name": "submachine-gun",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 291,
+                    "name": "shotgun",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 292,
+                    "name": "shotgun",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 293,
+                    "name": "combat-shotgun",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 294,
+                    "name": "combat-shotgun",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 295,
+                    "name": "rocket-launcher",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 296,
+                    "name": "rocket-launcher",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 297,
+                    "name": "flamethrower",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 298,
+                    "name": "flamethrower",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 299,
+                    "name": "firearm-magazine",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 300,
+                    "name": "firearm-magazine",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 301,
+                    "name": "piercing-rounds-magazine",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 302,
+                    "name": "piercing-rounds-magazine",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 303,
+                    "name": "uranium-rounds-magazine",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 304,
+                    "name": "uranium-rounds-magazine",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 305,
+                    "name": "shotgun-shell",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 306,
+                    "name": "shotgun-shell",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 307,
+                    "name": "piercing-shotgun-shell",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 308,
+                    "name": "piercing-shotgun-shell",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 309,
+                    "name": "cannon-shell",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 310,
+                    "name": "cannon-shell",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 311,
+                    "name": "explosive-cannon-shell",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 312,
+                    "name": "explosive-cannon-shell",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 313,
+                    "name": "uranium-cannon-shell",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 314,
+                    "name": "uranium-cannon-shell",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 315,
+                    "name": "explosive-uranium-cannon-shell",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 316,
+                    "name": "explosive-uranium-cannon-shell",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 317,
+                    "name": "artillery-shell",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 318,
+                    "name": "artillery-shell",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 319,
+                    "name": "rocket",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 320,
+                    "name": "rocket",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 321,
+                    "name": "explosive-rocket",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 322,
+                    "name": "explosive-rocket",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 323,
+                    "name": "atomic-bomb",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 324,
+                    "name": "atomic-bomb",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 325,
+                    "name": "flamethrower-ammo",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 326,
+                    "name": "flamethrower-ammo",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 327,
+                    "name": "grenade",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 328,
+                    "name": "grenade",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 329,
+                    "name": "cluster-grenade",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 330,
+                    "name": "cluster-grenade",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 331,
+                    "name": "poison-capsule",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 332,
+                    "name": "poison-capsule",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 333,
+                    "name": "slowdown-capsule",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 334,
+                    "name": "slowdown-capsule",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 335,
+                    "name": "defender-capsule",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 336,
+                    "name": "defender-capsule",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 337,
+                    "name": "distractor-capsule",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 338,
+                    "name": "distractor-capsule",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 339,
+                    "name": "destroyer-capsule",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 340,
+                    "name": "destroyer-capsule",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 341,
+                    "name": "light-armor",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 342,
+                    "name": "light-armor",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 343,
+                    "name": "heavy-armor",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 344,
+                    "name": "heavy-armor",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 345,
+                    "name": "modular-armor",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 346,
+                    "name": "modular-armor",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 347,
+                    "name": "power-armor",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 348,
+                    "name": "power-armor",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 349,
+                    "name": "power-armor-mk2",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 350,
+                    "name": "power-armor-mk2",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 351,
+                    "name": "solar-panel-equipment",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 352,
+                    "name": "solar-panel-equipment",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 353,
+                    "name": "fission-reactor-equipment",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 354,
+                    "name": "fission-reactor-equipment",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 355,
+                    "name": "battery-equipment",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 356,
+                    "name": "battery-equipment",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 357,
+                    "name": "battery-mk2-equipment",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 358,
+                    "name": "battery-mk2-equipment",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 359,
+                    "name": "belt-immunity-equipment",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 360,
+                    "name": "belt-immunity-equipment",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 361,
+                    "name": "exoskeleton-equipment",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 362,
+                    "name": "exoskeleton-equipment",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 363,
+                    "name": "personal-roboport-equipment",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 364,
+                    "name": "personal-roboport-equipment",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 365,
+                    "name": "personal-roboport-mk2-equipment",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 366,
+                    "name": "personal-roboport-mk2-equipment",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 367,
+                    "name": "night-vision-equipment",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 368,
+                    "name": "night-vision-equipment",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 369,
+                    "name": "energy-shield-equipment",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 370,
+                    "name": "energy-shield-equipment",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 371,
+                    "name": "energy-shield-mk2-equipment",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 372,
+                    "name": "energy-shield-mk2-equipment",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 373,
+                    "name": "personal-laser-defense-equipment",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 374,
+                    "name": "personal-laser-defense-equipment",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 375,
+                    "name": "discharge-defense-equipment",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 376,
+                    "name": "discharge-defense-equipment",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 377,
+                    "name": "stone-wall",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 378,
+                    "name": "stone-wall",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 379,
+                    "name": "gate",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 380,
+                    "name": "gate",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 381,
+                    "name": "radar",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 382,
+                    "name": "radar",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 383,
+                    "name": "land-mine",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 384,
+                    "name": "land-mine",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 385,
+                    "name": "gun-turret",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 386,
+                    "name": "gun-turret",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 387,
+                    "name": "laser-turret",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 388,
+                    "name": "laser-turret",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 389,
+                    "name": "flamethrower-turret",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 390,
+                    "name": "flamethrower-turret",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 391,
+                    "name": "artillery-turret",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 392,
+                    "name": "artillery-turret",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 393,
+                    "name": "copper-wire",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 394,
+                    "name": "copper-wire",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 395,
+                    "name": "green-wire",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 396,
+                    "name": "green-wire",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 397,
+                    "name": "red-wire",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 398,
+                    "name": "red-wire",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 399,
+                    "name": "rts-tool",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 400,
+                    "name": "rts-tool",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 401,
+                    "name": "discharge-defense-remote",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 402,
+                    "name": "discharge-defense-remote",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 403,
+                    "name": "artillery-targeting-remote",
+                    "quality": "normal",
+                    "comparator": "=",
+                    "count": 1
+                  },
+                  {
+                    "index": 404,
+                    "name": "artillery-targeting-remote",
+                    "quality": "quality-unknown",
+                    "comparator": "=",
+                    "count": 1
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "item": "blueprint",
+    "version": 281483568218115
+  }
+}
