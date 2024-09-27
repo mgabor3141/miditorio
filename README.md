@@ -33,19 +33,19 @@ game.remove_path("base_filtered_fluid.txt");
 game.remove_path("base_filtered_recipe.txt");
 game.remove_path("base_virtual_signal.txt");
 for name, _
-    in pairs(prototypes.get_item_filtered{{filter="hidden", hidden=true}})
+    in pairs(prototypes.get_item_filtered{{filter="hidden", hidden=true, invert=true}})
     do game.write_file("base_filtered_item.txt", name .. "\n", true);
 end;
 for name, _
-    in pairs(prototypes.get_entity_filtered{{filter="hidden", hidden=true}})
+    in pairs(prototypes.get_entity_filtered{{filter="hidden", hidden=true, invert=true}})
     do game.write_file("base_filtered_entity.txt", name .. "\n", true);
 end;
 for name, _
-    in pairs(prototypes.get_fluid_filtered{{filter="hidden", hidden=true}})
+    in pairs(prototypes.get_fluid_filtered{{filter="hidden", hidden=true, invert=true}})
     do game.write_file("base_filtered_fluid.txt", name .. "\n", true);
 end;
 for name, _
-    in pairs(prototypes.get_recipe_filtered{{filter="hidden", hidden=true}})
+    in pairs(prototypes.get_recipe_filtered{{filter="hidden", hidden=true, invert=true}})
     do game.write_file("base_filtered_recipe.txt", name .. "\n", true);
 end;
 for name, signal
@@ -56,3 +56,4 @@ for name, signal
         end
 end;
 ```
+/c 
