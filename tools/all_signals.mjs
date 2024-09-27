@@ -10,7 +10,7 @@ const to_signal_list = (items, additional_fields) => {
             name: item,
             quality: "normal",
             comparator: "=",
-            count: 1,
+            // count: 1,
             ...additional_fields
         })
     })
@@ -53,23 +53,8 @@ const to_constant_combinators = (signals) =>
 
 const all_signals = [
     ...to_signal_list(
-        fs.readFileSync('../reference/base_virtual_signal.txt', 'utf8'),
-        {type: "virtual"}
-    ),
-    ...to_signal_list(
-        fs.readFileSync('../reference/base_filtered_item.txt', 'utf8')
-    ),
-    ...to_signal_list(
-        fs.readFileSync('../reference/base_filtered_entity.txt', 'utf8'),
+        fs.readFileSync('../reference/base_all_entity.txt', 'utf8'),
         {type: "entity"}
-    ),
-    ...to_signal_list(
-        fs.readFileSync('../reference/base_filtered_fluid.txt', 'utf8'),
-        {type: "fluid"}
-    ),
-    ...to_signal_list(
-        fs.readFileSync('../reference/base_filtered_recipe.txt', 'utf8'),
-        {type: "recipe"}
     )
 ]
 
