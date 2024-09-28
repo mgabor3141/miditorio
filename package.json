@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "factorio-blueprint": "^2.6.5",
     "next": "14.2.13",
     "react": "^18",
     "react-dom": "^18"
