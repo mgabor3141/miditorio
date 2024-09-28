@@ -1582,6 +1582,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"factorio-blueprint@npm:^2.6.5":
+  version: 2.6.5
+  resolution: "factorio-blueprint@npm:2.6.5"
+  checksum: 10c0/b1d8a8f565231a26326a5843b336e8e3be21fdf78e9befb000ef9fefa12e6ce906be542d54469a85494cfc727811d5aa35b1302a6948d3d43391ee68a3e75ec6
+  languageName: node
+  linkType: hard
+
 "fast-deep-equal@npm:^3.1.1, fast-deep-equal@npm:^3.1.3":
   version: 3.1.3
   resolution: "fast-deep-equal@npm:3.1.3"
@@ -2596,6 +2603,7 @@ __metadata:
     "@types/react-dom": "npm:^18"
     eslint: "npm:^8"
     eslint-config-next: "npm:14.2.13"
+    factorio-blueprint: "npm:^2.6.5"
     next: "npm:14.2.13"
     postcss: "npm:^8"
     react: "npm:^18"
