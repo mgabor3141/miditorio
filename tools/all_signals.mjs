@@ -1,17 +1,24 @@
 import fs from 'node:fs'
 
+const SIGNAL_EXCLUDE = ["parameter", "unknown"]
+const RESERVED = ["signal-N"]
+
 const to_signal_list = (items, additional_fields) => {
     const signals = []
-    items.split("\n").forEach((item) => {
-        if (!item) return
-        if (item.includes("parameter")) return
+    items.split("\n").forEach((line) => {
+        if (!line) return
+
+        const [type, item] = line.split(/\s*,\s*/)
+        if ([...SIGNAL_EXCLUDE, ...RESERVED].some(
+            exclusion => item.includes(exclusion)
+        )) return
 
         signals.push({
             name: item,
             quality: "normal",
             comparator: "=",
             count: 1,
-            ...additional_fields
+            ...(type === "item" ? {} : {type})
         })
     })
 
@@ -51,34 +58,15 @@ const to_constant_combinators = (signals) =>
         }))
 
 
-const all_signals = [
-    ...to_signal_list(
-        fs.readFileSync('../reference/base_virtual_signal.txt', 'utf8'),
-        {type: "virtual"}
-    ),
-    ...to_signal_list(
-        fs.readFileSync('../reference/base_filtered_item.txt', 'utf8')
-    ),
-    ...to_signal_list(
-        fs.readFileSync('../reference/base_filtered_entity.txt', 'utf8'),
-        {type: "entity"}
-    ),
-    ...to_signal_list(
-        fs.readFileSync('../reference/base_filtered_fluid.txt', 'utf8'),
-        {type: "fluid"}
-    ),
-    ...to_signal_list(
-        fs.readFileSync('../reference/base_filtered_recipe.txt', 'utf8'),
-        {type: "recipe"}
-    )
-]
+const all_signals = to_signal_list(
+    fs.readFileSync('../reference/all_signals_sorted.csv', 'utf8')
+)
 
 console.log(`Number of signals: ${all_signals.length}`)
 
-const all_signals_with_quality = [
-    ...all_signals,
-    ...all_signals.map(signal => ({...signal, quality: "quality-unknown"}))
-]
+const all_signals_with_quality = all_signals.flatMap(
+    signal => ([signal /* TODO add qualities here */ ])
+)
 
 console.log(`Number of signals with quality added: ${all_signals_with_quality.length}`)
 
