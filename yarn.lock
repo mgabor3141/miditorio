@@ -12,6 +12,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.25.6":
+  version: 7.25.6
+  resolution: "@babel/runtime@npm:7.25.6"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 10c0/d6143adf5aa1ce79ed374e33fdfd74fa975055a80bc6e479672ab1eadc4e4bfd7484444e17dd063a1d180e051f3ec62b357c7a2b817e7657687b47313158c3d2
+  languageName: node
+  linkType: hard
+
 "@eslint-community/eslint-utils@npm:^4.2.0, @eslint-community/eslint-utils@npm:^4.4.0":
   version: 4.4.0
   resolution: "@eslint-community/eslint-utils@npm:4.4.0"
@@ -773,6 +782,18 @@ __metadata:
   dependencies:
     fill-range: "npm:^7.1.1"
   checksum: 10c0/7c6dfd30c338d2997ba77500539227b9d1f85e388a5f43220865201e407e076783d0881f2d297b9f80951b4c957fcf0b51c1d2d24227631643c3f7c284b0aa04
+  languageName: node
+  linkType: hard
+
+"broker-factory@npm:^3.0.102":
+  version: 3.0.102
+  resolution: "broker-factory@npm:3.0.102"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.6"
+    fast-unique-numbers: "npm:^9.0.9"
+    tslib: "npm:^2.7.0"
+    worker-factory: "npm:^7.0.29"
+  checksum: 10c0/d9122cf9f522bc3b1645a8d9c0ab7955e0d8ffa58734a341140e7325571bacaac8ef9be7407d20907e72f660c6957ed3d2dd96af2230da555fc1134efadfc7af
   languageName: node
   linkType: hard
 
@@ -1631,6 +1652,16 @@ __metadata:
   version: 2.0.6
   resolution: "fast-levenshtein@npm:2.0.6"
   checksum: 10c0/111972b37338bcb88f7d9e2c5907862c280ebf4234433b95bc611e518d192ccb2d38119c4ac86e26b668d75f7f3894f4ff5c4982899afced7ca78633b08287c4
+  languageName: node
+  linkType: hard
+
+"fast-unique-numbers@npm:^9.0.9":
+  version: 9.0.9
+  resolution: "fast-unique-numbers@npm:9.0.9"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.6"
+    tslib: "npm:^2.7.0"
+  checksum: 10c0/aec2fa560d3f21d04d9a76fda36c5c243c8dfb75b1d8d042dd11f16ae4c21b464734abd0db2ecf8575c8c10cf93058e45661dfbef6bcd7c686fb7180bff5d1c9
   languageName: node
   linkType: hard
 
@@ -2614,6 +2645,41 @@ __metadata:
   languageName: node
   linkType: hard
 
+"midi-json-parser-broker@npm:^4.0.110":
+  version: 4.0.110
+  resolution: "midi-json-parser-broker@npm:4.0.110"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.6"
+    broker-factory: "npm:^3.0.102"
+    midi-json-parser-worker: "npm:^8.1.45"
+    tslib: "npm:^2.7.0"
+  checksum: 10c0/57fa2424f54fbc352606a5c0408c46c5685ff6aeae8cb5082f93264e4cae0fd177e9e98891d86732ed89535e3a006a93d4bd2db4f4610c79752bda2a4f27d3e6
+  languageName: node
+  linkType: hard
+
+"midi-json-parser-worker@npm:^8.1.45":
+  version: 8.1.45
+  resolution: "midi-json-parser-worker@npm:8.1.45"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.6"
+    tslib: "npm:^2.7.0"
+    worker-factory: "npm:^7.0.29"
+  checksum: 10c0/c6aadabab0b6badb4bf5939cf15e2fc0e222a88eb4593c46ba6fd1e9fee7d133042109ea8184b1ea8aa7564e5f367b452de5e8ab7b3201f98435ec1eb3bf9f79
+  languageName: node
+  linkType: hard
+
+"midi-json-parser@npm:^8.1.50":
+  version: 8.1.50
+  resolution: "midi-json-parser@npm:8.1.50"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.6"
+    midi-json-parser-broker: "npm:^4.0.110"
+    midi-json-parser-worker: "npm:^8.1.45"
+    tslib: "npm:^2.7.0"
+  checksum: 10c0/c56f6c16dad746b4c9d2da80c44f689d2e76db3e3c594d74f434b1c83a33dd3bbd61c9e48ca9351fe11f7d01cc1701c29ccbb53e6213208364ff4879e43929cd
+  languageName: node
+  linkType: hard
+
 "miditorio@workspace:.":
   version: 0.0.0-use.local
   resolution: "miditorio@workspace:."
@@ -2625,6 +2691,7 @@ __metadata:
     eslint-config-next: "npm:14.2.13"
     eslint-config-prettier: "npm:^9.1.0"
     factorio-blueprint: "npm:^2.6.5"
+    midi-json-parser: "npm:^8.1.50"
     next: "npm:14.2.13"
     postcss: "npm:^8"
     prettier: "npm:^3.3.3"
@@ -3336,6 +3403,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"regenerator-runtime@npm:^0.14.0":
+  version: 0.14.1
+  resolution: "regenerator-runtime@npm:0.14.1"
+  checksum: 10c0/1b16eb2c4bceb1665c89de70dcb64126a22bc8eb958feef3cd68fe11ac6d2a4899b5cd1b80b0774c7c03591dc57d16631a7f69d2daa2ec98100e2f29f7ec4cc4
+  languageName: node
+  linkType: hard
+
 "regexp.prototype.flags@npm:^1.5.1, regexp.prototype.flags@npm:^1.5.2":
   version: 1.5.2
   resolution: "regexp.prototype.flags@npm:1.5.2"
@@ -3927,7 +4001,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.3, tslib@npm:^2.4.0":
+"tslib@npm:^2.0.3, tslib@npm:^2.4.0, tslib@npm:^2.7.0":
   version: 2.7.0
   resolution: "tslib@npm:2.7.0"
   checksum: 10c0/469e1d5bf1af585742128827000711efa61010b699cb040ab1800bcd3ccdd37f63ec30642c9e07c4439c1db6e46345582614275daca3e0f4abae29b0083f04a6
@@ -4170,6 +4244,17 @@ __metadata:
   version: 1.2.5
   resolution: "word-wrap@npm:1.2.5"
   checksum: 10c0/e0e4a1ca27599c92a6ca4c32260e8a92e8a44f4ef6ef93f803f8ed823f486e0889fc0b93be4db59c8d51b3064951d25e43d434e95dc8c960cc3a63d65d00ba20
+  languageName: node
+  linkType: hard
+
+"worker-factory@npm:^7.0.29":
+  version: 7.0.29
+  resolution: "worker-factory@npm:7.0.29"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.6"
+    fast-unique-numbers: "npm:^9.0.9"
+    tslib: "npm:^2.7.0"
+  checksum: 10c0/858c0d540abc2eaa476b1700a79af7552e63ef7211fd491c83b4932cf65f6c85b50bbee915652c816aa69f416e79d0dc5b375d0dc8355f550d99c1f7260bc8e9
   languageName: node
   linkType: hard
 
