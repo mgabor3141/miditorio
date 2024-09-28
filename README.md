@@ -1,6 +1,6 @@
 # miditorio
-Convert midi songs to Factorio blueprints
 
+Convert midi songs to Factorio blueprints
 
 ## 2.0 Notes
 
@@ -13,18 +13,19 @@ drumkit has 17 sounds
 Factorio used to have 227 signals
 
 Signals can be:
-  - item x
-  - fluid x 
-  - virtual x
-  - entity x
-  - recipe x
-  - space-location
-  - asteroid-chunk
-  - quality
-See: SignalIDType
 
+- item x
+- fluid x
+- virtual x
+- entity x
+- recipe x
+- space-location
+- asteroid-chunk
+- quality
+  See: SignalIDType
 
 Commands:
+
 ```lua
 /c
 game.remove_path("all_signals_sorted.csv");
@@ -38,7 +39,7 @@ for name, _
 end;
 for name, signal
     in pairs(prototypes.virtual_signal)
-    do 
+    do
         if signal.special == false then
             game.write_file("all_signals_sorted.csv", "virtual, " .. name .. "\n", true);
         end
