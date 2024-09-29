@@ -9,8 +9,8 @@
     "lint": "prettier --write . && next lint"
   },
   "dependencies": {
-    "factorio-blueprint": "^2.6.5",
     "midi-json-parser": "^8.1.50",
+    "midi-json-parser-worker": "^8.1.45",
     "next": "14.2.13",
     "react": "^18",
     "react-dom": "^18",
