@@ -1,0 +1,42 @@
+export function Track(trackNum, song) {
+  this.name = 'Track ' + trackNum
+  this.notes = []
+  this.text = []
+  this.shift = 0
+
+  this.trackNum = parseInt(trackNum)
+  this.song = song
+}
+
+Track.prototype.addNote = function (id) {
+  this.notes.push(id)
+}
+
+Track.prototype.addText = function (time, text) {
+  this.text.push({ time: time, text: text })
+}
+
+Track.prototype.setName = function (name) {
+  this.name = name
+}
+
+Track.prototype.getRangeData = function () {
+  const data = { above: 0, below: 0, max: { above: 0, below: 0 } }
+
+  for (const note_i in this.notes) {
+    const note = song.notes[this.notes[note_i]]
+
+    const range = note.instrument.factorioInstrument.checkRange(note, true)
+    if (range !== true) {
+      data[range.direction]++
+      if (range.delta > data.max[range.direction])
+        data.max[range.direction] = range.delta
+    }
+  }
+
+  return data
+}
+
+Track.prototype.setShift = function (shift) {
+  this.shift = shift
+}

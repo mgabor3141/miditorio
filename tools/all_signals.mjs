@@ -1,33 +1,3 @@
-import fs from 'node:fs'
-
-const SIGNAL_EXCLUDE = ['parameter', 'unknown']
-const RESERVED = ['signal-N']
-
-const to_signal_list = (items, additional_fields) => {
-  const signals = []
-  items.split('\n').forEach((line) => {
-    if (!line) return
-
-    const [type, item] = line.split(/\s*,\s*/)
-    if (
-      [...SIGNAL_EXCLUDE, ...RESERVED].some((exclusion) =>
-        item.includes(exclusion),
-      )
-    )
-      return
-
-    signals.push({
-      name: item,
-      quality: 'normal',
-      comparator: '=',
-      count: 1,
-      ...(type === 'item' ? {} : { type }),
-    })
-  })
-
-  return signals
-}
-
 const array_chunks = (array, chunk_size) =>
   Array(Math.ceil(array.length / chunk_size))
     .fill()
@@ -66,6 +36,11 @@ console.log(`Number of signals: ${all_signals.length}`)
 const all_signals_with_quality = all_signals.flatMap((signal) => [
   signal /* TODO add qualities here */,
 ])
+
+fs.writeFileSync(
+  'out/signals.ts',
+  `export const signals = ${JSON.stringify(all_signals_with_quality)}`,
+)
 
 console.log(
   `Number of signals with quality added: ${all_signals_with_quality.length}`,
