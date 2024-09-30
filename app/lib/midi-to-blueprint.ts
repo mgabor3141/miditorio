@@ -1,8 +1,8 @@
 import { IMidiFile } from 'midi-json-parser-worker'
-// import { signals } from '@/app/lib/signals'
-import * as zlib from 'zlib'
 import { midiToInternalSong } from '@/app/lib/parse-midi'
 import { signals } from '@/app/lib/signals'
+import { arrayChunks, encodeBlueprint } from '@/app/lib/utils'
+import { toBlueprint } from '@/app/lib/blueprint'
 
 export const midiToBlueprint = (midi: IMidiFile) => {
   console.log(midi)
@@ -10,20 +10,19 @@ export const midiToBlueprint = (midi: IMidiFile) => {
   const song = midiToInternalSong(midi)
   const { delays, factorioSignals, signalInstruments } = song.toFactorio()
 
-  const events: {
+  type Event = {
     time: number
     track: number
     noteValue: number
-  }[] = []
-
-  console.log(signalInstruments)
+  }
+  const events: Event[] = []
 
   for (const delay of delays) {
     for (const factorioTrackName in factorioSignals) {
       // if track has signal at this delay
       if (factorioSignals[factorioTrackName][delay]) {
         events.push({
-          time: delay, // sum?
+          time: delay,
           track: song.getTrack(factorioTrackName).trackNum + 1,
           noteValue: factorioSignals[factorioTrackName][delay],
         })
@@ -32,53 +31,51 @@ export const midiToBlueprint = (midi: IMidiFile) => {
   }
 
   console.log(events)
+  console.log(`${events.length} events`)
 
-  let tickCombinatorValues = []
-  let dataCombinatorValues = []
-  for (const event of events) {
-    tickCombinatorValues.push(event.time)
-    dataCombinatorValues.push(event.track + (event.noteValue << 8))
+  const eventsGroupedByTime: Event[][] = []
+  events.forEach((event) => {
+    if (!eventsGroupedByTime[event.time]) eventsGroupedByTime[event.time] = []
+
+    eventsGroupedByTime[event.time].push(event)
+  })
+
+  const tickCombinatorValues = []
+  const dataCombinatorValues = []
+  for (const eventGroupTime in eventsGroupedByTime) {
+    const eventGroup = eventsGroupedByTime[eventGroupTime]
+
+    const evenTrackEvents: Event[] = []
+    const oddTrackEvents: Event[] = []
+
+    eventGroup.forEach((event) => {
+      if (event.track % 2 === 0) evenTrackEvents.push(event)
+      else oddTrackEvents.push(event)
+    })
+
+    while (evenTrackEvents.length > 0 || oddTrackEvents.length > 0) {
+      tickCombinatorValues.push(parseInt(eventGroupTime))
+
+      let packedDataValue = 0
+
+      if (evenTrackEvents.length > 0) {
+        const event = evenTrackEvents.pop() as Event
+        packedDataValue += event.track + (event.noteValue << 8)
+      }
+
+      if (oddTrackEvents.length > 0) {
+        const event = oddTrackEvents.pop() as Event
+        packedDataValue +=
+          (event.track << (6 + 8)) + (event.noteValue << (8 + 6 + 8))
+      }
+
+      dataCombinatorValues.push(packedDataValue)
+    }
   }
 
-  tickCombinatorValues = tickCombinatorValues.slice(0, 1000)
-  dataCombinatorValues = dataCombinatorValues.slice(0, 1000)
-
-  const blueprint = {
-    blueprint: {
-      icons: [
-        {
-          signal: {
-            name: 'constant-combinator',
-          },
-          index: 1,
-        },
-      ],
-      entities: [tickCombinatorValues, dataCombinatorValues].map(
-        (values, combinatorNumber) => ({
-          name: 'constant-combinator',
-          entity_number: 0,
-          position: { x: combinatorNumber, y: 0 },
-          direction: 4,
-          control_behavior: {
-            sections: {
-              sections: [
-                {
-                  index: 1,
-                  filters: values.map((value, valueIndex) => ({
-                    index: valueIndex + 1,
-                    ...signals[valueIndex],
-                    count: value,
-                  })),
-                },
-              ],
-            },
-          },
-        }),
-      ),
-      item: 'blueprint',
-      version: 281483568218115,
-    },
-  }
-
-  return '0' + zlib.deflateSync(JSON.stringify(blueprint)).toString('base64')
+  return toBlueprint({
+    tickCombinatorValues,
+    dataCombinatorValues,
+    signalInstruments,
+  })
 }
