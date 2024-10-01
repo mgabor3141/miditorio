@@ -1,7 +1,5 @@
 import { IMidiFile } from 'midi-json-parser-worker'
 import { midiToInternalSong } from '@/app/lib/parse-midi'
-import { signals } from '@/app/lib/signals'
-import { arrayChunks, encodeBlueprint } from '@/app/lib/utils'
 import { toBlueprint } from '@/app/lib/blueprint'
 
 export const midiToBlueprint = (midi: IMidiFile) => {
@@ -60,13 +58,13 @@ export const midiToBlueprint = (midi: IMidiFile) => {
 
       if (evenTrackEvents.length > 0) {
         const event = evenTrackEvents.pop() as Event
-        packedDataValue += event.track + (event.noteValue << 8)
+        packedDataValue += event.noteValue + (event.track << 6)
       }
 
       if (oddTrackEvents.length > 0) {
         const event = oddTrackEvents.pop() as Event
         packedDataValue +=
-          (event.track << (6 + 8)) + (event.noteValue << (8 + 6 + 8))
+          (event.track << (6 + 8)) + (event.noteValue << (6 + 8 + 8))
       }
 
       dataCombinatorValues.push(packedDataValue)

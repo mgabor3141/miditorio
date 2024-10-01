@@ -51,7 +51,8 @@ Song.prototype.getInstrument = function (time, channel) {
   let maximumInstrumentTime = -1
   let maximumInstrument
 
-  for (const instrument of this.instruments[channel]) {
+  for (const instrumentNumber in this.instruments[channel]) {
+    const instrument = this.instruments[channel][instrumentNumber]
     if (instrument.time <= time && instrument.time > maximumInstrumentTime) {
       maximumInstrument = instrument
       maximumInstrumentTime = instrument.time
@@ -81,7 +82,8 @@ Song.prototype.toFactorio = function () {
   const factorioInstruments = []
 
   for (const instrument_channel of this.instruments) {
-    for (const instrument of instrument_channel) {
+    for (const instrumentNumber in instrument_channel) {
+      const instrument = instrument_channel[instrumentNumber]
       const factorioInstrument = instrument.factorioInstrument
 
       if (factorioInstruments[factorioInstrument.name] === undefined)
