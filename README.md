@@ -69,3 +69,40 @@ end;
 Very relevant message:
 https://discord.com/channels/1214952937613295676/1285467033357516850/1289178384890593400
 Sort order: {item, fluid, virtual, recipe, entity, space-location, quality, asteroid-chunk}
+
+# 2.0 Feature goals
+
+- Online preview (create soundfont)
+- Visual preview for instruments and note ranges while editing
+- Settings:
+  - Anti-jitter stretch
+  - Use Space Age DLC signals (including elevated rail and quality)
+  - Game speed control
+- Histogram of note velocities, number of velocity buckets to use
+- Mod: programmable-speaker-extended
+
+## User flow
+
+1. Upload MIDI
+2. Setup
+   1. Show note grid on top
+   2. Settings below
+      1. Instrument specific settings
+         1. Enable Disable
+         2. Instrument assignment
+         3. Octave shift
+      2. Do you have space age?
+      3. Anti Jitter
+      4. Game speed
+3. Export
+
+## Libraries
+
+Tone JS for midi parsing and internal data
+Factorio code will be separated to work with the ToneJS data as input
+Custom note visualizer with transport controls and layered midis
+
+## More?
+
+programmable-speaker-extended mod
+import settings from previous blueprint
