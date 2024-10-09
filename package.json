@@ -11,26 +11,26 @@
   "dependencies": {
     "@babel/runtime": "^7.25.7",
     "@tonejs/midi": "^2.0.28",
-    "midi-json-parser": "^8.1.50",
-    "midi-json-parser-worker": "^8.1.45",
-    "next": "14.2.13",
+    "midi-json-parser": "^8.1.52",
+    "midi-json-parser-worker": "^8.1.46",
+    "next": "^14.2.15",
     "pixi.js": "^8.4.1",
-    "posthog-js": "^1.166.1",
-    "react": "^18",
-    "react-dom": "^18",
+    "posthog-js": "^1.167.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "use-file-picker": "^2.1.2"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.13",
+    "@types/node": "^22.7.5",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.15",
     "eslint-config-prettier": "^9.1.0",
-    "postcss": "^8",
+    "postcss": "^8.4.47",
     "prettier": "^3.3.3",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.6.3"
   },
   "packageManager": "yarn@4.5.0"
 }
