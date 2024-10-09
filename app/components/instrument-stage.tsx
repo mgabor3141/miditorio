@@ -1,11 +1,12 @@
 import { PianoRoll } from '@/app/components/piano-roll'
 import { Midi } from '@tonejs/midi'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export type InstrumentStageProps = {
   song: Midi
 }
 export const InstrumentStage = ({ song }: InstrumentStageProps) => {
+  const panel = useRef<HTMLDivElement>(null)
   const [selectedTrack, setSelectedTrack] = useState<number | undefined>(
     undefined,
   )
@@ -14,8 +15,12 @@ export const InstrumentStage = ({ song }: InstrumentStageProps) => {
     setSelectedTrack(song.tracks.length === 1 ? 0 : undefined)
   }, [song.tracks.length])
 
+  useEffect(() => {
+    panel.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [])
+
   return (
-    <div className="panel mt0 !pt-4 flex-column">
+    <div className="panel mt0 !pt-4 flex-column" ref={panel}>
       <div className="flex items-baseline gap-3">
         <h1 className="text-ellipsis line-clamp-1">{song.name}</h1>
         <h5 className="flex-grow normal-weight">
