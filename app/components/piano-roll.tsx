@@ -193,22 +193,18 @@ export const PianoRoll = ({
     console.log('Refreshing piano roll...')
     app.stage.removeChildren()
 
-    if (trackTextures.length) {
-      trackTextures.forEach((texture, trackNumber) =>
-        app.stage.addChild(
-          new Sprite({
-            texture,
-            alpha:
-              selectedTrack === undefined || trackNumber === selectedTrack
-                ? 1
-                : 0.25,
-            zIndex: trackNumber === selectedTrack ? 2 : 1,
-          }),
-        ),
-      )
-    } else {
-      app.stage.addChild(new Text({ text: 'Generating song preview...' }))
-    }
+    trackTextures.forEach((texture, trackNumber) =>
+      app.stage.addChild(
+        new Sprite({
+          texture,
+          alpha:
+            selectedTrack === undefined || trackNumber === selectedTrack
+              ? 1
+              : 0.25,
+          zIndex: trackNumber === selectedTrack ? 2 : 1,
+        }),
+      ),
+    )
   }, [app, trackTextures, selectedTrack, appInitialized])
 
   return (
