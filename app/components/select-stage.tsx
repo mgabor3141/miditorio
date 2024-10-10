@@ -133,6 +133,7 @@ export const SelectStage = ({ setSong }: SelectStageProps) => {
           if (loadingMessage && filesContent.length) {
             const song = new Midi(filesContent[0].content.slice(0))
             const processedSong = preprocessSong(song, filesContent[0].name)
+            console.log('Finished processing: ', processedSong)
             setSong(processedSong)
 
             setLoadingMessage('')
