@@ -1,0 +1,65 @@
+import { gmPercussionToNote } from '@/app/lib/data/gm-percussion-note-names'
+import { factorioDrumSoundToSignal } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
+
+export const gmPercussionToFactorioDrumkit: Partial<
+  Record<
+    keyof typeof gmPercussionToNote,
+    keyof typeof factorioDrumSoundToSignal
+  >
+> = {
+  'High Q': 'High Q',
+  Slap: 'Clap',
+  'Scratch Push': 'Shaker',
+  'Scratch Pull': 'Shaker',
+  Sticks: 'Percussion 2',
+  'Square Click': 'Percussion 1',
+  'Metronome Click': 'Percussion 1',
+  'Metronome Bell': 'Cowbell',
+  'Acoustic Bass Drum': 'Kick 2',
+  'Bass Drum 1': 'Kick 1',
+  'Side Stick': 'Percussion 1',
+  'Acoustic Snare': 'Snare 3',
+  'Hand Clap': 'Clap',
+  'Electric Snare': 'Snare 2',
+  'Low Floor Tom': 'Snare 1', // All toms go to Snare 1 which is very high but is the most tom like
+  'Closed Hi Hat': 'Hi-hat 2',
+  'High Floor Tom': 'Snare 1',
+  'Pedal Hi-Hat': 'Hi-hat 1', // Best if this is different from closed hh
+  'Low Tom': 'Snare 1',
+  'Open Hi-Hat': 'Hi-hat 1',
+  'Low-Mid Tom': 'Snare 1',
+  'Hi-Mid Tom': 'Snare 1',
+  'Crash Cymbal 1': 'Crash',
+  'High Tom': 'Snare 1',
+  'Ride Cymbal 1': 'Percussion 1',
+  'Chinese Cymbal': 'Crash',
+  'Ride Bell': 'Cowbell',
+  Tambourine: 'Shaker',
+  'Splash Cymbal': 'Crash',
+  Cowbell: 'Cowbell',
+  'Crash Cymbal 2': 'Crash',
+  Vibraslap: 'Crash',
+  'Ride Cymbal 2': 'Percussion 1',
+  'Hi Bongo': 'Cowbell', // Cowbell is rough here...
+  'Low Bongo': 'Cowbell',
+  'Mute Hi Conga': 'Cowbell',
+  'Open Hi Conga': 'Cowbell',
+  'Low Conga': 'Cowbell',
+  'High Timbale': 'Snare 1',
+  'Low Timbale': 'Snare 1',
+  'High Agogo': 'Cowbell',
+  'Low Agogo': 'Cowbell',
+  Cabasa: 'Shaker',
+  Maracas: 'Shaker',
+  'Short Whistle': 'Triangle',
+  'Long Whistle': 'Triangle',
+  'Short Guiro': 'Shaker',
+  'Long Guiro': 'Shaker',
+  Claves: 'Percussion 1',
+  'Hi Wood Block': 'Percussion 1',
+  'Low Wood Block': 'Percussion 1',
+  'Mute Cuica': undefined,
+  'Open Cuica': undefined,
+  'Mute Triangle': 'Triangle',
+  'Open Triangle': 'Triangle',
+} as const

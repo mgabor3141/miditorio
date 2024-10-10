@@ -1,2 +1,3 @@
 .yarn
-tools/out
+app/lib/data/signals.json
+app/lib/data/signals-dlc.json

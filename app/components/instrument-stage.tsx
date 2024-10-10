@@ -1,19 +1,22 @@
 import { PianoRoll } from '@/app/components/piano-roll'
-import { Midi } from '@tonejs/midi'
-import { useEffect, useRef, useState } from 'react'
+import { Dispatch, useEffect, useRef, useState } from 'react'
+import { Settings, Song } from '@/app/components/select-stage'
 
 export type InstrumentStageProps = {
-  song: Midi
+  song: Song
+  onContinue?: Dispatch<void>
+  onSettingsChanged?: Dispatch<Settings>
 }
-export const InstrumentStage = ({ song }: InstrumentStageProps) => {
+export const InstrumentStage = ({ song, onContinue }: InstrumentStageProps) => {
   const panel = useRef<HTMLDivElement>(null)
   const [selectedTrack, setSelectedTrack] = useState<number | undefined>(
     undefined,
   )
+  const midi = song.midi
 
   useEffect(() => {
-    setSelectedTrack(song.tracks.length === 1 ? 0 : undefined)
-  }, [song.tracks.length])
+    setSelectedTrack(midi.tracks.length === 1 ? 0 : undefined)
+  }, [midi.tracks.length])
 
   useEffect(() => {
     panel.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -22,14 +25,19 @@ export const InstrumentStage = ({ song }: InstrumentStageProps) => {
   return (
     <div className="panel mt0 !pt-4 flex-column" ref={panel}>
       <div className="flex items-baseline gap-3">
-        <h1 className="text-ellipsis line-clamp-1">{song.name}</h1>
+        <h1 className="text-ellipsis line-clamp-1">{midi.name}</h1>
         <h5 className="flex-grow normal-weight">
-          {Math.floor(song.duration / 60)}:
-          {String(Math.floor(song.duration % 60)).padStart(2, '0')}
+          {Math.floor(midi.duration / 60)}:
+          {String(Math.floor(midi.duration % 60)).padStart(2, '0')}
         </h5>
         <div className="gap-3 min-w-fit">
-          <button className="button !text-center !mr-2">Choose another</button>
-          <button className="button-green-right !mr-3 !text-center">
+          <button className="button !text-center !mr-2">
+            Choose another TODO
+          </button>
+          <button
+            className="button-green-right !mr-3 !text-center"
+            onClick={() => onContinue && onContinue()}
+          >
             Continue
           </button>
         </div>
@@ -38,7 +46,7 @@ export const InstrumentStage = ({ song }: InstrumentStageProps) => {
       <div className="flex gap-3 items-start self-center">
         <div className="panel-inset-lighter flex-column gap-2 flex-start">
           <h3>Tracks</h3>
-          {song.tracks.length > 1 && (
+          {midi.tracks.length > 1 && (
             <div
               key="all"
               className={`button mr0 ${selectedTrack === undefined ? 'button-green' : ''}`}
@@ -47,7 +55,7 @@ export const InstrumentStage = ({ song }: InstrumentStageProps) => {
               All
             </div>
           )}
-          {song.tracks.map((track, trackNumber) => (
+          {midi.tracks.map((track, trackNumber) => (
             <div
               key={trackNumber}
               className={`mr0 ${selectedTrack === trackNumber ? 'button-green' : 'button'}`}
@@ -57,7 +65,7 @@ export const InstrumentStage = ({ song }: InstrumentStageProps) => {
             </div>
           ))}
         </div>
-        <div className="panel-inset !pl-0 !bg-[#171616] f">
+        <div className="panel-inset !pl-0 !bg-[#0E0E0E] f">
           <PianoRoll
             song={song}
             selectedTrack={selectedTrack}
