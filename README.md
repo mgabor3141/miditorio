@@ -24,45 +24,51 @@ Signals can be:
 - quality
   See: SignalIDType
 
-Commands:
+## Commands
+
+The following command generates a CSV of all the signals available in the game.
+Note that whatever mods you have enabled will also be included.
+The csv file will be in the game folder `/script-output`.
+Copy the resulting csv file into the `tools` folder in the project, then run `yarn parse-signals`
 
 ```lua
 /c
-game.remove_path("all_signals_sorted.csv");
+helpers.remove_path("all_signals.csv");
+helpers.write_file("all_signals.csv", "type, name\n", true);
 for name, _
     in pairs(prototypes.get_item_filtered{{filter="hidden", hidden=true, invert=true}})
-    do game.write_file("all_signals_sorted.csv", "item, " .. name .. "\n", true);
+    do helpers.write_file("all_signals.csv", "item, " .. name .. "\n", true);
 end;
 for name, _
     in pairs(prototypes.get_fluid_filtered{{filter="hidden", hidden=true, invert=true}})
-    do game.write_file("all_signals_sorted.csv", "fluid, " .. name .. "\n", true);
+    do helpers.write_file("all_signals.csv", "fluid, " .. name .. "\n", true);
 end;
 for name, signal
     in pairs(prototypes.virtual_signal)
     do
         if signal.special == false then
-            game.write_file("all_signals_sorted.csv", "virtual, " .. name .. "\n", true);
+            helpers.write_file("all_signals.csv", "virtual, " .. name .. "\n", true);
         end
 end;
 for name, _
     in pairs(prototypes.get_recipe_filtered{{filter="hidden", hidden=true, invert=true}})
-    do game.write_file("all_signals_sorted.csv", "recipe, " .. name .. "\n", true);
+    do helpers.write_file("all_signals.csv", "recipe, " .. name .. "\n", true);
 end;
 for name, _
     in pairs(prototypes.get_entity_filtered{{filter="hidden", hidden=true, invert=true}})
-    do game.write_file("all_signals_sorted.csv", "entity, " .. name .. "\n", true);
+    do helpers.write_file("all_signals.csv", "entity, " .. name .. "\n", true);
 end;
 for name, _
     in pairs(prototypes.space_location)
-    do game.write_file("all_signals_sorted.csv", "space-location, " .. name .. "\n", true);
+    do helpers.write_file("all_signals.csv", "space-location, " .. name .. "\n", true);
 end;
 for name, _
     in pairs(prototypes.quality)
-    do game.write_file("all_signals_sorted.csv", "quality, " .. name .. "\n", true);
+    do helpers.write_file("all_signals.csv", "quality, " .. name .. "\n", true);
 end;
 for name, _
     in pairs(prototypes.asteroid_chunk)
-    do game.write_file("all_signals_sorted.csv", "asteroid-chunk, " .. name .. "\n", true);
+    do helpers.write_file("all_signals.csv", "asteroid-chunk, " .. name .. "\n", true);
 end;
 ```
 

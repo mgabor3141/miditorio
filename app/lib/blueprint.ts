@@ -1,15 +1,11 @@
 import { arrayChunks, encodeBlueprint } from '@/app/lib/utils'
-import { signals } from '@/app/lib/signals'
-import { FactorioInstrument } from '@/app/lib/data.mjs'
+import signals from '@/app/lib/data/signals-dlc.json'
+import { FactorioInstrument } from '@/app/lib/factorio-instrument'
 
-const qualities = [
-  'normal',
-  'uncommon',
-  'rare',
-  'epic',
-  'legendary',
-  'quality-unknown',
-]
+const qualities = signals
+  .filter(({ type }) => type === 'quality')
+  .map(({ name }) => name)
+
 const signalsWithQuality = signals.flatMap((signal) =>
   qualities.map((quality) => ({
     ...signal,
@@ -76,12 +72,12 @@ export const toBlueprint = ({
           },
           circuit_parameters: {
             signal_value_is_pitch: true,
-            instrument_id: instrument.id,
+            instrument_id: Number(instrument.id),
             note_id: 0,
           },
         },
         parameters: {
-          playback_volume: instrument.default_volume,
+          playback_volume: instrument.volumeCorrection,
           playback_mode: 'surface',
           allow_polyphony: true,
         },

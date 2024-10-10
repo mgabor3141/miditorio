@@ -1,15 +1,15 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Midi } from '@tonejs/midi'
-import { SelectStage } from './components/select-stage'
+import { SelectStage, Song } from './components/select-stage'
 import { InstrumentStage } from '@/app/components/instrument-stage'
+import { ResultStage } from '@/app/components/result-stage'
 
-export type Stage = 'select' | 'instrument' | 'options'
+export type Stage = 'select' | 'instrument' | 'result'
 
 export default function Home() {
   const [flowStage, setFlowStage] = useState<Stage>('select')
-  const [song, setSong] = useState<Midi | undefined>(undefined)
+  const [song, setSong] = useState<Song | undefined>(undefined)
 
   // Select --> Instrument stage
   useEffect(() => {
@@ -27,16 +27,13 @@ export default function Home() {
       </header>
       <main className="flex flex-col gap-8 row-start-2 items-start">
         {flowStage === 'select' && <SelectStage setSong={setSong} />}
-        {flowStage === 'instrument' && song && <InstrumentStage song={song} />}
-        {/*{blueprintString && (*/}
-        {/*  <textarea*/}
-        {/*    value={blueprintString}*/}
-        {/*    readOnly={true}*/}
-        {/*    className="bg-gray-900"*/}
-        {/*    cols={50}*/}
-        {/*    rows={6}*/}
-        {/*  />*/}
-        {/*)}*/}
+        {flowStage === 'instrument' && song && (
+          <InstrumentStage
+            song={song}
+            onContinue={() => setFlowStage('result')}
+          />
+        )}
+        {flowStage === 'result' && song && <ResultStage song={song} />}
       </main>
     </div>
   )

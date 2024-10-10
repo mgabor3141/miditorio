@@ -1,3 +1,4 @@
+type, name
 item, wooden-chest
 item, iron-chest
 item, steel-chest
@@ -96,7 +97,7 @@ item, foundry
 item, recycler
 item, agricultural-tower
 item, biochamber
-item, synthetic-biter-spawner
+item, captive-biter-spawner
 item, assembling-machine-1
 item, assembling-machine-2
 item, assembling-machine-3
@@ -106,6 +107,7 @@ item, centrifuge
 item, electromagnetic-plant
 item, cryogenic-plant
 item, lab
+item, biolab
 item, lightning-rod
 item, lightning-collector
 item, heating-tower
@@ -204,7 +206,7 @@ item, metallurgic-science-pack
 item, electromagnetic-science-pack
 item, agricultural-science-pack
 item, cryogenic-science-pack
-item, interstellar-science-pack
+item, promethium-science-pack
 item, rocket-silo
 item, cargo-landing-pad
 item, space-platform-foundation
@@ -216,7 +218,7 @@ item, space-platform-starter-pack
 item, metallic-asteroid-chunk
 item, carbonic-asteroid-chunk
 item, oxide-asteroid-chunk
-item, interstellar-asteroid-chunk
+item, promethium-asteroid-chunk
 item, pistol
 item, submachine-gun
 item, railgun
@@ -295,7 +297,7 @@ item, parameter-9
 item, copper-wire
 item, green-wire
 item, red-wire
-item, rts-tool
+item, spidertron-remote
 item, discharge-defense-remote
 item, artillery-targeting-remote
 fluid, water
@@ -484,7 +486,7 @@ recipe, foundry
 recipe, recycler
 recipe, agricultural-tower
 recipe, biochamber
-recipe, synthetic-biter-spawner
+recipe, captive-biter-spawner
 recipe, assembling-machine-1
 recipe, assembling-machine-2
 recipe, assembling-machine-3
@@ -494,6 +496,7 @@ recipe, centrifuge
 recipe, electromagnetic-plant
 recipe, cryogenic-plant
 recipe, lab
+recipe, biolab
 recipe, lightning-rod
 recipe, lightning-collector
 recipe, heating-tower
@@ -607,7 +610,6 @@ recipe, biosulfur
 recipe, bioflux
 recipe, burnt-spoilage
 recipe, carbon-fiber
-recipe, synthetic-biter-eggs
 recipe, ammoniacal-solution-separation
 recipe, solid-fuel-from-ammonia
 recipe, ammonia-rocket-fuel
@@ -628,7 +630,7 @@ recipe, metallurgic-science-pack
 recipe, electromagnetic-science-pack
 recipe, agricultural-science-pack
 recipe, cryogenic-science-pack
-recipe, interstellar-science-pack
+recipe, promethium-science-pack
 recipe, rocket-silo
 recipe, cargo-landing-pad
 recipe, space-platform-foundation
@@ -811,7 +813,7 @@ entity, foundry
 entity, recycler
 entity, agricultural-tower
 entity, biochamber
-entity, synthetic-biter-spawner
+entity, captive-biter-spawner
 entity, assembling-machine-1
 entity, assembling-machine-2
 entity, assembling-machine-3
@@ -821,6 +823,7 @@ entity, centrifuge
 entity, electromagnetic-plant
 entity, cryogenic-plant
 entity, lab
+entity, biolab
 entity, lightning-rod
 entity, lightning-collector
 entity, heating-tower
@@ -846,7 +849,6 @@ entity, railgun-turret
 entity, tree-plant
 entity, yumako-tree
 entity, jellystem
-entity, captive-biter-spawner
 entity, coal
 entity, copper-ore
 entity, iron-ore
@@ -869,10 +871,10 @@ entity, small-oxide-asteroid
 entity, medium-oxide-asteroid
 entity, big-oxide-asteroid
 entity, huge-oxide-asteroid
-entity, small-interstellar-asteroid
-entity, medium-interstellar-asteroid
-entity, big-interstellar-asteroid
-entity, huge-interstellar-asteroid
+entity, small-promethium-asteroid
+entity, medium-promethium-asteroid
+entity, big-promethium-asteroid
+entity, huge-promethium-asteroid
 entity, defender
 entity, distractor
 entity, destroyer
@@ -945,6 +947,7 @@ entity, stingfrond
 entity, boompuff
 entity, sunnycomb
 entity, cuttlepop
+entity, water-cane
 entity, big-sand-rock
 entity, copper-stromatolite
 entity, iron-stromatolite
@@ -960,7 +963,8 @@ entity, vulcanus-chimney-truncated
 entity, vulcanus-chimney
 entity, vulcanus-chimney-cold
 entity, vulcanus-chimney-faded
-entity, fulgorite
+entity, fulgurite
+entity, fulgurite-small
 entity, big-fulgora-rock
 entity, fulgoran-ruin-small
 entity, fulgoran-ruin-medium
@@ -1084,6 +1088,8 @@ entity, steel-furnace-remnants
 entity, stone-furnace-remnants
 entity, foundry-remnants
 entity, agricultural-tower-remnants
+entity, biochamber-remnants
+entity, biolab-remnants
 entity, assembling-machine-1-remnants
 entity, assembling-machine-2-remnants
 entity, assembling-machine-3-remnants
@@ -1091,7 +1097,6 @@ entity, oil-refinery-remnants
 entity, chemical-plant-remnants
 entity, centrifuge-remnants
 entity, lab-remnants
-entity, biochamber-remnants
 entity, electromagnetic-plant-remnants
 entity, cryogenic-plant-remnants
 entity, lightning-rod-remnants
@@ -1174,7 +1179,7 @@ space-location, gleba
 space-location, fulgora
 space-location, aquilo
 space-location, solar-system-edge
-space-location, interstellar
+space-location, shattered-planet
 space-location, space-location-unknown
 quality, normal
 quality, uncommon
@@ -1185,5 +1190,5 @@ quality, quality-unknown
 asteroid-chunk, metallic-asteroid-chunk
 asteroid-chunk, carbonic-asteroid-chunk
 asteroid-chunk, oxide-asteroid-chunk
-asteroid-chunk, interstellar-asteroid-chunk
+asteroid-chunk, promethium-asteroid-chunk
 asteroid-chunk, asteroid-chunk-unknown

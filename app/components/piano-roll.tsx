@@ -1,5 +1,4 @@
-import { Midi, Track } from '@tonejs/midi'
-import { Note } from '@tonejs/midi/dist/Note'
+import { Track } from '@tonejs/midi'
 import { useEffect, useRef, useState } from 'react'
 import {
   Application,
@@ -10,9 +9,13 @@ import {
   Text,
   TextStyle,
 } from 'pixi.js'
+import { Song } from '@/app/components/select-stage'
+import { gmInstrumentFamilies } from '@/app/lib/data/gm-instrument-families'
 
 const getTrackColor = (track: Track) => {
-  const INSTRUMENT_FAMILY_BASE_COLOR: Record<string, string> = {
+  const INSTRUMENT_FAMILY_BASE_COLOR: Partial<
+    Record<(typeof gmInstrumentFamilies)[number], string>
+  > = {
     piano: '#016FB9',
     'chromatic percussion': '#80B3A7',
     organ: '#afa93b',
@@ -31,37 +34,11 @@ const getTrackColor = (track: Track) => {
     // 'sound effects': '#',
   }
 
-  return INSTRUMENT_FAMILY_BASE_COLOR[track.instrument.family] || '#8A817C'
-}
-
-const getNoteExtremes = (
-  input: Midi | Note[],
-  padding: number = 0,
-): { min: number; max: number } => {
-  const notes =
-    'tracks' in input
-      ? input.tracks
-          .filter((track) => !track.instrument.percussion)
-          .flatMap((track) => track.notes)
-      : input
-
-  const result: {
-    min?: number
-    max?: number
-  } = {
-    min: undefined,
-    max: undefined,
-  }
-
-  notes.forEach((note) => {
-    if (!result.max || note.midi > result.max) result.max = note.midi
-    if (!result.min || note.midi < result.min) result.min = note.midi
-  })
-
-  return {
-    min: (result.min || 40) - padding,
-    max: (result.max || 40 + 3 * 12) + padding,
-  }
+  return (
+    INSTRUMENT_FAMILY_BASE_COLOR[
+      track.instrument.family as (typeof gmInstrumentFamilies)[number]
+    ] || '#8A817C'
+  )
 }
 
 export const PianoRoll = ({
@@ -70,7 +47,7 @@ export const PianoRoll = ({
   height,
   selectedTrack,
 }: {
-  song: Midi
+  song: Song
   width: number
   height: number
   selectedTrack?: number
@@ -135,10 +112,10 @@ export const PianoRoll = ({
     ;(async () => {
       if (!app || !appInitialized) return
       console.log('Rendering piano roll...')
-      const { min, max } = getNoteExtremes(song, 4)
+      const { min, max } = song.additionalInfo.noteExtremes
 
       const tempContainer = new Container()
-      const trackRenderTextures = song.tracks
+      const trackRenderTextures = song.midi.tracks
         .filter((track) => !track.instrument.percussion)
         .map((track) => {
           const renderTexture = RenderTexture.create({
@@ -151,10 +128,10 @@ export const PianoRoll = ({
             tempContainer.addChild(
               new Graphics()
                 .roundRect(
-                  (note.ticks / song.durationTicks) * width,
+                  (note.ticks / song.midi.durationTicks) * width,
                   height - ((note.midi - min) / (max - min)) * height,
                   Math.max(
-                    (note.durationTicks / song.durationTicks) * width,
+                    (note.durationTicks / song.midi.durationTicks) * width,
                     1,
                   ),
                   Math.max(height / max - min, 8),
@@ -178,15 +155,7 @@ export const PianoRoll = ({
       setTrackTextures(trackRenderTextures)
       console.log('Piano roll render complete!')
     })()
-  }, [
-    app,
-    appInitialized,
-    width,
-    height,
-    song,
-    song.durationTicks,
-    song.tracks,
-  ])
+  }, [app, appInitialized, width, height, song])
 
   useEffect(() => {
     if (!app || !appInitialized) return

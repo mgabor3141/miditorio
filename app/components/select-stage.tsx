@@ -1,51 +1,125 @@
 import { Dispatch, useEffect, useState } from 'react'
 import { useFilePicker } from 'use-file-picker'
 import { Midi } from '@tonejs/midi'
+import { Note } from '@tonejs/midi/dist/Note'
+import {
+  FactorioInstrument,
+  toFactorioInstrument,
+} from '@/app/lib/factorio-instrument'
+import { capitalize } from '@/app/lib/utils'
+import { usePostHog } from 'posthog-js/react'
 
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+export type NoteExtremes = {
+  min: number
+  max: number
+}
 
-const preprocessSong = (originalSong: Midi, filename: string): Midi => {
-  const song: typeof originalSong = new Midi(originalSong.toArray())
-  if (!song.name) song.name = capitalize(filename.replace(/\.midi?$/, ''))
+export type Settings = {
+  tracks: {
+    factorioInstrument?: FactorioInstrument
+    octaveShift: number
+    velocityResolution: number
+  }[]
+}
 
-  song.tracks = song.tracks.filter(
+export type Song = {
+  midi: Midi
+  additionalInfo: {
+    noteExtremes: NoteExtremes
+    trackExtremes: NoteExtremes[]
+  }
+  settings: Settings
+}
+
+const getNoteExtremes = (
+  input: Midi | Note[],
+  padding: number = 0,
+): { min: number; max: number } => {
+  const notes =
+    'tracks' in input
+      ? input.tracks
+          .filter((track) => !track.instrument.percussion)
+          .flatMap((track) => track.notes)
+      : input
+
+  const result: {
+    min?: number
+    max?: number
+  } = {
+    min: undefined,
+    max: undefined,
+  }
+
+  notes.forEach((note) => {
+    if (!result.max || note.midi > result.max) result.max = note.midi
+    if (!result.min || note.midi < result.min) result.min = note.midi
+  })
+
+  return {
+    min: (result.min || 40) - padding,
+    max: (result.max || 40 + 3 * 12) + padding,
+  }
+}
+
+const preprocessSong = (originalMidi: Midi, filename: string): Song => {
+  const midi: typeof originalMidi = new Midi(originalMidi.toArray())
+  if (!midi.name) midi.name = capitalize(filename.replace(/\.midi?$/, ''))
+
+  midi.tracks = midi.tracks.filter(
     (track) => track.notes.length && !track.instrument.percussion,
   )
 
   // Unify drum tracks
-  const drumInstrument = originalSong.tracks.find(
+  const drumInstrument = originalMidi.tracks.find(
     (track) => track.instrument.percussion,
   )?.instrument
   if (drumInstrument) {
-    const unifiedDrumTrack = song.addTrack()
+    const unifiedDrumTrack = midi.addTrack()
     unifiedDrumTrack.instrument = drumInstrument
     unifiedDrumTrack.name = 'Percussion'
-    originalSong.tracks
+    originalMidi.tracks
       .filter((track) => track.instrument.percussion)
       .flatMap((track) => track.notes)
       .forEach((note) => unifiedDrumTrack.addNote(note))
   }
 
-  for (const trackNumber in song.tracks) {
-    if (!song.tracks[trackNumber].name)
-      song.tracks[trackNumber].name = capitalize(
-        song.tracks[trackNumber].instrument.name,
+  for (const trackNumber in midi.tracks) {
+    if (!midi.tracks[trackNumber].name)
+      midi.tracks[trackNumber].name = capitalize(
+        midi.tracks[trackNumber].instrument.name,
       )
   }
 
-  return song
+  return {
+    midi,
+    additionalInfo: {
+      noteExtremes: getNoteExtremes(midi),
+      trackExtremes: midi.tracks.map((track) => getNoteExtremes(track.notes)),
+    },
+    settings: {
+      tracks: midi.tracks.map((track) => ({
+        factorioInstrument: toFactorioInstrument(track.instrument),
+        octaveShift: 0,
+        velocityResolution: 1,
+      })),
+    },
+  }
 }
 
 export type SelectStageProps = {
-  setSong: Dispatch<Midi | undefined>
+  setSong: Dispatch<Song | undefined>
 }
 export const SelectStage = ({ setSong }: SelectStageProps) => {
+  const postHog = usePostHog()
   const [loadingMessage, setLoadingMessage] = useState('')
 
   const { openFilePicker, filesContent } = useFilePicker({
     accept: ['audio/midi', 'audio/x-midi'],
     readAs: 'ArrayBuffer',
-    onFilesSuccessfullySelected: async () => {
+    onFilesSuccessfullySelected: async ({ filesContent }) => {
+      postHog.capture('selected midi file', {
+        'File Name': filesContent[0].name,
+      })
       setSong(undefined)
     },
   })
@@ -57,13 +131,11 @@ export const SelectStage = ({ setSong }: SelectStageProps) => {
 
         requestAnimationFrame(() => {
           if (loadingMessage && filesContent.length) {
-            // const midi = await parseArrayBuffer(filesContent[0].content)
             const song = new Midi(filesContent[0].content.slice(0))
             console.log(song)
             const processedSong = preprocessSong(song, filesContent[0].name)
             console.log(processedSong)
             setSong(processedSong)
-            // setBlueprintString(midiToBlueprint(midi))
 
             setLoadingMessage('')
           }

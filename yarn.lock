@@ -12,7 +12,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.25.7":
+"@babel/runtime@npm:^7.25.6, @babel/runtime@npm:^7.25.7":
   version: 7.25.7
   resolution: "@babel/runtime@npm:7.25.7"
   dependencies:
@@ -782,6 +782,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"automation-events@npm:^7.0.9":
+  version: 7.1.0
+  resolution: "automation-events@npm:7.1.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.7"
+    tslib: "npm:^2.7.0"
+  checksum: 10c0/928db291588f297b9558e64616f690af26b46d400809fe6bd2ffd9ab458467884da42c44a333dcdd836286196fc439a77068f2c733f4af2e9bae5a0db495204d
+  languageName: node
+  linkType: hard
+
 "available-typed-arrays@npm:^1.0.7":
   version: 1.0.7
   resolution: "available-typed-arrays@npm:1.0.7"
@@ -844,18 +854,6 @@ __metadata:
   dependencies:
     fill-range: "npm:^7.1.1"
   checksum: 10c0/7c6dfd30c338d2997ba77500539227b9d1f85e388a5f43220865201e407e076783d0881f2d297b9f80951b4c957fcf0b51c1d2d24227631643c3f7c284b0aa04
-  languageName: node
-  linkType: hard
-
-"broker-factory@npm:^3.0.103":
-  version: 3.0.103
-  resolution: "broker-factory@npm:3.0.103"
-  dependencies:
-    "@babel/runtime": "npm:^7.25.7"
-    fast-unique-numbers: "npm:^9.0.10"
-    tslib: "npm:^2.7.0"
-    worker-factory: "npm:^7.0.30"
-  checksum: 10c0/19f1da9f8bfab82a710a5f510abd43bd3bcd08bb1ba203d5b2789e406cd300c787349e8702560d185357e96a30ef6593561f9df2f240344d8292a22c49ee2d05
   languageName: node
   linkType: hard
 
@@ -1721,16 +1719,6 @@ __metadata:
   version: 2.0.6
   resolution: "fast-levenshtein@npm:2.0.6"
   checksum: 10c0/111972b37338bcb88f7d9e2c5907862c280ebf4234433b95bc611e518d192ccb2d38119c4ac86e26b668d75f7f3894f4ff5c4982899afced7ca78633b08287c4
-  languageName: node
-  linkType: hard
-
-"fast-unique-numbers@npm:^9.0.10":
-  version: 9.0.10
-  resolution: "fast-unique-numbers@npm:9.0.10"
-  dependencies:
-    "@babel/runtime": "npm:^7.25.7"
-    tslib: "npm:^2.7.0"
-  checksum: 10c0/bfd09fe51653a4f03a1bc27c76e4d2df6569bd37bf29f7730b974206b3ced1f42ec88ba3c2feb485c0c8359b9b3395ff6c6b42562cc849fc1d3ca8cc2d9c7db8
   languageName: node
   linkType: hard
 
@@ -2735,41 +2723,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"midi-json-parser-broker@npm:^4.0.111":
-  version: 4.0.111
-  resolution: "midi-json-parser-broker@npm:4.0.111"
-  dependencies:
-    "@babel/runtime": "npm:^7.25.7"
-    broker-factory: "npm:^3.0.103"
-    midi-json-parser-worker: "npm:^8.1.46"
-    tslib: "npm:^2.7.0"
-  checksum: 10c0/fb15ee183b75ed8d62e2fe8b20f3adff7b74b01b7cf1ebea9409cb5c246aa2e9900c42150045aa258442c2a19d8b5618aab60f9a839c258a2816fa3724eadfd5
-  languageName: node
-  linkType: hard
-
-"midi-json-parser-worker@npm:^8.1.46":
-  version: 8.1.46
-  resolution: "midi-json-parser-worker@npm:8.1.46"
-  dependencies:
-    "@babel/runtime": "npm:^7.25.7"
-    tslib: "npm:^2.7.0"
-    worker-factory: "npm:^7.0.30"
-  checksum: 10c0/9721df9964c6d0120a80aea9f41e29dc9953e46784bd6a04c1b97c7cd82eb91e7ad7b89b1a0b49877712e3673586c0b40d47fa9bf20a1c40fe5c7baae27153ab
-  languageName: node
-  linkType: hard
-
-"midi-json-parser@npm:^8.1.52":
-  version: 8.1.52
-  resolution: "midi-json-parser@npm:8.1.52"
-  dependencies:
-    "@babel/runtime": "npm:^7.25.7"
-    midi-json-parser-broker: "npm:^4.0.111"
-    midi-json-parser-worker: "npm:^8.1.46"
-    tslib: "npm:^2.7.0"
-  checksum: 10c0/2d5eb18b78366d0acb61b6ef59a1a98da2db1de3cbff1c81d433df8842b8f44fa162fb740037991361ab9b0324c50b1043d5d3f5136970c7fa818799b8bc4d77
-  languageName: node
-  linkType: hard
-
 "miditorio@workspace:.":
   version: 0.0.0-use.local
   resolution: "miditorio@workspace:."
@@ -2782,8 +2735,6 @@ __metadata:
     eslint: "npm:^8.57.1"
     eslint-config-next: "npm:^14.2.15"
     eslint-config-prettier: "npm:^9.1.0"
-    midi-json-parser: "npm:^8.1.52"
-    midi-json-parser-worker: "npm:^8.1.46"
     next: "npm:^14.2.15"
     pixi.js: "npm:^8.4.1"
     postcss: "npm:^8.4.47"
@@ -2792,6 +2743,7 @@ __metadata:
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     tailwindcss: "npm:^3.4.13"
+    tone: "npm:15.0.4"
     typescript: "npm:^5.6.3"
     use-file-picker: "npm:^2.1.2"
   languageName: unknown
@@ -3827,6 +3779,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"standardized-audio-context@npm:^25.3.70":
+  version: 25.3.77
+  resolution: "standardized-audio-context@npm:25.3.77"
+  dependencies:
+    "@babel/runtime": "npm:^7.25.6"
+    automation-events: "npm:^7.0.9"
+    tslib: "npm:^2.7.0"
+  checksum: 10c0/41d5e3a64b881691fecd709313045ab9bddb864ed79c6eb51490056cec080e808e9f5b3ef94d734567b9da88f9c95e68cc63a3a0343374b2f865b1a961fb46ef
+  languageName: node
+  linkType: hard
+
 "stop-iteration-iterator@npm:^1.0.0":
   version: 1.0.0
   resolution: "stop-iteration-iterator@npm:1.0.0"
@@ -4109,6 +4072,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tone@npm:15.0.4":
+  version: 15.0.4
+  resolution: "tone@npm:15.0.4"
+  dependencies:
+    standardized-audio-context: "npm:^25.3.70"
+    tslib: "npm:^2.3.1"
+  checksum: 10c0/2dff3d8be884c818a877c1b9532f623e5a83deba4aebcc3f9c584208e9e19735c1b0d5f1697da148dfe793a0b4dbf6bf5a0f074f0f30f8a12a9e8a51445d881a
+  languageName: node
+  linkType: hard
+
 "ts-api-utils@npm:^1.3.0":
   version: 1.3.0
   resolution: "ts-api-utils@npm:1.3.0"
@@ -4137,7 +4110,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.0.3, tslib@npm:^2.4.0, tslib@npm:^2.7.0":
+"tslib@npm:^2.0.3, tslib@npm:^2.3.1, tslib@npm:^2.4.0, tslib@npm:^2.7.0":
   version: 2.7.0
   resolution: "tslib@npm:2.7.0"
   checksum: 10c0/469e1d5bf1af585742128827000711efa61010b699cb040ab1800bcd3ccdd37f63ec30642c9e07c4439c1db6e46345582614275daca3e0f4abae29b0083f04a6
@@ -4387,17 +4360,6 @@ __metadata:
   version: 1.2.5
   resolution: "word-wrap@npm:1.2.5"
   checksum: 10c0/e0e4a1ca27599c92a6ca4c32260e8a92e8a44f4ef6ef93f803f8ed823f486e0889fc0b93be4db59c8d51b3064951d25e43d434e95dc8c960cc3a63d65d00ba20
-  languageName: node
-  linkType: hard
-
-"worker-factory@npm:^7.0.30":
-  version: 7.0.30
-  resolution: "worker-factory@npm:7.0.30"
-  dependencies:
-    "@babel/runtime": "npm:^7.25.7"
-    fast-unique-numbers: "npm:^9.0.10"
-    tslib: "npm:^2.7.0"
-  checksum: 10c0/32fe61063c92c816031f2d2f5c7f0c388729a6fe2b3555143237cb8b3b2c520015f71e3deacfac762ee59dfa46cdc3f5948b7d2b47f1a631b2de80e30e794e2f
   languageName: node
   linkType: hard
 
