@@ -181,7 +181,7 @@ export const toBlueprint = ({
             {
               first_signal: {
                 type: 'virtual',
-                name: 'signal-T',
+                name: 'signal-green',
               },
               comparator: '>',
               first_signal_networks: {
@@ -201,7 +201,7 @@ export const toBlueprint = ({
         },
       },
       player_description:
-        'Clock\n\n[virtual-signal=signal-T] is the time (number of ticks) since the start of the song.',
+        'Clock\n\n[virtual-signal=signal-green] is the time (number of ticks) since the start of the song.',
     },
     {
       // entity_number: 2,
@@ -221,7 +221,7 @@ export const toBlueprint = ({
               },
               second_signal: {
                 type: 'virtual',
-                name: 'signal-T',
+                name: 'signal-green',
               },
               comparator: '=',
               first_signal_networks: {
@@ -245,7 +245,7 @@ export const toBlueprint = ({
         },
       },
       player_description:
-        'Let each signal through on the [color=green]green wire[/color] where the value of that same signal on the [color=red]red wire[/color] is equal to the [virtual-signal=signal-T] (time) signal.\n\nThis makes [virtual-signal=signal-T] a reserved signal and must not be present in the memory.\n\nOutput is any number of signals, where each signal contains one or two events, bit packed. Each event is made up of an instrument address and a note value.',
+        'Let each signal through on the [color=green]green wire[/color] where the value of that same signal on the [color=red]red wire[/color] is equal to the [virtual-signal=signal-green] (time) signal.\n\nThis makes [virtual-signal=signal-green] a reserved signal and must not be present in the memory.\n\nOutput is any number of signals, where each signal contains one or two events, bit packed. Each event is made up of an instrument address and a note value.',
     },
     {
       // entity_number: 3,
@@ -264,7 +264,7 @@ export const toBlueprint = ({
                 {
                   index: 1,
                   type: 'virtual',
-                  name: 'signal-T',
+                  name: 'signal-green',
                   quality: 'normal',
                   comparator: '=',
                   count: 1,
