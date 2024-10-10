@@ -3,7 +3,7 @@ import { Song } from '@/app/components/select-stage'
 import { FactorioInstrumentName } from '@/app/lib/data/factorio-instruments-by-id'
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
 import {
-  FACTORIO_INSTRUMENT_DATA,
+  FACTORIO_INSTRUMENT,
   FactorioInstrument,
 } from '@/app/lib/factorio-instrument'
 
@@ -69,7 +69,7 @@ const songToFactorioData = ({
           signals[signalsUsed + i] = []
           signalInstruments.push(
             // @ts-expect-error I can't be bothered right now TODO
-            FACTORIO_INSTRUMENT_DATA[instrument_i as FactorioInstrumentName],
+            FACTORIO_INSTRUMENT[instrument_i as FactorioInstrumentName],
           )
         }
 

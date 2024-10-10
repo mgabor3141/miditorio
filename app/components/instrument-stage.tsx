@@ -84,6 +84,17 @@ export const InstrumentStage = ({
           />
         </div>
       </div>
+      <div>
+        {selectedTrack !== undefined && (
+          <>
+            <p>{midi.tracks[selectedTrack].instrument.family}</p>
+            <p>{midi.tracks[selectedTrack].instrument.name}</p>
+            <p>
+              {song.settings.tracks[selectedTrack].factorioInstrument?.name}
+            </p>
+          </>
+        )}
+      </div>
     </div>
   )
 }

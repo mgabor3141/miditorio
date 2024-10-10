@@ -276,7 +276,7 @@ export const toBlueprint = ({
         is_on: false,
       },
       player_description:
-        '[virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green]\n\nCreated using MIDItorio.com v2',
+        '[virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green]\n\nCreated using miditorio.com v2',
     },
     {
       // entity_number: 5, -> 4

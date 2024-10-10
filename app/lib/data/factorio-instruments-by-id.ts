@@ -13,7 +13,6 @@ export const factorioInstrumentsById = {
   '9': 'Vibraphone',
   '10': 'Plucked strings',
   '11': 'Steel drum',
-  '12': 'Steel drum',
 } as const
 export type FactorioInstrumentId = keyof typeof factorioInstrumentsById
 
