@@ -18,8 +18,8 @@ const getTrackColor = (track: Track) => {
   > = {
     piano: '#016FB9',
     'chromatic percussion': '#80B3A7',
-    organ: '#afa93b',
-    guitar: '#A14A2B',
+    organ: '#846be1',
+    guitar: '#b65531',
     bass: '#6e0d14',
     strings: '#8A7090',
     ensemble: '#7785AC',
@@ -84,6 +84,12 @@ export const PianoRoll = ({
         resolution: window.devicePixelRatio,
         autoDensity: true,
       })
+
+      // We check again after await
+      if (!pixiRootDiv.current) {
+        app.destroy()
+        return
+      }
       pixiRootDiv.current.appendChild(app.canvas)
       const loading = new Text({
         text: 'Rendering piano roll...',

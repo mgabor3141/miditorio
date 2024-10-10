@@ -2,29 +2,7 @@
 
 Convert midi songs to Factorio blueprints
 
-## 2.0 Notes
-
-A signal is 8 bits on an unsigned range
-
-A note value is valid from 1 to 48, that's 6 bits.
-
-drumkit has 17 sounds
-
-Factorio used to have 227 signals
-
-Signals can be:
-
-- item x
-- fluid x
-- virtual x
-- entity x
-- recipe x
-- space-location
-- asteroid-chunk
-- quality
-  See: SignalIDType
-
-## Commands
+## Useful commands
 
 The following command generates a CSV of all the signals available in the game.
 Note that whatever mods you have enabled will also be included.
@@ -72,9 +50,18 @@ for name, _
 end;
 ```
 
-Very relevant message:
-https://discord.com/channels/1214952937613295676/1285467033357516850/1289178384890593400
-Sort order: {item, fluid, virtual, recipe, entity, space-location, quality, asteroid-chunk}
+Disable clouds:
+
+```lua
+/c game.get_surface(1).show_clouds = false
+```
+
+## Info
+
+Although not relevant for the current design, it's useful to know that signals of
+equal value are sorted in the following order:
+`{item, fluid, virtual, recipe, entity, space-location, quality, asteroid-chunk}`
+[Source](https://discord.com/channels/1214952937613295676/1285467033357516850/1289178384890593400)
 
 # 2.0 Feature goals
 

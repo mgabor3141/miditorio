@@ -14,9 +14,10 @@ type FactorioInstrumentsInSong = Partial<
 type InstrumentChords = Record<number, Chord>
 type Chord = FactorioNote[]
 
-const songToFactorioData = (
-  song: Song,
-): {
+const songToFactorioData = ({
+  midi,
+  settings,
+}: Song): {
   delays: number[]
   signals: number[][]
   instruments: FactorioInstrument[]
@@ -24,10 +25,9 @@ const songToFactorioData = (
   const factorioInstruments: FactorioInstrumentsInSong = {}
   const delays = new Set<number>()
 
-  for (const trackNumber in song.midi.tracks) {
-    const track = song.midi.tracks[trackNumber]
-    const { factorioInstrument, octaveShift } =
-      song.settings.tracks[trackNumber]
+  for (const trackNumber in midi.tracks) {
+    const track = midi.tracks[trackNumber]
+    const { factorioInstrument, octaveShift } = settings.tracks[trackNumber]
     if (!factorioInstrument) continue
 
     const instrumentChords: InstrumentChords =
@@ -68,7 +68,7 @@ const songToFactorioData = (
         if (signals[signalsUsed + i] === undefined) {
           signals[signalsUsed + i] = []
           signalInstruments.push(
-            // @ts-expect-error can't be bothered right now
+            // @ts-expect-error I can't be bothered right now TODO
             FACTORIO_INSTRUMENT_DATA[instrument_i as FactorioInstrumentName],
           )
         }
@@ -80,10 +80,16 @@ const songToFactorioData = (
     signalsUsed = signals.length
   }
 
+  // -1 because we can't have an instrument 0
+  const MAX_FACTORIO_SPEAKER_SIGNALS = 2 ** 8 - 1
+  if (signalInstruments.length >= MAX_FACTORIO_SPEAKER_SIGNALS) {
+    console.warn(`Warning! Too many instruments: ${signalInstruments.length}`)
+  }
+
   return {
     delays: delays.values().toArray().toSorted(),
     signals,
-    instruments: signalInstruments,
+    instruments: signalInstruments.slice(0, MAX_FACTORIO_SPEAKER_SIGNALS),
   }
 }
 
@@ -110,7 +116,6 @@ export const songToBlueprint = (song: Song) => {
     }
   }
 
-  console.log(events)
   console.log(`${events.length} events`)
 
   const eventsGroupedByTime: Event[][] = []
