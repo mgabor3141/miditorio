@@ -11,6 +11,9 @@ import {
   FactorioInstrumentName,
   factorioInstrumentNameToId,
 } from '@/app/lib/data/factorio-instruments-by-id'
+import { gmPercussionToFactorioDrumkit } from '@/app/lib/data/gm-percussion-to-factorio-drumkit'
+import { noteToGmPercussion } from '@/app/lib/data/gm-percussion-note-names'
+import { factorioDrumSoundToSignal } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
 
 export type FactorioInstrument = {
   /**
@@ -82,15 +85,22 @@ const noteRange = (
       }
     },
     // Factorio note signals are "indexed" from 1
-    noteToSignal: (note: MidiNote | Note) => Number(note) - lowestNote + 1,
+    noteToSignal: (note: MidiNote | Note) =>
+      Number(note) - lowestNote - lie + 1,
     lowestNote: lowestNote,
     highestNote: highestNote,
   }
 }
 
 const dbToGainRatio = (db: number) => 10 ** (db / 20)
-const CORRECT_LOUDNESS_TO = -21.4 // dB RMS
-const volumeCorrection = (loudnessDbRms: number) => ({
+const CORRECT_LOUDNESS_TO = -20.0 // dB RMS
+
+/**
+ * Correct loudness
+ * @param loudnessDbRms the RMS loudness measured of this instrument.
+ * This is the "from" value for the correction.
+ */
+const sampleLoudness = (loudnessDbRms: number) => ({
   volumeCorrection: dbToGainRatio(CORRECT_LOUDNESS_TO - loudnessDbRms),
 })
 
@@ -101,15 +111,15 @@ type FactorioInstrumentData = Omit<
 export const FACTORIO_INSTRUMENT_DATA = (() => {
   // prettier-ignore
   const rawInstrumentData: [FactorioInstrumentName, Partial<FactorioInstrument>, Pick<FactorioInstrument, 'volumeCorrection'>][] = [
-    ["Piano",           noteRange('F3', 'E7', 'F2'), volumeCorrection(-21.40) ],
-    ["Bass",            noteRange('F2', 'E5', 'F1'), volumeCorrection(-10.12) ],
-    ["Lead",            noteRange('F2', 'E5', 'F2'), volumeCorrection(-20.91) ],
-    ["Sawtooth",        noteRange('F2', 'E5', 'F1'), volumeCorrection(-18.43) ],
-    ["Square",          noteRange('F2', 'E5'      ), volumeCorrection( -0.21) ],
-    ["Celesta",         noteRange('F5', 'E8', 'F4'), volumeCorrection(-10.61) ],
-    ["Vibraphone",      noteRange('F5', 'E8', 'F3'), volumeCorrection(-11.69) ],
-    ["Plucked strings", noteRange('F4', 'E7', 'F3'), volumeCorrection(- 8.02) ],
-    ["Steel drum",      noteRange('F3', 'E6', 'F2'), volumeCorrection(- 6.18) ],
+    ["Piano",           noteRange('F3', 'E7', 'F2'), sampleLoudness(-20.00) ],
+    ["Bass",            noteRange('F2', 'E5', 'F1'), sampleLoudness(-10.12) ],
+    ["Lead",            noteRange('F2', 'E5'      ), sampleLoudness(-20.91) ],
+    ["Sawtooth",        noteRange('F2', 'E5', 'F1'), sampleLoudness(-20.00) ],
+    ["Square",          noteRange('F2', 'E5'      ), sampleLoudness( -0.21) ],
+    ["Celesta",         noteRange('F5', 'E8', 'F4'), sampleLoudness(-10.61) ],
+    ["Vibraphone",      noteRange('F5', 'E8', 'F3'), sampleLoudness(-11.69) ],
+    ["Plucked strings", noteRange('F4', 'E7', 'F3'), sampleLoudness(- 8.02) ],
+    ["Steel drum",      noteRange('F3', 'E6', 'F2'), sampleLoudness(- 6.18) ],
   ]
 
   const instrumentData: FactorioInstrumentData = {
@@ -125,12 +135,27 @@ export const FACTORIO_INSTRUMENT_DATA = (() => {
       }),
       {} as FactorioInstrumentData,
     ),
+    Drumkit: {
+      name: 'Drumkit',
+      id: '2',
+      isNoteValid: () => ({ valid: true }),
+      noteToSignal: (note) => {
+        const factorioSound =
+          gmPercussionToFactorioDrumkit[
+            noteToGmPercussion[
+              note.toString() as keyof typeof noteToGmPercussion
+            ]
+          ]
+
+        if (!factorioSound) return undefined
+        return parseInt(factorioDrumSoundToSignal[factorioSound])
+      },
+      volumeCorrection: 0.9,
+    },
   }
 
   return instrumentData
 })()
-
-console.log(FACTORIO_INSTRUMENT_DATA)
 
 export const toFactorioInstrument = (
   instrument: Instrument,
@@ -161,6 +186,8 @@ export const toFactorioInstrument = (
     case 'brass':
       return FACTORIO_INSTRUMENT_DATA['Piano']
     case 'reed':
+      return FACTORIO_INSTRUMENT_DATA['Piano']
+    case 'pipe':
       return FACTORIO_INSTRUMENT_DATA['Piano']
     case 'synth lead':
       // TODO

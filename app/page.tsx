@@ -27,13 +27,21 @@ export default function Home() {
       </header>
       <main className="flex flex-col gap-8 row-start-2 items-start">
         {flowStage === 'select' && <SelectStage setSong={setSong} />}
-        {flowStage === 'instrument' && song && (
+        {song && (
           <InstrumentStage
             song={song}
+            onBack={() => {
+              setSong(undefined)
+              setFlowStage('select')
+            }}
             onContinue={() => setFlowStage('result')}
+            // this is hidden so that we can keep the state when coming back to this page
+            className={flowStage === 'instrument' ? '' : 'display-none'}
           />
         )}
-        {flowStage === 'result' && song && <ResultStage song={song} />}
+        {flowStage === 'result' && song && (
+          <ResultStage song={song} onBack={() => setFlowStage('instrument')} />
+        )}
       </main>
     </div>
   )

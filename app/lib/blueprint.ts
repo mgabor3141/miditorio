@@ -6,12 +6,19 @@ const qualities = signals
   .filter(({ type }) => type === 'quality')
   .map(({ name }) => name)
 
-const signalsWithQuality = signals.flatMap((signal) =>
-  qualities.map((quality) => ({
-    ...signal,
-    quality,
-  })),
-)
+// This is a reserved signal because of the playback circuit
+const RESERVED = ['signal-green']
+
+const signalsWithQuality = signals
+  .flatMap((signal) =>
+    qualities.map((quality) => ({
+      ...signal,
+      quality,
+    })),
+  )
+  .filter(
+    ({ name, quality }) => !(quality === 'normal' && RESERVED.includes(name)),
+  )
 
 export const toBlueprint = ({
   tickCombinatorValues,
@@ -27,6 +34,7 @@ export const toBlueprint = ({
       `(${signalsWithQuality.length} total signals available.)`,
   )
 
+  // TODO
   tickCombinatorValues = tickCombinatorValues.slice(
     0,
     signalsWithQuality.length,
@@ -81,11 +89,6 @@ export const toBlueprint = ({
           playback_mode: 'surface',
           allow_polyphony: true,
         },
-        alert_parameters: {
-          show_alert: false,
-          show_on_map: true,
-          alert_message: 'MIDItorio.com',
-        },
       },
       {
         name: 'decider-combinator',
@@ -125,8 +128,6 @@ export const toBlueprint = ({
             ],
           },
         },
-        player_description:
-          'Only let signals through that match instrument address\n\nInstrument address is the constant in the condition.\n\nInstrument address is expected on red, note value is expected on green. Note value is mapped to a fixed signal.',
       },
     ])
     .forEach(([speakerEntity, combinatorEntity], instrumentNumber) => {
@@ -180,9 +181,13 @@ export const toBlueprint = ({
             {
               first_signal: {
                 type: 'virtual',
-                name: 'signal-R',
+                name: 'signal-T',
               },
-              comparator: '=',
+              comparator: '>',
+              first_signal_networks: {
+                red: false,
+                green: true,
+              },
             },
           ],
           outputs: [
@@ -196,7 +201,7 @@ export const toBlueprint = ({
         },
       },
       player_description:
-        'Clock\n\n[virtual-signal=signal-T] is time (number of ticks) since the start of the song.\n\nSend any nonzero [virtual-signal=signal-R] to reset.',
+        'Clock\n\n[virtual-signal=signal-T] is the time (number of ticks) since the start of the song.',
     },
     {
       // entity_number: 2,
@@ -271,41 +276,10 @@ export const toBlueprint = ({
         is_on: false,
       },
       player_description:
-        'Toggle on to\n[virtual-signal=signal-P][virtual-signal=signal-L][virtual-signal=signal-A][virtual-signal=signal-Y]\n\nCreated using MIDItorio.com',
+        '[virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green]\n\nCreated using MIDItorio.com v2',
     },
     {
-      // entity_number: 4,
-      name: 'constant-combinator',
-      position: {
-        x: -4,
-        y: 1.5,
-      },
-      direction: 8,
-      control_behavior: {
-        sections: {
-          sections: [
-            {
-              index: 1,
-              filters: [
-                {
-                  index: 1,
-                  type: 'virtual',
-                  name: 'signal-R',
-                  quality: 'normal',
-                  comparator: '=',
-                  count: 1,
-                },
-              ],
-            },
-          ],
-        },
-        is_on: false,
-      },
-      player_description:
-        'Toggle on then off to\n[virtual-signal=signal-R][virtual-signal=signal-E][virtual-signal=signal-S][virtual-signal=signal-E][virtual-signal=signal-T]',
-    },
-    {
-      // entity_number: 5,
+      // entity_number: 5, -> 4
       name: 'arithmetic-combinator',
       position: {
         x: -1,
@@ -331,7 +305,7 @@ export const toBlueprint = ({
     },
 
     {
-      // entity_number: 6,
+      // entity_number: 6, -> 5
       name: 'arithmetic-combinator',
       position: {
         x: -1,
@@ -356,7 +330,7 @@ export const toBlueprint = ({
         'Get instrument address for event 2 from each signal\n\nResult: 8 bits\n0000 0000 0011 1111 1100 0000 0000 0000\n\nResult is not shifted to zero, instruments check against the unshifted number',
     },
     {
-      // entity_number: 7,
+      // entity_number: 7, -> 6
       name: 'arithmetic-combinator',
       position: {
         x: -1,
@@ -381,7 +355,7 @@ export const toBlueprint = ({
         'Get instrument address for event 1 from each signal\n\nResult: 8 bits\n0000 0000 0000 0000 0011 1111 1100 0000\n\nResult is not shifted to zero, instruments check against the unshifted number',
     },
     {
-      // entity_number: 8,
+      // entity_number: 8, -> 7
       name: 'arithmetic-combinator',
       position: {
         x: -1,
@@ -413,23 +387,22 @@ export const toBlueprint = ({
     // Helper function to convert from the original entity numbers to
     //  the new ones in the `entities` array
     const e = (originalNumber: number): number =>
-      entities.length - 9 + originalNumber
+      entities.length - 8 + originalNumber
     wires.push(
-      [e(5), 2, e(6), 2], // [1, 2, 4, 2],
-      [e(1), 1, e(1), 3], // [2, 1, 2, 3],
-      [e(1), 2, e(4), 2], // [2, 2, 7, 2],
-      [e(1), 3, e(3), 1], // [2, 3, 6, 1],
-      [e(1), 4, e(2), 2], // [2, 4, 3, 2],
-      [e(2), 4, e(6), 2], // [3, 4, 4, 2],
-      [e(6), 2, e(7), 2], // [4, 2, 5, 2],
-      [e(7), 2, e(8), 2], // [5, 2, 8, 2],
-      [e(5), 4, 1, 2], // To first speaker green
-      [e(6), 3, 1, 1], // To first speaker red
-      [e(7), 3, 3, 1], // To second speaker red
-      [e(8), 4, 3, 2], // To second speaker green
+      [e(4), 2, e(5), 2],
+      [e(1), 1, e(1), 3],
+      [e(1), 2, e(3), 2],
+      [e(1), 4, e(2), 2],
+      [e(2), 4, e(5), 2],
+      [e(5), 2, e(6), 2],
+      [e(6), 2, e(7), 2],
+      [e(4), 4, 1, 2], // To first speaker green
+      [e(5), 3, 1, 1], // To first speaker red
+      [e(6), 3, 3, 1], // To second speaker red
+      [e(7), 4, 3, 2], // To second speaker green
     )
   }
-  const dataInputCombinatorEntityNumber = entities.length - 7
+  const clockCombinatorEntityNumber = entities.length - 6
 
   // Add data combinators
   ;[tickCombinatorValues, dataCombinatorValues]
@@ -463,8 +436,8 @@ export const toBlueprint = ({
     })
 
   wires.push(
-    [entities.length - 2, 1, dataInputCombinatorEntityNumber, 1],
-    [entities.length - 1, 2, dataInputCombinatorEntityNumber, 2],
+    [entities.length - 2, 1, clockCombinatorEntityNumber, 1],
+    [entities.length - 1, 2, clockCombinatorEntityNumber, 2],
   )
 
   const blueprint = {

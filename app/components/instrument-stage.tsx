@@ -4,10 +4,17 @@ import { Settings, Song } from '@/app/components/select-stage'
 
 export type InstrumentStageProps = {
   song: Song
-  onContinue?: Dispatch<void>
+  onBack: Dispatch<void>
+  onContinue: Dispatch<void>
   onSettingsChanged?: Dispatch<Settings>
+  className?: string
 }
-export const InstrumentStage = ({ song, onContinue }: InstrumentStageProps) => {
+export const InstrumentStage = ({
+  song,
+  onBack,
+  onContinue,
+  className,
+}: InstrumentStageProps) => {
   const panel = useRef<HTMLDivElement>(null)
   const [selectedTrack, setSelectedTrack] = useState<number | undefined>(
     undefined,
@@ -23,7 +30,7 @@ export const InstrumentStage = ({ song, onContinue }: InstrumentStageProps) => {
   }, [])
 
   return (
-    <div className="panel mt0 !pt-4 flex-column" ref={panel}>
+    <div className={`panel mt0 !pt-4 flex-column ${className}`} ref={panel}>
       <div className="flex items-baseline gap-3">
         <h1 className="text-ellipsis line-clamp-1">{midi.name}</h1>
         <h5 className="flex-grow normal-weight">
@@ -31,12 +38,15 @@ export const InstrumentStage = ({ song, onContinue }: InstrumentStageProps) => {
           {String(Math.floor(midi.duration % 60)).padStart(2, '0')}
         </h5>
         <div className="gap-3 min-w-fit">
-          <button className="button !text-center !mr-2">
-            Choose another TODO
+          <button
+            className="button !text-center !mr-2"
+            onClick={() => onBack()}
+          >
+            Choose another
           </button>
           <button
             className="button-green-right !mr-3 !text-center"
-            onClick={() => onContinue && onContinue()}
+            onClick={() => onContinue()}
           >
             Continue
           </button>

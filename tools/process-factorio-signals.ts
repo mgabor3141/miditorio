@@ -3,9 +3,6 @@ import fs from 'node:fs/promises'
 // These were unreliable in the past and could cause a crash
 const SIGNAL_EXCLUDE = ['parameter']
 
-// This is a reserved signal in the playback circuit
-const RESERVED = ['signal-T']
-
 type Signal = {
   type?: string
   name: string
@@ -24,11 +21,7 @@ const rawSignalsToObjects = (items: string) => {
     if (line === 'type, name') return
 
     const [type, item] = line.split(/\s*,\s*/)
-    if (
-      [...SIGNAL_EXCLUDE, ...RESERVED].some((exclusion) =>
-        item.includes(exclusion),
-      )
-    ) {
+    if (SIGNAL_EXCLUDE.some((exclusion) => item.includes(exclusion))) {
       return
     }
 

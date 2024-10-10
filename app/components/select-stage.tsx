@@ -132,9 +132,7 @@ export const SelectStage = ({ setSong }: SelectStageProps) => {
         requestAnimationFrame(() => {
           if (loadingMessage && filesContent.length) {
             const song = new Midi(filesContent[0].content.slice(0))
-            console.log(song)
             const processedSong = preprocessSong(song, filesContent[0].name)
-            console.log(processedSong)
             setSong(processedSong)
 
             setLoadingMessage('')
