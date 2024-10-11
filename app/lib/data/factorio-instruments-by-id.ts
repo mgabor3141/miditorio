@@ -1,8 +1,8 @@
 import { invert } from '@/app/lib/utils'
 
 export const factorioInstrumentsById = {
-  '0': 'Alarms',
-  '1': 'Miscellaneous',
+  // '0': 'Alarms',
+  // '1': 'Miscellaneous',
   '2': 'Drumkit',
   '3': 'Piano',
   '4': 'Bass',

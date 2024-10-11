@@ -1,14 +1,21 @@
 import { PianoRoll } from '@/app/components/piano-roll'
 import React, { Dispatch, useEffect, useRef, useState } from 'react'
 import { Settings, Song } from '@/app/components/select-stage'
-import { computeClusterMeans, dbscan1D } from '@/app/lib/dbscan'
-import {
-  FactorioInstrumentName,
-  factorioInstrumentsById,
-} from '@/app/lib/data/factorio-instruments-by-id'
 import { FACTORIO_INSTRUMENT } from '@/app/lib/factorio-instrument'
 import { kMeans1D } from '@/app/lib/kmeans'
 import { Histogram } from '@/app/components/histogram'
+import { Note } from '@tonejs/midi/dist/Note'
+
+export const getVelocityValues = (
+  notes: Note[],
+  targetNumberOfClusters?: number,
+): number[] => {
+  const data = notes.map(({ velocity }) => velocity)
+
+  if (!targetNumberOfClusters) return dbscan1DMeans(data)
+
+  return kMeans1D(data, targetNumberOfClusters).centroids
+}
 
 export type InstrumentStageProps = {
   song: Song
@@ -41,21 +48,6 @@ export const InstrumentStage = ({
   useEffect(() => {
     panel.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
-
-  // const clusters =
-  //   selectedTrack &&
-  //   dbscan1D(
-  //     song.midi.tracks[selectedTrack].notes.map(({ velocity }) =>
-  //       Number(velocity.toFixed(4)),
-  //     ),
-  //     0.01,
-  //   )
-  // const centers = clusters && computeClusterMeans(clusters)
-
-  const { clusters, centroids } = kMeans1D(
-    midi.tracks[selectedTrack ?? 0].notes.map(({ velocity }) => velocity),
-    settings.tracks[selectedTrack ?? 0].velocityBuckets,
-  )
 
   return (
     <div className={`panel mt0 !pt-4 flex-column ${className}`} ref={panel}>
@@ -115,7 +107,7 @@ export const InstrumentStage = ({
             />
           </div>
           {selectedTrack !== undefined && (
-            <div>
+            <div className="panel-inset">
               <h3>Instrument Settings</h3>
               <p>
                 Factorio Instrument
@@ -149,47 +141,39 @@ export const InstrumentStage = ({
                 <input
                   type="number"
                   className="ml-4"
-                  value={settings.tracks[selectedTrack].velocityBuckets}
+                  value={settings.tracks[selectedTrack].velocityValues.length}
                   onInput={({ currentTarget: { value } }) =>
                     onSettingsChanged((settings) => {
-                      settings.tracks[selectedTrack].velocityBuckets =
-                        Number(value)
+                      settings.tracks[selectedTrack].velocityValues =
+                        getVelocityValues(
+                          midi.tracks[selectedTrack].notes,
+                          Number(value),
+                        )
+
                       return settings
                     })
                   }
                   min={1}
-                  max={10}
+                  max={16}
                 />
               </p>
-              <p>
-                Note volumes:{' '}
-                {(() => {
-                  return centroids
-                    .map((n, i) => [n, clusters[i].length])
-                    .toSorted(([a], [b]) => a - b)
-                    .map(
-                      ([centroid, clusterLength]) =>
-                        `${centroid.toFixed(2)} (${clusterLength})`,
-                    )
-                    .join(', ')
-                })()}
-              </p>
 
-              <Histogram
-                data={Object.entries(
-                  midi.tracks[selectedTrack].notes.reduce(
-                    (acc, note) => {
-                      const roundedVelocity = note.velocity
-                      acc[roundedVelocity] = (acc[roundedVelocity] || 0) + 1
-                      return acc
-                    },
-                    {} as Record<string, number>,
-                  ),
-                ).toSorted(([a], [b]) => Number(a) - Number(b))}
-                clusterCenters={centroids}
-                width={400}
-                height={300}
-              />
+              <div className="panel-inset !bg-[#0E0E0E] w-[400px] box-content">
+                <Histogram
+                  data={Object.entries(
+                    midi.tracks[selectedTrack].notes.reduce(
+                      (acc, note) => {
+                        acc[note.velocity] = (acc[note.velocity] || 0) + 1
+                        return acc
+                      },
+                      {} as Record<string, number>,
+                    ),
+                  ).toSorted(([a], [b]) => Number(a) - Number(b))}
+                  clusterCenters={settings.tracks[selectedTrack].velocityValues}
+                  width={400}
+                  height={150}
+                />
+              </div>
             </div>
           )}
         </div>

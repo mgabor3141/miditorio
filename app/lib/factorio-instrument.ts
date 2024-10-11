@@ -38,13 +38,13 @@ export type FactorioInstrument = {
    * Convert MIDI note to the Factorio instrument note value
    * that can be sent on the circuit signal
    */
-  noteToSignal: (midiNote: MidiNote | Note) => number | undefined
+  noteToFactorioNote: (midiNote: MidiNote | Note) => number | undefined
 
   /**
    * Some instruments are louder than others at max volume.
    * This correction factor equalizes them.
    */
-  volumeCorrection?: number
+  volumeCorrection: number
 
   /**
    * The lowest note that the instrument can play
@@ -60,18 +60,10 @@ export type FactorioInstrument = {
 const noteRange = (
   lowestNoteAsShownInGame: MidiNote | NoteString,
   highestNoteAsShownInGame: MidiNote | NoteString,
-  actualMeasuredLowestNote?: MidiNote | NoteString,
-): Pick<FactorioInstrument, 'isNoteValid' | 'noteToSignal'> &
+): Pick<FactorioInstrument, 'isNoteValid' | 'noteToFactorioNote'> &
   Partial<FactorioInstrument> => {
-  const lie = actualMeasuredLowestNote
-    ? Frequency(actualMeasuredLowestNote).toMidi() -
-      Frequency(lowestNoteAsShownInGame).toMidi()
-    : 0
-
-  const lowestNote = (Frequency(lowestNoteAsShownInGame).toMidi() +
-    lie) as MidiNote
-  const highestNote = (Frequency(highestNoteAsShownInGame).toMidi() +
-    lie) as MidiNote
+  const lowestNote = Frequency(lowestNoteAsShownInGame).toMidi() as MidiNote
+  const highestNote = Frequency(highestNoteAsShownInGame).toMidi() as MidiNote
 
   return {
     isNoteValid: (midiNote: MidiNote | Note) => {
@@ -85,8 +77,8 @@ const noteRange = (
       }
     },
     // Factorio note signals are "indexed" from 1
-    noteToSignal: (note: MidiNote | Note) =>
-      Number(note) - lowestNote - lie + 1,
+    noteToFactorioNote: (note: MidiNote | Note) =>
+      Number(note) - lowestNote + 1,
     lowestNote: lowestNote,
     highestNote: highestNote,
   }
@@ -110,22 +102,23 @@ const sampleLoudness = (loudnessDbRms: number) => ({
   volumeCorrection: dbToGainRatio(CORRECT_LOUDNESS_TO - loudnessDbRms),
 })
 
-type FactorioInstrumentData = Omit<
-  Record<FactorioInstrumentName, FactorioInstrument>,
-  'Alarms' | 'Miscellaneous'
->
+type FactorioInstrumentData = Record<FactorioInstrumentName, FactorioInstrument>
+
+/**
+ * Note ranges are the actual note pitches which may differ from the in-game labels
+ */
 export const FACTORIO_INSTRUMENT = (() => {
   // prettier-ignore
   const rawInstrumentData: [FactorioInstrumentName, Partial<FactorioInstrument>, Pick<FactorioInstrument, 'volumeCorrection'>][] = [
-    ["Piano",           noteRange('F3', 'E7', 'F2'), sampleLoudness(-20.00) ],
-    ["Bass",            noteRange('F2', 'E5', 'F1'), sampleLoudness(-18.00) ],
-    ["Lead",            noteRange('F2', 'E5'      ), sampleLoudness(-20.91) ],
-    ["Sawtooth",        noteRange('F2', 'E5', 'F1'), sampleLoudness(-20.00) ],
-    ["Square",          noteRange('F2', 'E5'      ), sampleLoudness( -0.21) ],
-    ["Celesta",         noteRange('F5', 'E8', 'F4'), sampleLoudness(-10.61) ],
-    ["Vibraphone",      noteRange('F5', 'E8', 'F3'), sampleLoudness(-13.00) ],
-    ["Plucked strings", noteRange('F4', 'E7', 'F3'), sampleLoudness(- 8.02) ],
-    ["Steel drum",      noteRange('F3', 'E6', 'F2'), sampleLoudness(-17.00) ],
+    ["Piano",           noteRange('F2', 'E6'), sampleLoudness(-20.00) ], // In-game: F3-E7
+    ["Bass",            noteRange('F1', 'E4'), sampleLoudness(-18.00) ], // In-game: F2-E5
+    ["Lead",            noteRange('F2', 'E5'), sampleLoudness(-20.91) ],
+    ["Sawtooth",        noteRange('F1', 'E4'), sampleLoudness(-20.00) ], // In-game: F2-E5
+    ["Square",          noteRange('F2', 'E5'), sampleLoudness( -0.21) ],
+    ["Celesta",         noteRange('F4', 'E7'), sampleLoudness(-10.61) ], // In-game: F5-E8
+    ["Vibraphone",      noteRange('F3', 'E6'), sampleLoudness(-13.00) ], // In-game: F5-E8
+    ["Plucked strings", noteRange('F3', 'E6'), sampleLoudness(- 8.02) ], // In-game: F4-E7
+    ["Steel drum",      noteRange('F2', 'E5'), sampleLoudness(-17.00) ], // In-game: F3-E6
   ]
 
   const instrumentData: FactorioInstrumentData = {
@@ -145,7 +138,7 @@ export const FACTORIO_INSTRUMENT = (() => {
       name: 'Drumkit',
       id: '2',
       isNoteValid: () => ({ valid: true }),
-      noteToSignal: (note) => {
+      noteToFactorioNote: (note) => {
         const factorioSound =
           gmPercussionToFactorioDrumkit[
             noteToGmPercussion[

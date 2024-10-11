@@ -1,6 +1,6 @@
 import { arrayChunks, encodeBlueprint } from '@/app/lib/utils'
 import signals from '@/app/lib/data/signals-dlc.json'
-import { FactorioInstrument } from '@/app/lib/factorio-instrument'
+import { FinalInstruments } from '@/app/lib/song-to-blueprint'
 
 const qualities = signals
   .filter(({ type }) => type === 'quality')
@@ -23,11 +23,11 @@ const signalsWithQuality = signals
 export const toBlueprint = ({
   tickCombinatorValues,
   dataCombinatorValues,
-  signalInstruments,
+  instruments,
 }: {
   tickCombinatorValues: number[]
   dataCombinatorValues: number[]
-  signalInstruments: FactorioInstrument[]
+  instruments: FinalInstruments
 }) => {
   console.log(
     `Got ${tickCombinatorValues.length} signals. ` +
@@ -61,8 +61,8 @@ export const toBlueprint = ({
   // Add speakers and their combinators
   // WARNING! There is code that relies on speakers and their combinators being
   //  added first to the entity array!
-  signalInstruments
-    .map((instrument, instrumentNumber) => [
+  Object.values(instruments)
+    .map(({ instrument, volume }, instrumentNumber) => [
       {
         name: 'programmable-speaker',
         position: {
@@ -85,7 +85,7 @@ export const toBlueprint = ({
           },
         },
         parameters: {
-          playback_volume: instrument.volumeCorrection,
+          playback_volume: instrument.volumeCorrection * volume,
           playback_mode: 'surface',
           allow_polyphony: true,
         },
