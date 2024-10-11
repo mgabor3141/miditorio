@@ -1,8 +1,10 @@
 import React from 'react'
 import { Group } from '@visx/group'
 import { Bar, Line } from '@visx/shape'
-import { scaleBand, scaleLinear } from '@visx/scale'
+import { scaleLinear } from '@visx/scale'
 import { roundToNearestClusterCenter } from '@/app/lib/kmeans'
+
+const BAR_WIDTH = 3
 
 export type HistogramProps = {
   data: [value: number | string, frequency: number][]
@@ -16,10 +18,8 @@ export function Histogram({
   width,
   height,
 }: HistogramProps) {
-  console.log(data)
-
   // Define the graph dimensions and margins
-  const margin = { top: 20, bottom: 20, left: 20, right: 20 }
+  const margin = { top: 0, bottom: 0, left: 0, right: BAR_WIDTH }
 
   // We'll make some helpers to get at the data we want
   const x = (d: HistogramProps['data'][number]) => d[0]
@@ -37,7 +37,7 @@ export function Histogram({
     // padding: 0.4,
   })
   const yScale = scaleLinear({
-    range: [yMax, 0],
+    range: [yMax, 25],
     round: true,
     domain: [0, Math.max(...data.map((d) => d[1]))],
   })
@@ -54,6 +54,20 @@ export function Histogram({
 
   return (
     <svg width={width} height={height}>
+      {clusterCenters.map((cc, i) => (
+        <Group key={`cc-${i}`}>
+          <Line
+            from={{ x: xScale(cc) + BAR_WIDTH / 2, y: 0 }}
+            to={{ x: xScale(cc) + BAR_WIDTH / 2, y: yMax }}
+            style={{
+              stroke: '#5c2525',
+              strokeWidth: '1',
+              shapeRendering: 'geometricPrecision',
+            }}
+          />
+        </Group>
+      ))}
+
       {data.map((d, i) => {
         const barHeight = yMax - yPoint(d)
         return (
@@ -62,29 +76,12 @@ export function Histogram({
               x={xPoint(d)}
               y={yMax - barHeight}
               height={barHeight}
-              width={3}
-              fill={
-                clusterCenters.find((n) => String(n) === x(d))
-                  ? 'red'
-                  : `hsl(${roundToNearestClusterCenter(Number(x(d)), clusterCenters) * 300}deg 60% 50%)`
-              }
+              width={BAR_WIDTH}
+              fill={`hsl(${roundToNearestClusterCenter(Number(x(d)), clusterCenters).closestCenter * 300}deg 60% 50%)`}
             />
           </Group>
         )
       })}
-
-      {clusterCenters.map((cc, i) => (
-        <Group key={`cc-${i}`}>
-          <Line
-            from={{ x: xScale(cc), y: 0 }}
-            to={{ x: xScale(cc), y: yMax }}
-            // style="stroke:red;stroke-width:2"
-            style={{ stroke: 'red', strokeWidth: 2 }}
-            fill="red"
-            width={1}
-          />
-        </Group>
-      ))}
     </svg>
   )
 }

@@ -8,6 +8,7 @@ import {
 } from '@/app/lib/factorio-instrument'
 import { capitalize } from '@/app/lib/utils'
 import { usePostHog } from 'posthog-js/react'
+import { getVelocityValues } from '@/app/components/instrument-stage'
 
 export type NoteExtremes = {
   min: number
@@ -17,9 +18,8 @@ export type NoteExtremes = {
 export type Settings = {
   tracks: {
     factorioInstrument?: FactorioInstrument
-    velocityBuckets: number
+    velocityValues: number[]
     octaveShift: number
-    velocityResolution: number
   }[]
 }
 
@@ -100,9 +100,8 @@ const preprocessSong = (originalMidi: Midi, filename: string): Song => {
     settings: {
       tracks: midi.tracks.map((track) => ({
         factorioInstrument: toFactorioInstrument(track.instrument),
-        velocityBuckets: 1,
+        velocityValues: getVelocityValues(track.notes),
         octaveShift: 0,
-        velocityResolution: 1,
       })),
     },
   }

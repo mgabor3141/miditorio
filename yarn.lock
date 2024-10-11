@@ -401,13 +401,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/d3-random@npm:^2.2.0":
-  version: 2.2.3
-  resolution: "@types/d3-random@npm:2.2.3"
-  checksum: 10c0/a0f5ef08372bd3f1d48b639477418550c1ce5b8f63152edd2dff6b42431656bc6e1a85ebe7ef6c91aafb13bc032a23bb5a30cf987e55efff90d046a3b5212eae
-  languageName: node
-  linkType: hard
-
 "@types/d3-scale@npm:4.0.2":
   version: 4.0.2
   resolution: "@types/d3-scale@npm:4.0.2"
@@ -468,7 +461,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.172":
+"@types/lodash.groupby@npm:^4":
+  version: 4.6.9
+  resolution: "@types/lodash.groupby@npm:4.6.9"
+  dependencies:
+    "@types/lodash": "npm:*"
+  checksum: 10c0/1302531f76da99cc8f1bbd486a8c7048a833352b12c39eb5b2ded01173dd5fff76f2c7ace04f08b51c55840271170f1cfbffe4e454dde8597c3ee996e70d4e11
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:*, @types/lodash@npm:^4.14.172":
   version: 4.17.10
   resolution: "@types/lodash@npm:4.17.10"
   checksum: 10c0/149b2b9fcc277204393423ed14df28894980c2322ec522fc23f2c6f7edef6ee8d876ee09ed4520f45d128adc0a7a6e618bb0017668349716cd99c6ef54a21621
@@ -663,16 +665,6 @@ __metadata:
   peerDependencies:
     react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
   checksum: 10c0/43ab4fc285cb1a0f9bae8aa5e1ac906f207163da4bd3104f431141b21e5987fe86dafee70808b074c3644aa2b117768997d35e18fe3e695008599a62759982fc
-  languageName: node
-  linkType: hard
-
-"@visx/mock-data@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@visx/mock-data@npm:3.3.0"
-  dependencies:
-    "@types/d3-random": "npm:^2.2.0"
-    d3-random: "npm:^2.2.2"
-  checksum: 10c0/dffb891eb888a9e76e21c136b1469e5b2bc5448b83c1338c31d26dda52dcecf95805983bf0c5687b00b785a57228bd6ed252c2a3f54d2e7a83ce3069d3d07c9c
   languageName: node
   linkType: hard
 
@@ -1308,13 +1300,6 @@ __metadata:
   version: 1.0.9
   resolution: "d3-path@npm:1.0.9"
   checksum: 10c0/e35e84df5abc18091f585725b8235e1fa97efc287571585427d3a3597301e6c506dea56b11dfb3c06ca5858b3eb7f02c1bf4f6a716aa9eade01c41b92d497eb5
-  languageName: node
-  linkType: hard
-
-"d3-random@npm:^2.2.2":
-  version: 2.2.2
-  resolution: "d3-random@npm:2.2.2"
-  checksum: 10c0/2c7413c4c626272cf12945ff14dacffdccc531989b551f8cfdd9c0266ae902cd9ffffc9ff98b693594a5ff342fb0f22e70afcce908cc6c43fb082bd52ace5acf
   languageName: node
   linkType: hard
 
@@ -3001,6 +2986,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.groupby@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "lodash.groupby@npm:4.6.0"
+  checksum: 10c0/3d136cad438ad6c3a078984ef60e057a3498b1312aa3621b00246ecb99e8f2c4d447e2815460db7a0b661a4fe4e2eeee96c84cb661a824bad04b6cf1f7bc6e9b
+  languageName: node
+  linkType: hard
+
 "lodash.merge@npm:^4.6.2":
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
@@ -3083,16 +3075,17 @@ __metadata:
   dependencies:
     "@babel/runtime": "npm:^7.25.7"
     "@tonejs/midi": "npm:^2.0.28"
+    "@types/lodash.groupby": "npm:^4"
     "@types/node": "npm:^22.7.5"
     "@types/react": "npm:^18.3.11"
     "@types/react-dom": "npm:^18.3.0"
     "@visx/group": "npm:^3.3.0"
-    "@visx/mock-data": "npm:^3.3.0"
     "@visx/scale": "npm:^3.5.0"
     "@visx/shape": "npm:^3.5.0"
     eslint: "npm:^8.57.1"
     eslint-config-next: "npm:^14.2.15"
     eslint-config-prettier: "npm:^9.1.0"
+    lodash.groupby: "npm:^4.6.0"
     next: "npm:^14.2.15"
     pixi.js: "npm:^8.4.1"
     postcss: "npm:^8.4.47"

@@ -4,7 +4,7 @@ export function kMeans1D(
   maxIterations = 100,
 ): { clusters: number[][]; centroids: number[] } {
   // Initialize centroids randomly from the data points
-  let centroids = initializeCentroids(data, k)
+  let centroids = initializeCentroidsKMeansPP(data, k)
   let clusters: number[][] = new Array(k).fill(0).map(() => [])
   let previousCentroids: number[] = []
   let iterations = 0
@@ -26,22 +26,39 @@ export function kMeans1D(
   return { clusters, centroids }
 }
 
-function initializeCentroids(data: number[], k: number): number[] {
-  // You can use different strategies to initialize centroids
-  // Here, we'll choose k random unique data points as centroids
-  const uniqueData = Array.from(new Set(data))
-  if (uniqueData.length < k) {
-    throw new Error('Not enough unique data points to initialize centroids.')
-  }
-
+function initializeCentroidsKMeansPP(data: number[], k: number): number[] {
   const centroids: number[] = []
-  while (centroids.length < k) {
-    const randomIndex = Math.floor(Math.random() * uniqueData.length)
-    const candidate = uniqueData[randomIndex]
-    if (!centroids.includes(candidate)) {
-      centroids.push(candidate)
+  const n = data.length
+  const dataCopy = data.slice()
+
+  // Choose the first centroid randomly from the data points
+  const firstCentroidIndex = Math.floor(Math.random() * n)
+  centroids.push(dataCopy[firstCentroidIndex])
+
+  // Choose the rest of the centroids
+  for (let i = 1; i < k; i++) {
+    const distances = dataCopy.map((point) => {
+      return Math.min(...centroids.map((c) => Math.pow(point - c, 2)))
+    })
+
+    const totalDistance = distances.reduce((a, b) => a + b, 0)
+    const probabilities = distances.map((d) => d / totalDistance)
+
+    // Compute cumulative probabilities
+    const cumulativeProbabilities: number[] = []
+    probabilities.reduce((a, b, i) => {
+      return (cumulativeProbabilities[i] = a + b)
+    }, 0)
+
+    const randomValue = Math.random()
+    for (let j = 0; j < cumulativeProbabilities.length; j++) {
+      if (randomValue < cumulativeProbabilities[j]) {
+        centroids.push(dataCopy[j])
+        break
+      }
     }
   }
+
   return centroids
 }
 
@@ -93,9 +110,9 @@ function hasConverged(
 export function roundToNearestClusterCenter(
   value: number,
   clusterCenters: number[],
-): number {
+): { closestCenter: number; closestCenterNumber: number } {
   // Find the cluster center that is closest to the input value
-  let closestCenter = clusterCenters[0]
+  let closestCenterNumber = 0
   let minDistance = Math.abs(value - clusterCenters[0])
 
   for (let i = 1; i < clusterCenters.length; i++) {
@@ -103,8 +120,12 @@ export function roundToNearestClusterCenter(
     const distance = Math.abs(value - center)
     if (distance < minDistance) {
       minDistance = distance
-      closestCenter = center
+      closestCenterNumber = i
     }
   }
-  return closestCenter
+
+  return {
+    closestCenter: clusterCenters[closestCenterNumber],
+    closestCenterNumber,
+  }
 }
