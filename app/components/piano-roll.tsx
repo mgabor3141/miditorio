@@ -1,4 +1,4 @@
-import { Track } from '@tonejs/midi'
+import { Midi, Track } from '@tonejs/midi'
 import { useEffect, useRef, useState } from 'react'
 import {
   Application,
@@ -9,7 +9,7 @@ import {
   Text,
   TextStyle,
 } from 'pixi.js'
-import { Song } from '@/app/components/select-stage'
+import { NoteExtremes, Settings } from '@/app/components/select-stage'
 import { gmInstrumentFamilies } from '@/app/lib/data/gm-instrument-families'
 
 const getTrackColor = (track: Track) => {
@@ -41,17 +41,22 @@ const getTrackColor = (track: Track) => {
   )
 }
 
-export const PianoRoll = ({
-  song,
-  width,
-  height,
-  selectedTrack,
-}: {
-  song: Song
+export type PianoRollProps = {
+  midi: Midi
+  settings: Settings
+  noteExtremes: NoteExtremes
   width: number
   height: number
   selectedTrack?: number
-}) => {
+}
+export const PianoRoll = ({
+  midi,
+  settings: _,
+  noteExtremes,
+  width,
+  height,
+  selectedTrack,
+}: PianoRollProps) => {
   const pixiRootDiv = useRef<HTMLDivElement>(null)
   const [app, setApp] = useState<Application | undefined>(undefined)
   const [appInitialized, setAppInitialized] = useState(false)
@@ -118,10 +123,10 @@ export const PianoRoll = ({
     ;(async () => {
       if (!app || !appInitialized) return
       console.log('Rendering piano roll...')
-      const { min, max } = song.additionalInfo.noteExtremes
+      const { min, max } = noteExtremes
 
       const tempContainer = new Container()
-      const trackRenderTextures = song.midi.tracks
+      const trackRenderTextures = midi.tracks
         .filter((track) => !track.instrument.percussion)
         .map((track) => {
           const renderTexture = RenderTexture.create({
@@ -134,10 +139,10 @@ export const PianoRoll = ({
             tempContainer.addChild(
               new Graphics()
                 .roundRect(
-                  (note.ticks / song.midi.durationTicks) * width,
+                  (note.ticks / midi.durationTicks) * width,
                   height - ((note.midi - min) / (max - min)) * height,
                   Math.max(
-                    (note.durationTicks / song.midi.durationTicks) * width,
+                    (note.durationTicks / midi.durationTicks) * width,
                     1,
                   ),
                   Math.max(height / max - min, 8),
@@ -161,7 +166,7 @@ export const PianoRoll = ({
       setTrackTextures(trackRenderTextures)
       console.log('Piano roll render complete!')
     })()
-  }, [app, appInitialized, width, height, song])
+  }, [app, appInitialized, width, height, midi])
 
   useEffect(() => {
     if (!app || !appInitialized) return

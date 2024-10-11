@@ -73,6 +73,7 @@ equal value are sorted in the following order:
   - Game speed control
 - Histogram of note velocities, number of velocity buckets to use
 - Mod: programmable-speaker-extended
+- Long notes
 
 ## User flow
 
@@ -85,8 +86,7 @@ equal value are sorted in the following order:
          2. Instrument assignment
          3. Octave shift
       2. Do you have space age?
-      3. Anti Jitter
-      4. Game speed
+      3. Game speed
 3. Export
 
 ## Libraries

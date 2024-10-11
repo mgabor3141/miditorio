@@ -17,6 +17,7 @@ export type NoteExtremes = {
 export type Settings = {
   tracks: {
     factorioInstrument?: FactorioInstrument
+    velocityBuckets: number
     octaveShift: number
     velocityResolution: number
   }[]
@@ -99,6 +100,7 @@ const preprocessSong = (originalMidi: Midi, filename: string): Song => {
     settings: {
       tracks: midi.tracks.map((track) => ({
         factorioInstrument: toFactorioInstrument(track.instrument),
+        velocityBuckets: 1,
         octaveShift: 0,
         velocityResolution: 1,
       })),

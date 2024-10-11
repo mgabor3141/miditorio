@@ -30,6 +30,12 @@ export default function Home() {
         {song && (
           <InstrumentStage
             song={song}
+            onSettingsChanged={(setSettings) => {
+              setSong((song) => {
+                if (!song) return
+                return { ...song, settings: setSettings(song.settings) }
+              })
+            }}
             onBack={() => {
               setSong(undefined)
               setFlowStage('select')
