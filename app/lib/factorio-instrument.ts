@@ -93,7 +93,13 @@ const noteRange = (
 }
 
 const dbToGainRatio = (db: number) => 10 ** (db / 20)
-const CORRECT_LOUDNESS_TO = -20.0 // dB RMS
+
+/**
+ * This is set to the lowest sample loudness out of the instrument.
+ * That instrument will be set as full volume, the rest will be normalized.
+ * Unit: dB RMS
+ */
+const CORRECT_LOUDNESS_TO = -20.0
 
 /**
  * Correct loudness
@@ -112,7 +118,7 @@ export const FACTORIO_INSTRUMENT = (() => {
   // prettier-ignore
   const rawInstrumentData: [FactorioInstrumentName, Partial<FactorioInstrument>, Pick<FactorioInstrument, 'volumeCorrection'>][] = [
     ["Piano",           noteRange('F3', 'E7', 'F2'), sampleLoudness(-20.00) ],
-    ["Bass",            noteRange('F2', 'E5', 'F1'), sampleLoudness(-15.00) ],
+    ["Bass",            noteRange('F2', 'E5', 'F1'), sampleLoudness(-18.00) ],
     ["Lead",            noteRange('F2', 'E5'      ), sampleLoudness(-20.91) ],
     ["Sawtooth",        noteRange('F2', 'E5', 'F1'), sampleLoudness(-20.00) ],
     ["Square",          noteRange('F2', 'E5'      ), sampleLoudness( -0.21) ],
