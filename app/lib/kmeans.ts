@@ -4,32 +4,74 @@ export type ClusterResult = {
 }
 
 // Main function to automatically determine the number of clusters
-export function autoCluster(
-  data: number[],
-  threshold = 0.05,
+export function autoCluster({
+  data,
+  meanThreshold = 0.05,
+  clusterWidthThreshold = 0.1,
   maxK = 10,
-): ClusterResult {
-  const maxClusters = Math.min(maxK, data.length)
+}: {
+  data: number[]
+  meanThreshold?: number
+  clusterWidthThreshold?: number
+  maxK?: number
+}): ClusterResult {
+  // Input validation
+  if (!Array.isArray(data) || data.length === 0) {
+    throw new Error('Data array must be a non-empty array of numbers.')
+  }
+
+  const uniqueData = Array.from(new Set(data))
+  const maxClusters = Math.min(maxK, uniqueData.length)
   let prevMeanDeviation = Infinity
+  let prevMaxClusterWidth = Infinity
   let bestClusters: ClusterResult | null = null
 
   for (let k = 1; k <= maxClusters; k++) {
     const clustersResult = kMeansClustering(data, k)
     const meanDeviation = computeMeanDeviation(clustersResult)
+    const maxClusterWidth = clustersResult.clusters
+      .map((cluster) =>
+        cluster.reduce(
+          ({ min, max }, v) => ({
+            min: Math.min(min, v),
+            max: Math.max(max, v),
+          }),
+          { min: 1, max: 0 } as { min: number; max: number },
+        ),
+      )
+      .reduce((acc, { min, max }) => Math.max(acc, max - min), 0)
 
-    if (prevMeanDeviation !== Infinity) {
-      const meanDeviationDecrease = prevMeanDeviation - meanDeviation
+    console.log(maxClusterWidth)
 
-      if (
-        prevMeanDeviation === 0 ||
-        meanDeviationDecrease / prevMeanDeviation < threshold
-      ) {
-        // Stop iterating if the decrease in mean deviation is less than the threshold
-        break
-      }
+    if (
+      prevMeanDeviation !== Infinity &&
+      prevMaxClusterWidth !== Infinity &&
+      ((prevMeanDeviation - meanDeviation) / prevMeanDeviation <
+        meanThreshold ||
+        maxClusterWidth > prevMaxClusterWidth + clusterWidthThreshold)
+    ) {
+      // Stop iterating if the deviation has reached zero or
+      // if the decrease in mean deviation is less than the threshold
+
+      console.log(
+        `Instrument with ${data.length} notes, clustering stopping before ${k} custers: ` +
+          `mean dev ratio ${(prevMeanDeviation - meanDeviation) / prevMeanDeviation}, max w ${maxClusterWidth}, prev max w ${prevMaxClusterWidth}`,
+      )
+
+      break
+    }
+
+    if (maxClusterWidth < clusterWidthThreshold || meanDeviation === 0) {
+      console.log(
+        `Instrument with ${data.length} notes, clustering stopping at ${k} custers: mean dev ${meanDeviation}, max w ${maxClusterWidth}`,
+      )
+
+      bestClusters = clustersResult
+      break
     }
 
     prevMeanDeviation = meanDeviation
+    prevMaxClusterWidth = maxClusterWidth
     bestClusters = clustersResult
   }
 
@@ -43,6 +85,12 @@ export function autoCluster(
 
 // K-means clustering function with k-means++ initialization
 export function kMeansClustering(data: number[], k: number): ClusterResult {
+  // Handle the case where k is greater than the number of unique data points
+  const uniqueData = Array.from(new Set(data))
+  if (k > uniqueData.length) {
+    k = uniqueData.length
+  }
+
   // Initialize centers using k-means++ initialization
   let centers = initializeCenters(data, k)
 
