@@ -1,6 +1,6 @@
 import { arrayChunks, encodeBlueprint } from '@/app/lib/utils'
 import signals from '@/app/lib/data/signals-dlc.json'
-import { FinalInstruments } from '@/app/lib/song-to-blueprint'
+import { FinalInstruments } from '@/app/lib/song-to-factorio'
 
 const qualities = signals
   .filter(({ type }) => type === 'quality')
@@ -107,7 +107,7 @@ export const toBlueprint = ({
                 // Instrument address
                 constant:
                   (instrumentNumber + 1) <<
-                  (6 + 8 * ((instrumentNumber + 1) % 2)),
+                  (6 + ((instrumentNumber + 1) % 2 ? 8 : 0)),
                 comparator: '=',
                 first_signal_networks: {
                   red: true,
