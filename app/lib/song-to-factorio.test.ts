@@ -1,10 +1,17 @@
-import { expect, test } from 'vitest'
-import { FACTORIO_INSTRUMENT } from '@/app/lib/factorio-instrument'
-import { Frequency } from 'tone'
+import { describe, expect, test } from 'vitest'
+import { songToFactorio, songToFactorioData } from '@/app/lib/song-to-factorio'
+import { Midi } from '@tonejs/midi'
+import { preprocessSong } from '@/app/components/select-stage'
+import { readFile } from 'node:fs/promises'
 
-test('Simple song conversion', () => {
-  const piano = FACTORIO_INSTRUMENT['Piano']
-  const F2 = Frequency('F2').toMidi()
+describe('Song to Factorio', () => {
+  test('consistency', async () => {
+    const file = await readFile('test-data/debussy-clair-de-lune.mid')
 
-  expect(piano.noteToFactorioNote(F2)).toBe(1)
+    const song = new Midi(file)
+    const processedSong = preprocessSong(song, 'file.mid')
+
+    expect(songToFactorioData(processedSong)).toMatchSnapshot()
+    expect(songToFactorio(processedSong)).toMatchSnapshot()
+  })
 })
