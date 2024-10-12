@@ -2,7 +2,7 @@ import { PianoRoll } from '@/app/components/piano-roll'
 import React, { Dispatch, useEffect, useRef, useState } from 'react'
 import { Settings, Song } from '@/app/components/select-stage'
 import { FACTORIO_INSTRUMENT } from '@/app/lib/factorio-instrument'
-import { kMeans1D } from '@/app/lib/kmeans'
+import { autoCluster, kMeansClustering } from '@/app/lib/kmeans'
 import { Histogram } from '@/app/components/histogram'
 import { Note } from '@tonejs/midi/dist/Note'
 
@@ -12,9 +12,9 @@ export const getVelocityValues = (
 ): number[] => {
   const data = notes.map(({ velocity }) => velocity)
 
-  if (!targetNumberOfClusters) return dbscan1DMeans(data)
+  if (!targetNumberOfClusters) return autoCluster(data, 0.08).centers.toSorted()
 
-  return kMeans1D(data, targetNumberOfClusters).centroids
+  return kMeansClustering(data, targetNumberOfClusters).centers.toSorted()
 }
 
 export type InstrumentStageProps = {
@@ -37,7 +37,7 @@ export const InstrumentStage = ({
   )
   const {
     midi,
-    additionalInfo: { noteExtremes },
+    additionalInfo: { noteExtremes, trackExtremes },
     settings,
   } = song
 
@@ -108,11 +108,18 @@ export const InstrumentStage = ({
           </div>
           {selectedTrack !== undefined && (
             <div className="panel-inset">
-              <h3>Instrument Settings</h3>
+              <div className="flex items-baseline gap-4">
+                <h3>{midi.tracks[selectedTrack].name}</h3>
+                <p className="smaller">
+                  {midi.tracks[selectedTrack].notes.length} notes from{' '}
+                  {trackExtremes[selectedTrack].min} to{' '}
+                  {trackExtremes[selectedTrack].max}
+                </p>
+              </div>
               <p>
                 Factorio Instrument
                 <select
-                  className="ml-4 text-black"
+                  className="mx-4 text-black"
                   value={
                     settings.tracks[selectedTrack].factorioInstrument?.name
                   }
@@ -135,6 +142,10 @@ export const InstrumentStage = ({
                     [Mute]
                   </option>
                 </select>
+                Instrument range from{' '}
+                {settings.tracks[selectedTrack].factorioInstrument?.lowestNote}{' '}
+                to{' '}
+                {settings.tracks[selectedTrack].factorioInstrument?.highestNote}
               </p>
               <p>
                 Note volumes

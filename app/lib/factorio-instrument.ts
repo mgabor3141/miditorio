@@ -58,12 +58,12 @@ export type FactorioInstrument = {
 }
 
 const noteRange = (
-  lowestNoteAsShownInGame: MidiNote | NoteString,
-  highestNoteAsShownInGame: MidiNote | NoteString,
+  lowestPlayableNote: MidiNote | NoteString,
+  highestPlayableNote: MidiNote | NoteString,
 ): Pick<FactorioInstrument, 'isNoteValid' | 'noteToFactorioNote'> &
   Partial<FactorioInstrument> => {
-  const lowestNote = Frequency(lowestNoteAsShownInGame).toMidi() as MidiNote
-  const highestNote = Frequency(highestNoteAsShownInGame).toMidi() as MidiNote
+  const lowestNote = Frequency(lowestPlayableNote).toMidi() as MidiNote
+  const highestNote = Frequency(highestPlayableNote).toMidi() as MidiNote
 
   return {
     isNoteValid: (midiNote: MidiNote | Note) => {
@@ -84,14 +84,13 @@ const noteRange = (
   }
 }
 
-const dbToGainRatio = (db: number) => 10 ** (db / 20)
-
 /**
  * This is set to the lowest sample loudness out of the instrument.
  * That instrument will be set as full volume, the rest will be normalized.
  * Unit: dB RMS
  */
 const CORRECT_LOUDNESS_TO = -20.0
+const dbToGainRatio = (db: number) => 10 ** (db / 20)
 
 /**
  * Correct loudness
@@ -112,7 +111,7 @@ export const FACTORIO_INSTRUMENT = (() => {
   const rawInstrumentData: [FactorioInstrumentName, Partial<FactorioInstrument>, Pick<FactorioInstrument, 'volumeCorrection'>][] = [
     ["Piano",           noteRange('F2', 'E6'), sampleLoudness(-20.00) ], // In-game: F3-E7
     ["Bass",            noteRange('F1', 'E4'), sampleLoudness(-18.00) ], // In-game: F2-E5
-    ["Lead",            noteRange('F2', 'E5'), sampleLoudness(-20.91) ],
+    ["Lead",            noteRange('F2', 'E5'), sampleLoudness(-20.00) ],
     ["Sawtooth",        noteRange('F1', 'E4'), sampleLoudness(-20.00) ], // In-game: F2-E5
     ["Square",          noteRange('F2', 'E5'), sampleLoudness( -0.21) ],
     ["Celesta",         noteRange('F4', 'E7'), sampleLoudness(-10.61) ], // In-game: F5-E8

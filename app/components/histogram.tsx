@@ -21,13 +21,13 @@ export function Histogram({
   // Define the graph dimensions and margins
   const margin = { top: 0, bottom: 0, left: 0, right: BAR_WIDTH }
 
-  // We'll make some helpers to get at the data we want
-  const x = (d: HistogramProps['data'][number]) => d[0]
-  const y = (d: HistogramProps['data'][number]) => d[1]
-
   // Then we'll create some bounds
   const xMax = width - margin.left - margin.right
   const yMax = height - margin.top - margin.bottom
+
+  // We'll make some helpers to get at the data we want
+  const x = (d: HistogramProps['data'][number]) => d[0]
+  const y = (d: HistogramProps['data'][number]) => d[1]
 
   // And then scale the graph by our data
   const xScale = scaleLinear({
@@ -37,9 +37,9 @@ export function Histogram({
     // padding: 0.4,
   })
   const yScale = scaleLinear({
-    range: [yMax, 25],
+    range: [yMax - 2, 0],
     round: true,
-    domain: [0, Math.max(...data.map((d) => d[1]))],
+    domain: [0, Math.max(...data.map(y))],
   })
 
   // Compose together the scale and accessor functions to get point functions
@@ -69,7 +69,7 @@ export function Histogram({
       ))}
 
       {data.map((d, i) => {
-        const barHeight = yMax - yPoint(d)
+        const barHeight = (yMax - yPoint(d)) * 0.8
         return (
           <Group key={`bar-${i}`}>
             <Bar

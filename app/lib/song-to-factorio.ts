@@ -9,6 +9,7 @@ import { roundToNearestClusterCenter } from '@/app/lib/kmeans'
 import groupBy from 'lodash.groupby'
 
 type FactorioNote = number
+type Chord = FactorioNote[]
 
 /**
  * This maps from a string ID with the following format:
@@ -17,13 +18,16 @@ type FactorioNote = number
 export type FinalInstruments = Record<
   string,
   {
-    notes: FactorioNote[]
+    chords: Chord[]
     instrument: FactorioInstrument
     volume: number
   }
 >
 
-const songToFactorioData = ({ midi, settings }: Song): FinalInstruments => {
+export const songToFactorioData = ({
+  midi,
+  settings,
+}: Song): FinalInstruments => {
   const finalInstruments: FinalInstruments = {}
 
   for (const trackNumber in midi.tracks) {
@@ -44,15 +48,19 @@ const songToFactorioData = ({ midi, settings }: Song): FinalInstruments => {
 
         if (!finalInstruments[factorioDataInstrumentId]) {
           finalInstruments[factorioDataInstrumentId] = {
-            notes: [],
+            chords: [],
             instrument: FACTORIO_INSTRUMENT[factorioInstrument.name],
             volume: closestCenter,
           }
         }
 
-        const factorioTick = Math.round(note.time * 60) // Seconds to 1/60 sec tick
-        finalInstruments[factorioDataInstrumentId].notes[factorioTick] =
-          factorioNote
+        const factorioTick = Math.round(note.time * 60) + 10 // Seconds to 1/60 sec tick
+        if (!finalInstruments[factorioDataInstrumentId].chords[factorioTick])
+          finalInstruments[factorioDataInstrumentId].chords[factorioTick] = []
+
+        finalInstruments[factorioDataInstrumentId].chords[factorioTick].push(
+          factorioNote,
+        )
       }
     })
   }
@@ -68,7 +76,7 @@ const songToFactorioData = ({ midi, settings }: Song): FinalInstruments => {
   return finalInstruments
 }
 
-export const songToBlueprint = (song: Song) => {
+export const songToFactorio = (song: Song) => {
   const instruments = songToFactorioData(song)
 
   type Event = {
@@ -76,17 +84,34 @@ export const songToBlueprint = (song: Song) => {
     track: number
     noteValue: number
   }
-  const events: Event[] = Object.values(instruments).flatMap(
-    ({ notes }, instrumentNumber) =>
-      notes.map(
-        (noteValue, time): Event => ({
+  let instrumentNumber = 0
+  const finalFinalInstruments: FinalInstruments = {}
+  const events: Event[] = Object.values(instruments).flatMap((instrument) => {
+    let maxNotesInChord = 0
+
+    const instrumentEvents = instrument.chords.flatMap((chord, time) => {
+      maxNotesInChord = Math.max(maxNotesInChord, chord.length)
+
+      return chord.map(
+        (noteValue, noteNumberInChord): Event => ({
           // We need to add 1 as we can't address instrument 0 in Factorio
-          track: instrumentNumber + 1,
+          track: instrumentNumber + noteNumberInChord + 1,
           noteValue,
           time,
         }),
-      ),
-  )
+      )
+    })
+
+    new Array(maxNotesInChord)
+      .fill(undefined)
+      .forEach(
+        (_, i) => (finalFinalInstruments[instrumentNumber + i] = instrument),
+      )
+
+    instrumentNumber += maxNotesInChord
+
+    return instrumentEvents
+  })
 
   console.log(`${events.length} events`)
 
@@ -128,6 +153,6 @@ export const songToBlueprint = (song: Song) => {
   return toBlueprint({
     tickCombinatorValues,
     dataCombinatorValues,
-    instruments,
+    instruments: finalFinalInstruments,
   })
 }

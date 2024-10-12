@@ -1,6 +1,6 @@
 import { Dispatch, useCallback, useState } from 'react'
 import { Song } from '@/app/components/select-stage'
-import { songToBlueprint } from '@/app/lib/song-to-blueprint'
+import { songToFactorio } from '@/app/lib/song-to-factorio'
 
 export type ResultStageProps = {
   song: Song
@@ -10,7 +10,7 @@ export const ResultStage = ({ song, onBack }: ResultStageProps) => {
   const [blueprintString, setBlueprintString] = useState('')
 
   const getBlueprint = useCallback(() => {
-    setBlueprintString(songToBlueprint(song))
+    setBlueprintString(songToFactorio(song))
   }, [song])
 
   return (
