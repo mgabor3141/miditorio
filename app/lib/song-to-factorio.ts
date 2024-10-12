@@ -39,9 +39,15 @@ export const songToFactorioData = ({
 
     track.notes.forEach((note) => {
       const shiftedNote = (note.midi + octaveShift) as MidiNote
-      const factorioNote = factorioInstrument.noteToFactorioNote(shiftedNote)
+      const factorioNote =
+        factorioInstrument.noteToFactorioNote &&
+        factorioInstrument.noteToFactorioNote(shiftedNote)
 
-      if (factorioInstrument.isNoteValid(shiftedNote) && factorioNote) {
+      if (
+        factorioInstrument.isNoteValid &&
+        factorioInstrument.isNoteValid(shiftedNote) &&
+        factorioNote
+      ) {
         const { closestCenter, closestCenterNumber } =
           roundToNearestClusterCenter(note.velocity, velocityValues)
         const factorioDataInstrumentId = `${factorioInstrument.name}_${closestCenterNumber}`
