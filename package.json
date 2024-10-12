@@ -27,6 +27,7 @@
     "use-file-picker": "^2.1.2"
   },
   "devDependencies": {
+    "@spissvinkel/alea": "^1.2.1",
     "@testing-library/react": "^16.0.1",
     "@types/lodash.groupby": "^4",
     "@types/node": "^22.7.5",

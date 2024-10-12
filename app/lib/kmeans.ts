@@ -6,72 +6,38 @@ export type ClusterResult = {
 // Main function to automatically determine the number of clusters
 export function autoCluster({
   data,
-  meanThreshold = 0.05,
-  clusterWidthThreshold = 0.1,
+  meanDeviationThreshold = 0.1,
+  meanDeviationDecreaseThreshold = 0.05,
   maxK = 10,
 }: {
   data: number[]
-  meanThreshold?: number
-  clusterWidthThreshold?: number
+  meanDeviationThreshold?: number
+  meanDeviationDecreaseThreshold?: number
   maxK?: number
 }): ClusterResult {
-  // Input validation
-  if (!Array.isArray(data) || data.length === 0) {
-    throw new Error('Data array must be a non-empty array of numbers.')
-  }
-
-  const uniqueData = Array.from(new Set(data))
-  const maxClusters = Math.min(maxK, uniqueData.length)
+  const maxClusters = Math.min(maxK, data.length)
   let prevMeanDeviation = Infinity
-  let prevMaxClusterWidth = Infinity
   let bestClusters: ClusterResult | null = null
 
   for (let k = 1; k <= maxClusters; k++) {
     const clustersResult = kMeansClustering(data, k)
     const meanDeviation = computeMeanDeviation(clustersResult)
-    const maxClusterWidth = clustersResult.clusters
-      .map((cluster) =>
-        cluster.reduce(
-          ({ min, max }, v) => ({
-            min: Math.min(min, v),
-            max: Math.max(max, v),
-          }),
-          { min: 1, max: 0 } as { min: number; max: number },
-        ),
-      )
-      .reduce((acc, { min, max }) => Math.max(acc, max - min), 0)
 
-    console.log(maxClusterWidth)
+    if (prevMeanDeviation !== Infinity) {
+      const meanDeviationDecrease = prevMeanDeviation - meanDeviation
 
-    if (
-      prevMeanDeviation !== Infinity &&
-      prevMaxClusterWidth !== Infinity &&
-      ((prevMeanDeviation - meanDeviation) / prevMeanDeviation <
-        meanThreshold ||
-        maxClusterWidth > prevMaxClusterWidth + clusterWidthThreshold)
-    ) {
-      // Stop iterating if the deviation has reached zero or
-      // if the decrease in mean deviation is less than the threshold
-
-      console.log(
-        `Instrument with ${data.length} notes, clustering stopping before ${k} custers: ` +
-          `mean dev ratio ${(prevMeanDeviation - meanDeviation) / prevMeanDeviation}, max w ${maxClusterWidth}, prev max w ${prevMaxClusterWidth}`,
-      )
-
-      break
-    }
-
-    if (maxClusterWidth < clusterWidthThreshold || meanDeviation === 0) {
-      console.log(
-        `Instrument with ${data.length} notes, clustering stopping at ${k} custers: mean dev ${meanDeviation}, max w ${maxClusterWidth}`,
-      )
-
-      bestClusters = clustersResult
-      break
+      if (
+        prevMeanDeviation === 0 ||
+        meanDeviationDecrease / prevMeanDeviation <
+          meanDeviationDecreaseThreshold
+      ) {
+        // Stop iterating if the mean deviation or the decrease
+        // in mean deviation is less than the threshold
+        break
+      }
     }
 
     prevMeanDeviation = meanDeviation
-    prevMaxClusterWidth = maxClusterWidth
     bestClusters = clustersResult
   }
 
@@ -80,7 +46,50 @@ export function autoCluster({
     return kMeansClustering(data, 1)
   }
 
-  return bestClusters
+  console.log(
+    data.length,
+    'Clusters after proper clustering:',
+    bestClusters.centers.length,
+  )
+
+  let clustersWithCentersSorted = bestClusters.clusters
+    .map((cluster, index) => ({ cluster, center: bestClusters.centers[index] }))
+    .toSorted(({ center }, { center: otherCenter }) => center - otherCenter)
+
+  while (true) {
+    const clusterToMergeLeft = clustersWithCentersSorted
+      .map(({ center }) => center)
+      .findIndex(
+        (center, i, centers) => i != 0 && center - centers[i - 1] < 1 / 14,
+      )
+
+    if (-1 === clusterToMergeLeft) break
+
+    const mergedCluster = [
+      ...clustersWithCentersSorted[clusterToMergeLeft - 1].cluster,
+      ...clustersWithCentersSorted[clusterToMergeLeft].cluster,
+    ]
+    clustersWithCentersSorted = [
+      ...clustersWithCentersSorted.slice(0, clusterToMergeLeft - 1),
+      {
+        cluster: mergedCluster,
+        center: mergedCluster.reduce((a, b) => a + b, 0) / mergedCluster.length,
+      },
+      ...clustersWithCentersSorted.slice(clusterToMergeLeft + 1),
+    ]
+  }
+
+  console.log(
+    data.length,
+    'Clusters after merging too close ones',
+    clustersWithCentersSorted.length,
+  )
+
+  // return kMeansClustering(data, clustersWithCentersSorted.length)
+  return {
+    clusters: clustersWithCentersSorted.map(({ cluster }) => cluster),
+    centers: clustersWithCentersSorted.map(({ center }) => center),
+  }
 }
 
 // K-means clustering function with k-means++ initialization

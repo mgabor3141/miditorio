@@ -62,7 +62,7 @@ const getNoteExtremes = (
   }
 }
 
-const preprocessSong = (originalMidi: Midi, filename: string): Song => {
+export const preprocessSong = (originalMidi: Midi, filename: string): Song => {
   const midi: typeof originalMidi = new Midi(originalMidi.toArray())
   if (!midi.name) midi.name = capitalize(filename.replace(/\.midi?$/, ''))
 

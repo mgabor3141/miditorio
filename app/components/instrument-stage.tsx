@@ -20,19 +20,12 @@ export const getVelocityValues = (
     // Examples: 1000+ notes -> 1/32; 100 notes ~> 1/4
     // const autoClusterThreshold = 0.05
 
-    const autoClusterSettings = {
+    const clusters = autoCluster({
       data,
-      meanThreshold: 0.01,
-      distanceThreshold: 0.1,
+      meanDeviationThreshold: 0.005,
+      meanDeviationDecreaseThreshold: 0.01,
       maxK: 16,
-    }
-    const clusters = autoCluster(autoClusterSettings).centers.toSorted()
-
-    console.log(
-      `Instrument with ${notes.length} notes had its velocity values clustered with ` +
-        `a ${autoClusterSettings.meanThreshold} mean and ${autoClusterSettings.distanceThreshold} threshold. ` +
-        `This resulted in ${clusters.length} clusters.`,
-    )
+    }).centers.toSorted()
 
     return clusters
   }
