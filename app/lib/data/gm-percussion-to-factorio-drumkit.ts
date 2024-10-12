@@ -24,14 +24,14 @@ export const gmPercussionToFactorioDrumkit: Partial<
   'Low Floor Tom': 'Snare 1', // All toms go to Snare 1 which is very high but is the most tom like
   'Closed Hi Hat': 'Hi-hat 2',
   'High Floor Tom': 'Snare 1',
-  'Pedal Hi-Hat': 'Hi-hat 1', // Best if this is different from closed hh
+  'Pedal Hi-Hat': 'Hi-hat 2', // Best if this is different from closed hh
   'Low Tom': 'Snare 1',
-  'Open Hi-Hat': 'Hi-hat 1',
+  'Open Hi-Hat': 'Crash',
   'Low-Mid Tom': 'Snare 1',
   'Hi-Mid Tom': 'Snare 1',
   'Crash Cymbal 1': 'Crash',
   'High Tom': 'Snare 1',
-  'Ride Cymbal 1': 'Percussion 1',
+  'Ride Cymbal 1': 'Hi-hat 1',
   'Chinese Cymbal': 'Crash',
   'Ride Bell': 'Cowbell',
   Tambourine: 'Shaker',
@@ -39,7 +39,7 @@ export const gmPercussionToFactorioDrumkit: Partial<
   Cowbell: 'Cowbell',
   'Crash Cymbal 2': 'Crash',
   Vibraslap: 'Crash',
-  'Ride Cymbal 2': 'Percussion 1',
+  'Ride Cymbal 2': 'Hi-hat 2',
   'Hi Bongo': undefined,
   'Low Bongo': undefined,
   'Mute Hi Conga': undefined,
