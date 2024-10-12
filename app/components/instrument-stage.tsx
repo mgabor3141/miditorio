@@ -5,6 +5,7 @@ import { FACTORIO_INSTRUMENT } from '@/app/lib/factorio-instrument'
 import { autoCluster, kMeansClustering } from '@/app/lib/kmeans'
 import { Histogram } from '@/app/components/histogram'
 import { Note } from '@tonejs/midi/dist/Note'
+import { noteToGmPercussion } from '@/app/lib/data/gm-percussion-note-names'
 
 export const getVelocityValues = (
   notes: Note[],
@@ -201,6 +202,29 @@ export const InstrumentStage = ({
                   height={150}
                 />
               </div>
+              {midi.tracks[selectedTrack].instrument.percussion && (
+                <div>
+                  <h3>Drum sounds</h3>
+                  {Object.entries(
+                    midi.tracks[selectedTrack].notes.reduce(
+                      (acc, note) => ({
+                        ...acc,
+                        [note.midi]: (acc[note.midi] || 0) + 1,
+                      }),
+                      {} as Record<string, number>,
+                    ),
+                  )
+                    .toSorted(
+                      ([_a, frequency], [_b, otherFrequency]) =>
+                        otherFrequency - frequency,
+                    )
+                    .map(([note, frequency]) => (
+                      <p key={note}>
+                        {frequency} - {noteToGmPercussion[note as never]}
+                      </p>
+                    ))}
+                </div>
+              )}
             </div>
           )}
         </div>
