@@ -23,7 +23,6 @@ export const getVelocityValues = (
 
     const clusters = autoCluster({
       data,
-      meanDeviationThreshold: 0.005,
       meanDeviationDecreaseThreshold: 0.01,
       maxK: 16,
     }).centers.toSorted()

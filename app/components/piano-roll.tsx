@@ -166,7 +166,7 @@ export const PianoRoll = ({
       setTrackTextures(trackRenderTextures)
       console.log('Piano roll render complete!')
     })()
-  }, [app, appInitialized, width, height, midi])
+  }, [app, appInitialized, width, height, midi, noteExtremes])
 
   useEffect(() => {
     if (!app || !appInitialized) return
