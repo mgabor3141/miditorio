@@ -20,10 +20,13 @@ export default function Home() {
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-8 sm:p-20">
-      <header>
+      <header className="text-center">
         <a href="/" className="!text-3xl !text-[#ffe6c0] bold">
           miditorio.com
         </a>
+        <p className="text-gray-300">
+          convert any song to a Factorio blueprint
+        </p>
       </header>
       <main className="flex flex-col gap-8 row-start-2 items-start">
         {flowStage === 'select' && <SelectStage setSong={setSong} />}
@@ -49,6 +52,9 @@ export default function Home() {
           <ResultStage song={song} onBack={() => setFlowStage('instrument')} />
         )}
       </main>
+      <footer>
+        {flowStage === 'select' && <a href="v1/">Go to miditorio v1</a>}
+      </footer>
     </div>
   )
 }
