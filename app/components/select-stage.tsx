@@ -150,9 +150,28 @@ export const SelectStage = ({ setSong }: SelectStageProps) => {
       {loadingMessage ? (
         <div className="panel m0">{loadingMessage}</div>
       ) : (
-        <button className="button button-green mr0" onClick={openFilePicker}>
-          Select MIDI file
-        </button>
+        <div className="flex-column items-center gap-4">
+          <div className="panel max-w-md">
+            <p>
+              This is a preview of the in-development version of miditorio v2
+              for Factorio 2.0 and Space Age.
+            </p>
+            <p>
+              Send feedback about this preview{' '}
+              <a
+                href="https://github.com/mgabor3141/miditorio/pull/1"
+                target="_blank"
+              >
+                here
+              </a>
+              .
+            </p>
+          </div>
+
+          <button className="button button-green mr0" onClick={openFilePicker}>
+            Select MIDI file
+          </button>
+        </div>
       )}
     </div>
   )
