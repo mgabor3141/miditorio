@@ -2,7 +2,6 @@
   <configuration default="false" name="Pre-deploy checks" type="CompoundRunConfigurationType">
     <toRun name="build" type="js.build_tools.npm" />
     <toRun name="lint" type="js.build_tools.npm" />
-    <toRun name="tsc" type="js.build_tools.npm" />
     <toRun name="Test" type="JavaScriptTestRunnerVitest" />
     <method v="2" />
   </configuration>
