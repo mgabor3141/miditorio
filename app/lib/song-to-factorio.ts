@@ -1,4 +1,4 @@
-import { Signal, toBlueprint } from '@/app/lib/blueprint'
+import { BlueprintResult, Signal, toBlueprint } from '@/app/lib/blueprint'
 import { Song } from '@/app/components/select-stage'
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
 import {
@@ -28,7 +28,7 @@ export const songToFactorioData = ({
   midi,
   settings,
 }: Song): FinalInstruments => {
-  const finalInstruments: FinalInstruments = {}
+  const instrumentsAfterVelocity: FinalInstruments = {}
 
   for (const trackNumber in midi.tracks) {
     const track = midi.tracks[trackNumber]
@@ -52,8 +52,8 @@ export const songToFactorioData = ({
           roundToNearestClusterCenter(note.velocity, velocityValues)
         const factorioDataInstrumentId = `${factorioInstrument.name}_${closestCenterNumber}`
 
-        if (!finalInstruments[factorioDataInstrumentId]) {
-          finalInstruments[factorioDataInstrumentId] = {
+        if (!instrumentsAfterVelocity[factorioDataInstrumentId]) {
+          instrumentsAfterVelocity[factorioDataInstrumentId] = {
             chords: [],
             instrument: FACTORIO_INSTRUMENT[factorioInstrument.name],
             volume: closestCenter,
@@ -61,28 +61,29 @@ export const songToFactorioData = ({
         }
 
         const factorioTick = Math.round(note.time * 60) + 10 // Seconds to 1/60 sec tick
-        if (!finalInstruments[factorioDataInstrumentId].chords[factorioTick])
-          finalInstruments[factorioDataInstrumentId].chords[factorioTick] = []
-
-        finalInstruments[factorioDataInstrumentId].chords[factorioTick].push(
-          factorioNote,
+        if (
+          !instrumentsAfterVelocity[factorioDataInstrumentId].chords[
+            factorioTick
+          ]
         )
+          instrumentsAfterVelocity[factorioDataInstrumentId].chords[
+            factorioTick
+          ] = []
+
+        instrumentsAfterVelocity[factorioDataInstrumentId].chords[
+          factorioTick
+        ].push(factorioNote)
       }
     })
   }
 
-  // -1 because we can't have an instrument 0
-  const MAX_FACTORIO_SPEAKER_SIGNALS = 2 ** 8 - 1
-  if (Object.keys(finalInstruments).length >= MAX_FACTORIO_SPEAKER_SIGNALS) {
-    console.warn(
-      `Warning! Too many instruments: ${Object.keys(finalInstruments).length}`,
-    )
-  }
-
-  return finalInstruments
+  return instrumentsAfterVelocity
 }
 
-export const songToFactorio = (song: Song, signals: Signal[]) => {
+export const songToFactorio = (
+  song: Song,
+  signals: Signal[],
+): BlueprintResult => {
   const instruments = songToFactorioData(song)
 
   type Event = {
@@ -91,7 +92,7 @@ export const songToFactorio = (song: Song, signals: Signal[]) => {
     noteValue: number
   }
   let instrumentNumber = 0
-  const finalFinalInstruments: FinalInstruments = {}
+  const instrumentsAfterChords: FinalInstruments = {}
   const events: Event[] = Object.values(instruments).flatMap((instrument) => {
     let maxNotesInChord = 0
 
@@ -111,7 +112,7 @@ export const songToFactorio = (song: Song, signals: Signal[]) => {
     new Array(maxNotesInChord)
       .fill(undefined)
       .forEach(
-        (_, i) => (finalFinalInstruments[instrumentNumber + i] = instrument),
+        (_, i) => (instrumentsAfterChords[instrumentNumber + i] = instrument),
       )
 
     instrumentNumber += maxNotesInChord
@@ -159,7 +160,7 @@ export const songToFactorio = (song: Song, signals: Signal[]) => {
   return toBlueprint({
     tickCombinatorValues,
     dataCombinatorValues,
-    instruments: finalFinalInstruments,
+    instruments: instrumentsAfterChords,
     signals,
   })
 }

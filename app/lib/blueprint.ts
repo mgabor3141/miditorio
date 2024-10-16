@@ -28,6 +28,10 @@ export type Signal = {
   type?: string
 }
 
+export type BlueprintResult = {
+  blueprint: string
+  warnings: string[]
+}
 export const toBlueprint = ({
   tickCombinatorValues,
   dataCombinatorValues,
@@ -38,13 +42,27 @@ export const toBlueprint = ({
   dataCombinatorValues: number[]
   instruments: FinalInstruments
   signals: Signal[]
-}) => {
+}): BlueprintResult => {
+  const warnings = []
   const preparedSignals = prepareSignals(signals)
 
-  console.log(
-    `Got ${tickCombinatorValues.length} signals. ` +
-      `(${preparedSignals.length} total signals available.)`,
-  )
+  // With bit packing we have 8 bits for the instrument address
+  // This means 2 ** 8 - 2 because we can't have an instrument 0 and 2^8 is 0b100000000 (9 bits).
+  const MAX_FACTORIO_SPEAKER_SIGNALS = 2 ** 8 - 2
+  if (Object.keys(instruments).length > MAX_FACTORIO_SPEAKER_SIGNALS) {
+    warnings.push(
+      `Your song would have needed ${Object.keys(instruments).length} programmable speakers. ` +
+        'Try reducing the number of "note volumes" in your instrument settings.',
+    )
+  }
+
+  if (tickCombinatorValues.length > preparedSignals.length) {
+    warnings.push(
+      `Your song would have needed ${tickCombinatorValues.length} signals but ` +
+        `the selected game version only has ${preparedSignals.length} signals available. ` +
+        'The song has been cut short to fit the combinators. This will be improved soon.',
+    )
+  }
 
   // TODO
   tickCombinatorValues = tickCombinatorValues.slice(0, preparedSignals.length)
@@ -110,8 +128,9 @@ export const toBlueprint = ({
                   type: 'virtual',
                   name: 'signal-each',
                 },
-                // Instrument address
                 constant:
+                  // Instrument address is shifted by 6 if the speaker is
+                  //  on the odd row or 6+8 if it's on the even row
                   (instrumentNumber + 1) <<
                   (6 + ((instrumentNumber + 1) % 2 ? 8 : 0)),
                 comparator: '=',
@@ -463,5 +482,8 @@ export const toBlueprint = ({
     },
   }
 
-  return encodeBlueprint(blueprint)
+  return {
+    blueprint: encodeBlueprint(blueprint),
+    warnings,
+  }
 }

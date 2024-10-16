@@ -44,12 +44,6 @@ export function autoCluster({
     return kMeansClustering(data, 1)
   }
 
-  console.log(
-    data.length,
-    'Clusters after proper clustering:',
-    bestClusters.centers.length,
-  )
-
   let clustersWithCentersSorted = bestClusters.clusters
     .map((cluster, index) => ({ cluster, center: bestClusters.centers[index] }))
     .toSorted(({ center }, { center: otherCenter }) => center - otherCenter)
@@ -77,13 +71,6 @@ export function autoCluster({
     ]
   }
 
-  console.log(
-    data.length,
-    'Clusters after merging too close ones',
-    clustersWithCentersSorted.length,
-  )
-
-  // return kMeansClustering(data, clustersWithCentersSorted.length)
   return {
     clusters: clustersWithCentersSorted.map(({ cluster }) => cluster),
     centers: clustersWithCentersSorted.map(({ center }) => center),
