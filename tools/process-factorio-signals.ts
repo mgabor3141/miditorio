@@ -1,4 +1,10 @@
 import fs from 'node:fs/promises'
+import process from 'node:process'
+
+process.on('warning', (warning: Error) => {
+  console.log(warning)
+  // if (warning.name)
+})
 
 // These were unreliable in the past and could cause a crash
 const SIGNAL_EXCLUDE = ['parameter']
@@ -6,8 +12,6 @@ const SIGNAL_EXCLUDE = ['parameter']
 type Signal = {
   type?: string
   name: string
-  quality: string
-  comparator: string
 }
 
 /**
@@ -28,8 +32,6 @@ const rawSignalsToObjects = (items: string) => {
     signals.push({
       ...(type === 'item' ? {} : { type }),
       name: item,
-      quality: 'normal',
-      comparator: '=',
     })
   })
 
@@ -54,4 +56,6 @@ const processSignals = async (filePostFix: string = '') => {
 ;(async () => {
   await processSignals()
   await processSignals('-dlc')
+
+  console.log('Finished processing signals')
 })()

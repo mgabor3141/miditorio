@@ -4,6 +4,7 @@ import { Midi } from '@tonejs/midi'
 import { preprocessSong } from '@/app/components/select-stage'
 import { readFile } from 'node:fs/promises'
 import { mkAlea } from '@spissvinkel/alea'
+import signals from '@/app/lib/data/signals.json'
 
 describe('Song to Factorio', () => {
   beforeEach(() => {
@@ -18,6 +19,6 @@ describe('Song to Factorio', () => {
     const processedSong = preprocessSong(song, 'file.mid')
 
     expect(songToFactorioData(processedSong)).toMatchSnapshot()
-    expect(songToFactorio(processedSong)).toMatchSnapshot()
+    expect(songToFactorio(processedSong, signals)).toMatchSnapshot()
   })
 })
