@@ -1,4 +1,4 @@
-import { toBlueprint } from '@/app/lib/blueprint'
+import { Signal, toBlueprint } from '@/app/lib/blueprint'
 import { Song } from '@/app/components/select-stage'
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
 import {
@@ -82,7 +82,7 @@ export const songToFactorioData = ({
   return finalInstruments
 }
 
-export const songToFactorio = (song: Song) => {
+export const songToFactorio = (song: Song, signals: Signal[]) => {
   const instruments = songToFactorioData(song)
 
   type Event = {
@@ -160,5 +160,6 @@ export const songToFactorio = (song: Song) => {
     tickCombinatorValues,
     dataCombinatorValues,
     instruments: finalFinalInstruments,
+    signals,
   })
 }

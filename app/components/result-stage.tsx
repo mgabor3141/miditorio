@@ -1,34 +1,105 @@
 import { Dispatch, useCallback, useState } from 'react'
 import { Song } from '@/app/components/select-stage'
 import { songToFactorio } from '@/app/lib/song-to-factorio'
+import signals from '@/app/lib/data/signals.json'
+import signalsDlc from '@/app/lib/data/signals-dlc.json'
+import { usePostHog } from 'posthog-js/react'
+
+/**
+ * @param text
+ * @returns boolean: success
+ */
+const copyToClipboard = async (text: string): Promise<boolean> => {
+  try {
+    const type = 'text/plain'
+    const blob = new Blob([text], { type })
+    const data = [new ClipboardItem({ [type]: blob })]
+    await navigator.clipboard.write(data)
+    return true
+  } catch (e: unknown) {
+    console.warn(`Could not copy to clipboard. Update your browser.`, e)
+    return false
+  }
+}
 
 export type ResultStageProps = {
   song: Song
-  onBack?: Dispatch<void>
+  onBack: Dispatch<void>
 }
 export const ResultStage = ({ song, onBack }: ResultStageProps) => {
+  const postHog = usePostHog()
+
+  type version = '1' | '2' | '2sa'
+  const [targetVersion, setTargetVersion] = useState<version>('2')
+
+  const [copySuccess, setCopySuccess] = useState<boolean>(false)
   const [blueprintString, setBlueprintString] = useState('')
 
-  const getBlueprint = useCallback(() => {
-    setBlueprintString(songToFactorio(song))
-  }, [song])
+  const getBlueprint = useCallback(async () => {
+    setCopySuccess(false)
+    const signalSet = targetVersion === '2sa' ? signalsDlc : signals
+
+    const bp = songToFactorio(song, signalSet)
+    const copyAttempt = await copyToClipboard(bp)
+    setCopySuccess(copyAttempt)
+    setBlueprintString(bp)
+    postHog?.capture('Generated blueprint', {
+      Blueprint: bp,
+      'Clipboard Success': copyAttempt,
+    })
+  }, [postHog, song, targetVersion])
+
+  const versionOptions: { value: version; title: string }[] = [
+    { value: '1', title: 'Factorio 1.x' },
+    { value: '2', title: 'Factorio 2.x' },
+    { value: '2sa', title: 'Factorio 2.x with Space Age DLC' },
+  ]
 
   return (
-    <div className="panel">
-      <div className="panel-inset">
-        <button className="button" onClick={() => onBack && onBack()}>
+    <div className="panel w-[500px]">
+      <div className="panel-inset flex-column items-start gap-4">
+        <button className="button" onClick={() => onBack()}>
           Back
         </button>
-        <button className="button button-green" onClick={getBlueprint}>
-          Get blueprint!
-        </button>
-        <textarea
-          value={blueprintString}
-          readOnly={true}
-          cols={50}
-          rows={6}
-          className="text-"
-        />
+
+        <div className="flex-column gap-2">
+          <p className="mb-2">I am going to use this blueprint in:</p>
+          {versionOptions.map(({ value, title }) => (
+            <div className="flex gap-2 ml-4" key={value}>
+              <label>
+                <input
+                  type="radio"
+                  name="target-version"
+                  onChange={({ target: { value } }) => {
+                    setCopySuccess(false)
+                    setBlueprintString('')
+                    setTargetVersion(value as version)
+                  }}
+                  value={value}
+                  checked={value === targetVersion}
+                />
+                {title}
+              </label>
+            </div>
+          ))}
+        </div>
+
+        <p className={`${targetVersion !== '1' ? 'opacity-0' : ''}`}>
+          To create blueprints for Factorio 1.x, please use{' '}
+          <a href="v1/">miditorio v1</a>.
+        </p>
+
+        <div className="flex items-center gap-4">
+          <button
+            className={`button button-green box-border ${targetVersion === '1' ? 'disabled' : ''}`}
+            onClick={getBlueprint}
+            disabled={targetVersion === '1'}
+          >
+            Get blueprint!
+          </button>
+          <p>{copySuccess && 'Copied 🗸'}</p>
+        </div>
+        <textarea value={blueprintString} readOnly={true} cols={50} rows={6} />
       </div>
     </div>
   )

@@ -119,7 +119,7 @@ export const SelectStage = ({ setSong }: SelectStageProps) => {
     accept: ['audio/midi', 'audio/x-midi'],
     readAs: 'ArrayBuffer',
     onFilesSuccessfullySelected: async ({ filesContent }) => {
-      postHog.capture('selected midi file', {
+      postHog.capture('Selected midi file', {
         'File Name': filesContent[0].name,
       })
       setSong(undefined)
@@ -165,6 +165,11 @@ export const SelectStage = ({ setSong }: SelectStageProps) => {
                 here
               </a>
               .
+            </p>
+            <p>
+              If you would like to generate a blueprint for Factorio 1.x, the
+              current released version, please use{' '}
+              <a href="v1/">miditorio v1</a>.
             </p>
           </div>
 

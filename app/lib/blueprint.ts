@@ -1,48 +1,54 @@
 import { arrayChunks, encodeBlueprint } from '@/app/lib/utils'
-import signals from '@/app/lib/data/signals-dlc.json'
 import { FinalInstruments } from '@/app/lib/song-to-factorio'
 
-const qualities = signals
-  .filter(({ type }) => type === 'quality')
-  .map(({ name }) => name)
-
 // This is a reserved signal because of the playback circuit
-const RESERVED = ['signal-green']
+const RESERVED_SIGNALS = ['signal-green']
 
-const signalsWithQuality = signals
-  .flatMap((signal) =>
-    qualities.map((quality) => ({
-      ...signal,
-      quality,
-    })),
-  )
-  .filter(
-    ({ name, quality }) => !(quality === 'normal' && RESERVED.includes(name)),
-  )
+const prepareSignals = (signals: Signal[]) => {
+  const qualities = signals
+    .filter(({ type }) => type === 'quality')
+    .map(({ name }) => name)
+
+  return signals
+    .flatMap((signal) =>
+      qualities.map((quality) => ({
+        ...signal,
+        comparator: '=',
+        quality,
+      })),
+    )
+    .filter(
+      ({ name, quality }) =>
+        !(quality === 'normal' && RESERVED_SIGNALS.includes(name)),
+    )
+}
+
+export type Signal = {
+  name: string
+  type?: string
+}
 
 export const toBlueprint = ({
   tickCombinatorValues,
   dataCombinatorValues,
   instruments,
+  signals,
 }: {
   tickCombinatorValues: number[]
   dataCombinatorValues: number[]
   instruments: FinalInstruments
+  signals: Signal[]
 }) => {
+  const preparedSignals = prepareSignals(signals)
+
   console.log(
     `Got ${tickCombinatorValues.length} signals. ` +
-      `(${signalsWithQuality.length} total signals available.)`,
+      `(${preparedSignals.length} total signals available.)`,
   )
 
   // TODO
-  tickCombinatorValues = tickCombinatorValues.slice(
-    0,
-    signalsWithQuality.length,
-  )
-  dataCombinatorValues = dataCombinatorValues.slice(
-    0,
-    signalsWithQuality.length,
-  )
+  tickCombinatorValues = tickCombinatorValues.slice(0, preparedSignals.length)
+  dataCombinatorValues = dataCombinatorValues.slice(0, preparedSignals.length)
 
   const entities: {
     name: string
@@ -415,7 +421,7 @@ export const toBlueprint = ({
             index: sectionIndex + 1,
             filters: section.map((value, valueIndex) => ({
               index: valueIndex + 1,
-              ...signalsWithQuality[sectionIndex * 1000 + valueIndex],
+              ...preparedSignals[sectionIndex * 1000 + valueIndex],
               count: value,
             })),
           })),
