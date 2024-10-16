@@ -22,6 +22,13 @@ const copyToClipboard = async (text: string): Promise<boolean> => {
   }
 }
 
+type version = '1' | '2' | '2SA'
+const versionOptions: Record<version, string> = {
+  '1': 'Factorio 1.x',
+  '2': 'Factorio 2.x',
+  '2SA': 'Factorio 2.x with Space Age DLC',
+}
+
 export type ResultStageProps = {
   song: Song
   onBack: Dispatch<void>
@@ -29,31 +36,24 @@ export type ResultStageProps = {
 export const ResultStage = ({ song, onBack }: ResultStageProps) => {
   const postHog = usePostHog()
 
-  type version = '1' | '2' | '2sa'
   const [targetVersion, setTargetVersion] = useState<version>('2')
-
   const [copySuccess, setCopySuccess] = useState<boolean>(false)
   const [blueprintString, setBlueprintString] = useState('')
 
   const getBlueprint = useCallback(async () => {
     setCopySuccess(false)
-    const signalSet = targetVersion === '2sa' ? signalsDlc : signals
+    const signalSet = targetVersion === '2SA' ? signalsDlc : signals
 
     const bp = songToFactorio(song, signalSet)
     const copyAttempt = await copyToClipboard(bp)
     setCopySuccess(copyAttempt)
     setBlueprintString(bp)
     postHog?.capture('Generated blueprint', {
+      'Factorio Version': targetVersion,
       Blueprint: bp,
       'Clipboard Success': copyAttempt,
     })
   }, [postHog, song, targetVersion])
-
-  const versionOptions: { value: version; title: string }[] = [
-    { value: '1', title: 'Factorio 1.x' },
-    { value: '2', title: 'Factorio 2.x' },
-    { value: '2sa', title: 'Factorio 2.x with Space Age DLC' },
-  ]
 
   return (
     <div className="panel w-[500px]">
@@ -64,7 +64,7 @@ export const ResultStage = ({ song, onBack }: ResultStageProps) => {
 
         <div className="flex-column gap-2">
           <p className="mb-2">I am going to use this blueprint in:</p>
-          {versionOptions.map(({ value, title }) => (
+          {Object.entries(versionOptions).map(([value, title]) => (
             <div className="flex gap-2 ml-4" key={value}>
               <label>
                 <input

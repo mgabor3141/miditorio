@@ -1,10 +1,4 @@
 import fs from 'node:fs/promises'
-import process from 'node:process'
-
-process.on('warning', (warning: Error) => {
-  console.log(warning)
-  // if (warning.name)
-})
 
 // These were unreliable in the past and could cause a crash
 const SIGNAL_EXCLUDE = ['parameter']
@@ -38,12 +32,30 @@ const rawSignalsToObjects = (items: string) => {
   return signals
 }
 
-const processSignals = async (filePostFix: string = '') => {
+const processSignals = async (
+  filePostFix: string = '',
+  intersectWith?: Signal[],
+): Promise<Signal[]> => {
   console.log(`Reading signals${filePostFix}.csv...`)
 
-  const signals = rawSignalsToObjects(
+  let signals = rawSignalsToObjects(
     await fs.readFile(`tools/data/signals${filePostFix}.csv`, 'utf8'),
   )
+
+  if (intersectWith) {
+    // We only include signals in the vanilla dataset that are also in SA
+    // This ensures that after upgrading from vanilla to SA no signals will be broken
+    // This is generally only the satellite and its recipe
+    console.log(`Signals before intersecting: ${signals.length}`)
+
+    signals = signals.filter(({ type, name }) =>
+      intersectWith.some(
+        (intersectWithSignal) =>
+          type === intersectWithSignal.type &&
+          name === intersectWithSignal.name,
+      ),
+    )
+  }
 
   await fs.writeFile(
     `app/lib/data/signals${filePostFix}.json`,
@@ -51,11 +63,13 @@ const processSignals = async (filePostFix: string = '') => {
   )
 
   console.log(`Done! Number of signals: ${signals.length}`)
+
+  return signals
 }
 
 ;(async () => {
-  await processSignals()
-  await processSignals('-dlc')
+  const signals = await processSignals('-dlc')
+  await processSignals('', signals)
 
   console.log('Finished processing signals')
 })()
