@@ -7,10 +7,12 @@ export type ClusterResult = {
 export function autoCluster({
   data,
   meanDeviationDecreaseThreshold = 0.05,
+  minimumGroupCenterDistance = 1 / 14,
   maxK = 10,
 }: {
   data: number[]
   meanDeviationDecreaseThreshold?: number
+  minimumGroupCenterDistance?: number
   maxK?: number
 }): ClusterResult {
   const maxClusters = Math.min(maxK, data.length)
@@ -52,7 +54,8 @@ export function autoCluster({
     const clusterToMergeLeft = clustersWithCentersSorted
       .map(({ center }) => center)
       .findIndex(
-        (center, i, centers) => i != 0 && center - centers[i - 1] < 1 / 14,
+        (center, i, centers) =>
+          i != 0 && center - centers[i - 1] < minimumGroupCenterDistance,
       )
 
     if (-1 === clusterToMergeLeft) break

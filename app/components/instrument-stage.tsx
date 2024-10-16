@@ -14,16 +14,14 @@ export const getVelocityValues = (
   const data = notes.map(({ velocity }) => velocity)
 
   if (!targetNumberOfClusters) {
-    // TODO comment
-    // Auto clustering stops adding new clusters when the mean difference improvement
-    // is less than the threshold. This is set dependent of the total number of notes,
-    // so that more important instruments get more love. The actual values are guesses.
-    // Examples: 1000+ notes -> 1/32; 100 notes ~> 1/4
-    // const autoClusterThreshold = 0.05
-
+    // Auto clustering tries to cluster the values into a "nice" number of clusters.
+    // To do this, it tries every cluster number until the mean difference improvement
+    //  is less than the threshold. Then groups that are too close together are merged.
+    // The resulting number of groups is the target number for a final k-means clustering.
     const clusters = autoCluster({
       data,
       meanDeviationDecreaseThreshold: 0.01,
+      minimumGroupCenterDistance: 1 / 14,
       maxK: 16,
     }).centers.toSorted()
 
