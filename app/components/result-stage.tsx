@@ -22,8 +22,8 @@ const copyToClipboard = async (text: string): Promise<boolean> => {
   }
 }
 
-type version = '1' | '2' | '2SA'
-const versionOptions: Record<version, string> = {
+type Version = '1' | '2' | '2SA'
+const versionOptions: Record<Version, string> = {
   '1': 'Factorio 1.x',
   '2': 'Factorio 2.x',
   '2SA': 'Factorio 2.x with Space Age DLC',
@@ -36,21 +36,30 @@ export type ResultStageProps = {
 export const ResultStage = ({ song, onBack }: ResultStageProps) => {
   const postHog = usePostHog()
 
-  const [targetVersion, setTargetVersion] = useState<version>('2')
+  const [targetVersion, setTargetVersion] = useState<Version>('2')
   const [copySuccess, setCopySuccess] = useState<boolean>(false)
   const [blueprintString, setBlueprintString] = useState('')
+  const [warnings, setWarnings] = useState<string[]>([])
+
+  const resetResults = () => {
+    setCopySuccess(false)
+    setWarnings([])
+    setBlueprintString('')
+  }
 
   const getBlueprint = useCallback(async () => {
     setCopySuccess(false)
     const signalSet = targetVersion === '2SA' ? signalsDlc : signals
 
-    const bp = songToFactorio(song, signalSet)
-    const copyAttempt = await copyToClipboard(bp)
+    const { blueprint, warnings } = songToFactorio(song, signalSet)
+    const copyAttempt = await copyToClipboard(blueprint)
+    setWarnings(warnings)
     setCopySuccess(copyAttempt)
-    setBlueprintString(bp)
+    setBlueprintString(blueprint)
     postHog?.capture('Generated blueprint', {
       'Factorio Version': targetVersion,
-      Blueprint: bp,
+      Blueprint: blueprint,
+      Warnings: warnings,
       'Clipboard Success': copyAttempt,
     })
   }, [postHog, song, targetVersion])
@@ -71,9 +80,8 @@ export const ResultStage = ({ song, onBack }: ResultStageProps) => {
                   type="radio"
                   name="target-version"
                   onChange={({ target: { value } }) => {
-                    setCopySuccess(false)
-                    setBlueprintString('')
-                    setTargetVersion(value as version)
+                    resetResults()
+                    setTargetVersion(value as Version)
                   }}
                   value={value}
                   checked={value === targetVersion}
@@ -84,10 +92,12 @@ export const ResultStage = ({ song, onBack }: ResultStageProps) => {
           ))}
         </div>
 
-        <p className={`${targetVersion !== '1' ? 'opacity-0' : ''}`}>
+        <div
+          className={`  ${targetVersion !== '1' ? 'hidden' : 'panel m0 alert-success w-full'}`}
+        >
           To create blueprints for Factorio 1.x, please use{' '}
           <a href="v1/">miditorio v1</a>.
-        </p>
+        </div>
 
         <div className="flex items-center gap-4">
           <button
@@ -99,6 +109,16 @@ export const ResultStage = ({ song, onBack }: ResultStageProps) => {
           </button>
           <p>{copySuccess && 'Copied 🗸'}</p>
         </div>
+        {warnings.length > 0 && (
+          <div className="panel alert-warning flex-column gap-2 m0 w-full">
+            {warnings.map((warning, i) => (
+              <div key={i} className="flex items-start gap-2">
+                <p>⚠️</p>
+                <p className="!mt-0">{warning}</p>
+              </div>
+            ))}
+          </div>
+        )}
         <textarea value={blueprintString} readOnly={true} cols={50} rows={6} />
       </div>
     </div>
