@@ -25,7 +25,7 @@ export default function Home() {
           miditorio.com
         </a>
         <p className="text-gray-300">
-          convert any song to a Factorio blueprint
+          Create Factorio blueprints from any song!
         </p>
       </header>
       <main className="flex flex-col gap-8 row-start-2 items-start">

@@ -63,9 +63,17 @@ const getNoteExtremes = (
 }
 
 export const preprocessSong = (originalMidi: Midi, filename: string): Song => {
-  const midi: typeof originalMidi = new Midi(originalMidi.toArray())
-  if (!midi.name || midi.name.trim().length <= 2)
-    midi.name = capitalize(filename.replace(/\.midi?$/, ''))
+  const midi = new Midi(originalMidi.toArray())
+  midi.name = midi.name.trim()
+
+  // Arbitrary rules for when not to accept the midi embedded title and
+  //  fall back on the filename instead
+  if (
+    !midi.name ||
+    midi.name.toLowerCase().match(/^(\w*\s*track|\w*\s*template)\s*\d*$/) ||
+    midi.name.toLowerCase() === midi.tracks[0].name.trim().toLowerCase()
+  )
+    midi.name = capitalize(filename.replace(/\.midi?$/, '').replace(/_/g, ' '))
 
   midi.tracks = midi.tracks.filter(
     (track) => track.notes.length && !track.instrument.percussion,
