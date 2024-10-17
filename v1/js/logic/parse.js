@@ -23,6 +23,11 @@ function handleFileSelect(event) {
 			throw new Error("This file isn't recognized as a MIDI file! "+
 				"(Its type seems to be " + f.type + ")"); */
 
+		posthog?.capture('Selected midi file', {
+			'File Name': f.name,
+			v1: true
+		});
+
 		song = new Song();
 		song.name = f.name.charAt(0).toUpperCase() + f.name.substring(1, f.name.lastIndexOf("."));
 		song.name = song.name.replace(new RegExp("_", 'g'), " ");

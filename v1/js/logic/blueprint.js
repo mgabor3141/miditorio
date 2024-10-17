@@ -290,5 +290,10 @@ function getBlueprint() {
 
 	bpstring = encode(bp);
 
+	posthog?.capture('Generated blueprint', {
+		'Factorio Version': '1',
+		Blueprint: bpstring,
+	})
+
 	$("#bpoutput").val(bpstring);
 }
