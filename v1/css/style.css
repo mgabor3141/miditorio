@@ -402,3 +402,13 @@ select.form-control {
 	text-align: center;
 	padding-top: 5px;
 }
+
+.new-version {
+	background-image: linear-gradient(to bottom, #8c8c8c 0, #317575 100%);
+	color: #e6e6e6 !important;
+}
+
+.new-version:hover {
+	background-image: linear-gradient(to bottom, #bcbcbc 0, #1f9c9c 100%);
+	color: white !important;
+}
