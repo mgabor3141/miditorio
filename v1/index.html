@@ -23,11 +23,8 @@
 
   <script>
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
-    posthog.init('phc_j65NakqtzCDfUVsYYowBd1giKxo5QNGlIljmUZg1k5f',{api_host:'https://eu.i.posthog.com', person_profiles: 'identified_only' // or 'always' to create profiles for anonymous users as well
-        })
+    posthog.init('phc_j65NakqtzCDfUVsYYowBd1giKxo5QNGlIljmUZg1k5f',{api_host:'https://eu.i.posthog.com', person_profiles: 'never', persistence: 'memory' })
   </script>
-
-  <script src="lib/clipboard.min.js"></script>
 
   <link href="css/style.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Suez+One" rel="stylesheet">
@@ -45,41 +42,44 @@
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li><a href="/">Home</a></li>
+          <li><a href="/">Version 2</a></li>
+          <li class="active"><a href="#">Home</a></li>
           <li><a href="guide.html">Guide</a></li>
           <li><a href="addons.html">Addons</a></li>
-          <li class="active"><a href="#">About</a></li>
+          <li><a href="about.html">About</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <div class="container about" role="main">
-    <div class="page-header">
-      <h1>About</h1>
-    </div>
-    <p><span class='logo'>MIDItorio</span> version 1.0</p>
-    <p>Created by</p>
-    <h3><a href="https://www.reddit.com/message/compose?to=mgabor&subject=[MIDItorio]%20" target="_blank">mgabor</a></h3>
-    <p>Circuit designs by</p>
-    <h3><a href="https://www.reddit.com/message/compose?to=mentlerd&subject=[MIDItorio]%20" target="_blank">mentlerd</a></h3>
-    <div class="well">
-      <p>If you like what we do here, and would like to...</p>
-      <ul>
-        <li>Help out with hosting costs</li>
-        <li>Keep the site ad-free</li>
-        <li>Buy us a beer/coffee</li>
-      </ul>
-      <p>Please consider donating:</p>
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-        <input type="hidden" name="cmd" value="_s-xclick">
-        <input type="hidden" name="hosted_button_id" value="ZKFMQ9QW7DKUL">
-        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-        <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-      </form>
+  <div class="container" role="main">
+    <div class="well" id="graphics">
+      <div id="assembler"></div>
+      <div id="inserter"></div>
+      <div id="insertertake"></div>
+      <div id="droparea"></div>
+      <div id="tooltip">Drag a MIDI file into the Requester Chest to begin!</div>
+      <div id="bpbox" style="display: none; top: 220px; left: 390px; width: 160px;">
+        <input id="bpoutput" class="form-control" value="Blueprint" readonly>
+
+        <span>
+          <button class="btn btn-default">
+            <img id="clippy" src="assets/clippy.svg" width="16" alt="Copy to clipboard">
+            <img id="tick" src="assets/tick.svg" width="16" alt="Done">
+          </button>
+        </span>
+        <div class="clearfix"></div>
+      </div>
     </div>
 
-  </div>
+    <div class="well" id="settings" style="display: none;"></div>
+
+    <div class="alert alert-danger" role="alert" id="errorbox">
+      <strong>Error: </strong> <span id="errormsg"></span>
+    </div>
+  </div> <!-- /container -->
+
+  <input type="file" id="file" accept="audio/mid" />
 
   <!-- Bootstrap core JavaScript
   ================================================== -->
@@ -90,5 +90,27 @@
   <script src="lib/bootstrap/assets/js/docs.min.js"></script>
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <script src="lib/bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+  <!-- Libraries Used -->
+  <script src="lib/MIDIFile.js"></script>
+  <script src="lib/base64js.min.js"></script>
+  <script src="lib/pako.js"></script>
+  <script src="lib/jquery.spritely.js"></script>
+  <script src="lib/clipboard.min.js"></script>
+
+  <!-- MIDItorio Scripts -->
+  <script src="js/logic/data.js"></script>
+  <script src="js/logic/instrument.js"></script>
+  <script src="js/logic/track.js"></script>
+  <script src="js/logic/note.js"></script>
+  <script src="js/logic/song.js"></script>
+  <script src="js/logic/parse.js"></script>
+  <script src="js/logic/blueprint.js"></script>
+
+  <script src="js/ui/errorbox.js"></script>
+  <script src="js/ui/fileselection.js"></script>
+  <script src="js/ui/settings.js"></script>
+  <script src="js/ui/bpbox.js"></script>
+  <script src="js/ui/animations.js"></script>
 </body>
 </html>
