@@ -6,12 +6,10 @@ import {
 } from '@/app/lib/blueprint/blueprint'
 import { Song } from '@/app/components/select-stage'
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
-import {
-  FACTORIO_INSTRUMENT,
-  FactorioInstrument,
-} from '@/app/lib/factorio-instrument'
+import { getFactorioInstrument } from '@/app/lib/factorio-instrument'
 import { roundToNearestClusterCenter } from '@/app/lib/kmeans'
 import groupBy from 'lodash.groupby'
+import { FactorioInstrumentName } from '@/app/lib/data/factorio-instruments-by-id'
 
 type FactorioNote = number
 type Chord = FactorioNote[]
@@ -24,7 +22,7 @@ export type Speakers = Record<
   string,
   {
     chords: Chord[]
-    instrument: FactorioInstrument
+    instrumentName: FactorioInstrumentName
     volume: number
   }
 >
@@ -39,25 +37,27 @@ export const songToFactorioData = ({ midi, settings }: Song): Speakers => {
 
     if (!factorioInstrument) continue
 
+    const factorioInstrumentData = getFactorioInstrument(factorioInstrument)
+
     track.notes.forEach((note) => {
       const shiftedNote = (note.midi + octaveShift) as MidiNote
       const factorioNote =
-        factorioInstrument.noteToFactorioNote &&
-        factorioInstrument.noteToFactorioNote(shiftedNote)
+        factorioInstrumentData.noteToFactorioNote &&
+        factorioInstrumentData.noteToFactorioNote(shiftedNote)
 
       if (
-        factorioInstrument.isNoteValid &&
-        factorioInstrument.isNoteValid(shiftedNote) &&
+        factorioInstrumentData.isNoteValid &&
+        factorioInstrumentData.isNoteValid(shiftedNote) &&
         factorioNote
       ) {
         const { closestCenter, closestCenterNumber } =
           roundToNearestClusterCenter(note.velocity, velocityValues)
-        const factorioDataInstrumentId = `${factorioInstrument.name}_${closestCenterNumber}`
+        const factorioDataInstrumentId = `${factorioInstrumentData.name}_${closestCenterNumber}`
 
         if (!instrumentsAfterVelocity[factorioDataInstrumentId]) {
           instrumentsAfterVelocity[factorioDataInstrumentId] = {
             chords: [],
-            instrument: FACTORIO_INSTRUMENT[factorioInstrument.name],
+            instrumentName: factorioInstrument,
             volume: closestCenter,
           }
         }

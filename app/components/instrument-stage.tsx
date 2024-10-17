@@ -1,11 +1,15 @@
 import { PianoRoll } from '@/app/components/piano-roll'
 import React, { Dispatch, useEffect, useRef, useState } from 'react'
 import { Settings, Song } from '@/app/components/select-stage'
-import { FACTORIO_INSTRUMENT } from '@/app/lib/factorio-instrument'
+import {
+  getFactorioInstrument,
+  getFactorioInstrumentList,
+} from '@/app/lib/factorio-instrument'
 import { autoCluster, kMeansClustering } from '@/app/lib/kmeans'
 import { Histogram } from '@/app/components/histogram'
 import { Note } from '@tonejs/midi/dist/Note'
 import { noteToGmPercussion } from '@/app/lib/data/gm-percussion-note-names'
+import { FactorioInstrumentName } from '@/app/lib/data/factorio-instruments-by-id'
 
 export const getVelocityValues = (
   notes: Note[],
@@ -18,14 +22,12 @@ export const getVelocityValues = (
     // To do this, it tries every cluster number until the mean difference improvement
     //  is less than the threshold. Then groups that are too close together are merged.
     // The resulting number of groups is the target number for a final k-means clustering.
-    const clusters = autoCluster({
+    return autoCluster({
       data,
       meanDeviationDecreaseThreshold: 0.01,
       minimumGroupCenterDistance: 1 / 14,
       maxK: 16,
     }).centers.toSorted()
-
-    return clusters
   }
 
   return kMeansClustering(data, targetNumberOfClusters).centers.toSorted()
@@ -135,31 +137,42 @@ export const InstrumentStage = ({
                 <select
                   className="mx-4 text-black"
                   value={
-                    settings.tracks[selectedTrack].factorioInstrument?.name
+                    getFactorioInstrument(
+                      settings.tracks[selectedTrack].factorioInstrument,
+                    )?.name
                   }
                   onChange={({ currentTarget: { value } }) =>
                     onSettingsChanged((settings) => {
                       settings.tracks[selectedTrack].factorioInstrument =
-                        FACTORIO_INSTRUMENT[
-                          value as keyof typeof FACTORIO_INSTRUMENT
-                        ] ?? value
+                        value as FactorioInstrumentName
+
                       return settings
                     })
                   }
                 >
-                  {Object.keys(FACTORIO_INSTRUMENT).map((instrument) => (
-                    <option key={instrument} value={instrument}>
-                      {instrument}
-                    </option>
-                  ))}
+                  {Object.keys(getFactorioInstrumentList()).map(
+                    (instrument) => (
+                      <option key={instrument} value={instrument}>
+                        {instrument}
+                      </option>
+                    ),
+                  )}
                   <option key="none" value={undefined}>
                     [Mute]
                   </option>
                 </select>
                 Instrument range from{' '}
-                {settings.tracks[selectedTrack].factorioInstrument?.lowestNote}{' '}
+                {
+                  getFactorioInstrument(
+                    settings.tracks[selectedTrack].factorioInstrument,
+                  )?.lowestNote
+                }{' '}
                 to{' '}
-                {settings.tracks[selectedTrack].factorioInstrument?.highestNote}
+                {
+                  getFactorioInstrument(
+                    settings.tracks[selectedTrack].factorioInstrument,
+                  )?.highestNote
+                }
               </p>
               <p>
                 Note volumes
