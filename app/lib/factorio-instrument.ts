@@ -106,7 +106,7 @@ type FactorioInstrumentData = Record<FactorioInstrumentName, FactorioInstrument>
 /**
  * Note ranges are the actual note pitches which may differ from the in-game labels
  */
-export const FACTORIO_INSTRUMENT = (() => {
+export const getFactorioInstrumentList = () => {
   // prettier-ignore
   const rawInstrumentData: [FactorioInstrumentName, Partial<FactorioInstrument>, Pick<FactorioInstrument, 'volumeCorrection'>][] = [
     ["Piano",           noteRange('F2', 'E6'), sampleLoudness(-20.00) ], // In-game: F3-E7
@@ -153,58 +153,62 @@ export const FACTORIO_INSTRUMENT = (() => {
   }
 
   return instrumentData
-})()
+}
+
+export const getFactorioInstrument = ((
+  name?: FactorioInstrumentName,
+): FactorioInstrument | undefined => {
+  if (name !== undefined) return getFactorioInstrumentList()[name]
+  return undefined
+}) as {
+  (name: undefined): undefined
+  (name: FactorioInstrumentName): FactorioInstrument
+  (name?: FactorioInstrumentName): FactorioInstrument | undefined
+}
 
 export const toFactorioInstrument = (
   instrument: Instrument,
-): FactorioInstrument | undefined => {
-  if (instrument.percussion) return FACTORIO_INSTRUMENT['Drumkit']
+): FactorioInstrumentName | undefined => {
+  if (instrument.percussion) return 'Drumkit'
 
   switch (instrument.family as (typeof gmInstrumentFamilies)[number]) {
     case 'piano':
-      return FACTORIO_INSTRUMENT['Piano']
+      return 'Piano'
     case 'chromatic percussion':
-      if (instrument.name === 'vibraphone')
-        return FACTORIO_INSTRUMENT['Vibraphone']
-      if (instrument.name === 'celesta') return FACTORIO_INSTRUMENT['Celesta']
-      return FACTORIO_INSTRUMENT[
-        instrument.number % 2 ? 'Vibraphone' : 'Celesta'
-      ]
+      if (instrument.name === 'vibraphone') return 'Vibraphone'
+      if (instrument.name === 'celesta') return 'Celesta'
+      return instrument.number % 2 ? 'Vibraphone' : 'Celesta'
     case 'organ':
-      return FACTORIO_INSTRUMENT['Square']
+      return 'Square'
     case 'guitar':
-      return FACTORIO_INSTRUMENT['Sawtooth']
+      return 'Sawtooth'
     case 'bass':
-      return FACTORIO_INSTRUMENT['Bass']
+      return 'Bass'
     case 'strings':
-      if (instrument.name === 'pizzicato strings')
-        return FACTORIO_INSTRUMENT['Plucked strings']
-      return FACTORIO_INSTRUMENT['Lead']
+      if (instrument.name === 'pizzicato strings') return 'Plucked strings'
+      return 'Lead'
     case 'ensemble':
-      return FACTORIO_INSTRUMENT['Sawtooth']
+      return 'Sawtooth'
     case 'brass':
-      return FACTORIO_INSTRUMENT['Lead']
+      return 'Lead'
     case 'reed':
-      return FACTORIO_INSTRUMENT['Piano']
+      return 'Piano'
     case 'pipe':
-      return FACTORIO_INSTRUMENT['Piano']
+      return 'Piano'
     case 'synth lead':
-      if (instrument.name === 'lead 1 (square)')
-        return FACTORIO_INSTRUMENT['Square']
-      if (instrument.name === 'lead 2 (sawtooth)')
-        return FACTORIO_INSTRUMENT['Sawtooth']
-      if (instrument.name === 'lead 8 (bass + lead)')
-        return FACTORIO_INSTRUMENT['Bass']
-      return FACTORIO_INSTRUMENT['Sawtooth']
+      if (instrument.name === 'lead 1 (square)') return 'Square'
+      if (instrument.name === 'lead 2 (sawtooth)') return 'Sawtooth'
+      if (instrument.name === 'lead 8 (bass + lead)') return 'Bass'
+      return 'Sawtooth'
     case 'synth pad':
-      return FACTORIO_INSTRUMENT['Vibraphone']
+      return 'Vibraphone'
     case 'synth effects':
-      return FACTORIO_INSTRUMENT['Sawtooth']
+      return 'Sawtooth'
     case 'world':
-      return FACTORIO_INSTRUMENT['Piano']
+      return 'Piano'
     case 'percussive':
       // TODO
-      return FACTORIO_INSTRUMENT['Steel drum']
+      return 'Steel drum'
     case 'sound effects':
       return undefined
   }

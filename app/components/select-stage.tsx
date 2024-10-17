@@ -2,13 +2,11 @@ import { Dispatch, useEffect, useState } from 'react'
 import { useFilePicker } from 'use-file-picker'
 import { Midi } from '@tonejs/midi'
 import { Note } from '@tonejs/midi/dist/Note'
-import {
-  FactorioInstrument,
-  toFactorioInstrument,
-} from '@/app/lib/factorio-instrument'
+import { toFactorioInstrument } from '@/app/lib/factorio-instrument'
 import { capitalize } from '@/app/lib/utils'
 import { usePostHog } from 'posthog-js/react'
 import { getVelocityValues } from '@/app/components/instrument-stage'
+import { FactorioInstrumentName } from '@/app/lib/data/factorio-instruments-by-id'
 
 export type NoteExtremes = {
   min: number
@@ -17,7 +15,7 @@ export type NoteExtremes = {
 
 export type Settings = {
   tracks: {
-    factorioInstrument?: FactorioInstrument
+    factorioInstrument?: FactorioInstrumentName
     velocityValues: number[]
     octaveShift: number
   }[]
