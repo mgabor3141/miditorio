@@ -19,3 +19,7 @@ export const invert = <T extends Record<PropertyKey, PropertyKey>>(
 ): Invert<T> => Object.fromEntries(Object.entries(o).map(swap))
 
 export const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+export const localEntityNumberToAbsolute =
+  (entitiesSoFar: number) => (localEntityNumber: number) =>
+    entitiesSoFar + localEntityNumber

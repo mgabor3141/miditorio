@@ -1,4 +1,9 @@
-import { BlueprintResult, Signal, toBlueprint } from '@/app/lib/blueprint'
+import {
+  BlueprintResult,
+  CombinatorValuePair,
+  RawSignal,
+  toBlueprint,
+} from '@/app/lib/blueprint/blueprint'
 import { Song } from '@/app/components/select-stage'
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
 import {
@@ -15,7 +20,7 @@ type Chord = FactorioNote[]
  * This maps from a string ID with the following format:
  * `Name_velocityGroupNumber`, example `Piano_0`
  */
-export type FinalInstruments = Record<
+export type Speakers = Record<
   string,
   {
     chords: Chord[]
@@ -24,11 +29,8 @@ export type FinalInstruments = Record<
   }
 >
 
-export const songToFactorioData = ({
-  midi,
-  settings,
-}: Song): FinalInstruments => {
-  const instrumentsAfterVelocity: FinalInstruments = {}
+export const songToFactorioData = ({ midi, settings }: Song): Speakers => {
+  const instrumentsAfterVelocity: Speakers = {}
 
   for (const trackNumber in midi.tracks) {
     const track = midi.tracks[trackNumber]
@@ -82,7 +84,7 @@ export const songToFactorioData = ({
 
 export const songToFactorio = (
   song: Song,
-  signals: Signal[],
+  signals: RawSignal[],
 ): BlueprintResult => {
   const instruments = songToFactorioData(song)
 
@@ -92,7 +94,7 @@ export const songToFactorio = (
     noteValue: number
   }
   let instrumentNumber = 0
-  const instrumentsAfterChords: FinalInstruments = {}
+  const instrumentsAfterChords: Speakers = {}
   const events: Event[] = Object.values(instruments).flatMap((instrument) => {
     let maxNotesInChord = 0
 
@@ -120,12 +122,9 @@ export const songToFactorio = (
     return instrumentEvents
   })
 
-  console.log(`${events.length} events`)
-
   const eventsGroupedByTime = groupBy(events, ({ time }) => time)
 
-  const tickCombinatorValues = []
-  const dataCombinatorValues = []
+  const combinatorValues: CombinatorValuePair[] = []
   for (const eventGroupTime in eventsGroupedByTime) {
     const eventGroup = eventsGroupedByTime[eventGroupTime]
 
@@ -138,8 +137,6 @@ export const songToFactorio = (
     })
 
     while (evenTrackEvents.length > 0 || oddTrackEvents.length > 0) {
-      tickCombinatorValues.push(parseInt(eventGroupTime))
-
       let packedDataValue = 0
 
       if (evenTrackEvents.length > 0) {
@@ -153,14 +150,17 @@ export const songToFactorio = (
           (event.track << (6 + 8)) + (event.noteValue << (6 + 8 + 8))
       }
 
-      dataCombinatorValues.push(packedDataValue)
+      combinatorValues.push({
+        ticks: parseInt(eventGroupTime),
+        speakerData: packedDataValue,
+      })
     }
   }
 
   return toBlueprint({
-    tickCombinatorValues,
-    dataCombinatorValues,
-    instruments: instrumentsAfterChords,
-    signals,
+    song,
+    combinatorValues,
+    speakers: instrumentsAfterChords,
+    rawSignals: signals,
   })
 }

@@ -1031,6 +1031,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/json-stable-stringify@npm:^1":
+  version: 1.0.36
+  resolution: "@types/json-stable-stringify@npm:1.0.36"
+  checksum: 10c0/c2f0d0075bd04681d664a7ac4ef5078289b2f790f9737cd3457b5cc199d39df2efe132e04574ad5f89c9ae50096d44c9ca5ec4aebcd6005b969009f725dbcb79
+  languageName: node
+  linkType: hard
+
 "@types/json5@npm:^0.0.29":
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
@@ -3934,6 +3941,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-stable-stringify@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "json-stable-stringify@npm:1.1.1"
+  dependencies:
+    call-bind: "npm:^1.0.5"
+    isarray: "npm:^2.0.5"
+    jsonify: "npm:^0.0.1"
+    object-keys: "npm:^1.1.1"
+  checksum: 10c0/3801e3eeccbd030afb970f54bea690a079cfea7d9ed206a1b17ca9367f4b7772c764bf77a48f03e56b50e5f7ee7d11c52339fe20d8d7ccead003e4ca69e4cfde
+  languageName: node
+  linkType: hard
+
 "json5@npm:^1.0.2":
   version: 1.0.2
   resolution: "json5@npm:1.0.2"
@@ -3951,6 +3970,13 @@ __metadata:
   bin:
     json5: lib/cli.js
   checksum: 10c0/5a04eed94810fa55c5ea138b2f7a5c12b97c3750bc63d11e511dcecbfef758003861522a070c2272764ee0f4e3e323862f386945aeb5b85b87ee43f084ba586c
+  languageName: node
+  linkType: hard
+
+"jsonify@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "jsonify@npm:0.0.1"
+  checksum: 10c0/7f5499cdd59a0967ed35bda48b7cec43d850bbc8fb955cdd3a1717bb0efadbe300724d5646de765bb7a99fc1c3ab06eb80d93503c6faaf99b4ff50a3326692f6
   languageName: node
   linkType: hard
 
@@ -4147,6 +4173,7 @@ __metadata:
     "@spissvinkel/alea": "npm:^1.2.1"
     "@testing-library/react": "npm:^16.0.1"
     "@tonejs/midi": "npm:^2.0.28"
+    "@types/json-stable-stringify": "npm:^1"
     "@types/lodash.groupby": "npm:^4"
     "@types/node": "npm:^22.7.5"
     "@types/react": "npm:^18.3.11"
@@ -4159,6 +4186,7 @@ __metadata:
     eslint-config-next: "npm:^14.2.15"
     eslint-config-prettier: "npm:^9.1.0"
     jsdom: "npm:^25.0.1"
+    json-stable-stringify: "npm:^1.1.1"
     lodash.groupby: "npm:^4.6.0"
     next: "npm:^14.2.15"
     pixi.js: "npm:^8.4.1"

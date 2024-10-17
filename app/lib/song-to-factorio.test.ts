@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest'
+import { beforeEach, describe, test, vi } from 'vitest'
 import { songToFactorio, songToFactorioData } from '@/app/lib/song-to-factorio'
 import { Midi } from '@tonejs/midi'
 import { preprocessSong } from '@/app/components/select-stage'
@@ -6,6 +6,9 @@ import { readFile } from 'node:fs/promises'
 import { mkAlea } from '@spissvinkel/alea'
 import signals from '@/app/lib/data/signals.json'
 import * as utils from '@/app/lib/utils'
+import stringify from 'json-stable-stringify'
+
+const TEST_FILES = ['debussy-clair-de-lune.mid', 'bwv1013_04.mid']
 
 describe('Song to Factorio', () => {
   beforeEach(() => {
@@ -14,34 +17,43 @@ describe('Song to Factorio', () => {
     vi.spyOn(Math, 'random').mockImplementation(() => random())
   })
 
-  test('factorio data consistency', async () => {
-    const file = await readFile('test-data/debussy-clair-de-lune.mid')
+  test.sequential.for(TEST_FILES)(
+    'factorio data consistency - %s',
+    async (testFile, { expect }) => {
+      const file = await readFile(`test-data/${testFile}`)
 
-    const song = new Midi(file)
-    const processedSong = preprocessSong(song, 'file.mid')
+      const song = new Midi(file)
+      const processedSong = preprocessSong(song, testFile)
 
-    expect(songToFactorioData(processedSong)).toMatchSnapshot()
-  })
+      expect(songToFactorioData(processedSong)).toMatchSnapshot()
+    },
+  )
 
-  test('blueprint json consistency', async () => {
-    vi.spyOn(utils, 'encodeBlueprint').mockImplementation((json) =>
-      JSON.stringify(json, null, 2),
-    )
+  test.sequential.for(TEST_FILES)(
+    'blueprint json consistency - %s',
+    async (testFile, { expect }) => {
+      vi.spyOn(utils, 'encodeBlueprint').mockImplementation((json) =>
+        stringify(json, { space: 2 }),
+      )
 
-    const file = await readFile('test-data/debussy-clair-de-lune.mid')
+      const file = await readFile(`test-data/${testFile}`)
 
-    const song = new Midi(file)
-    const processedSong = preprocessSong(song, 'file.mid')
+      const song = new Midi(file)
+      const processedSong = preprocessSong(song, testFile)
 
-    expect(songToFactorio(processedSong, signals).blueprint).toMatchSnapshot()
-  })
+      expect(songToFactorio(processedSong, signals).blueprint).toMatchSnapshot()
+    },
+  )
 
-  test('final blueprint consistency', async () => {
-    const file = await readFile('test-data/debussy-clair-de-lune.mid')
+  test.sequential.for(TEST_FILES)(
+    'final blueprint consistency - %s',
+    async (testFile, { expect }) => {
+      const file = await readFile(`test-data/${testFile}`)
 
-    const song = new Midi(file)
-    const processedSong = preprocessSong(song, 'file.mid')
+      const song = new Midi(file)
+      const processedSong = preprocessSong(song, testFile)
 
-    expect(songToFactorio(processedSong, signals)).toMatchSnapshot()
-  })
+      expect(songToFactorio(processedSong, signals)).toMatchSnapshot()
+    },
+  )
 })
