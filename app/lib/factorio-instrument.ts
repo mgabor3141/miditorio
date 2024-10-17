@@ -109,15 +109,15 @@ type FactorioInstrumentData = Record<FactorioInstrumentName, FactorioInstrument>
 export const getFactorioInstrumentList = () => {
   // prettier-ignore
   const rawInstrumentData: [FactorioInstrumentName, Partial<FactorioInstrument>, Pick<FactorioInstrument, 'volumeCorrection'>][] = [
-    ["Piano",           noteRange('F2', 'E6'), sampleLoudness(-20.00) ], // In-game: F3-E7
-    ["Bass",            noteRange('F1', 'E4'), sampleLoudness(-18.00) ], // In-game: F2-E5
-    ["Lead",            noteRange('F2', 'E5'), sampleLoudness(-20.00) ],
-    ["Sawtooth",        noteRange('F1', 'E4'), sampleLoudness(-20.00) ], // In-game: F2-E5
-    ["Square",          noteRange('F2', 'E5'), sampleLoudness( -0.21) ],
     ["Celesta",         noteRange('F4', 'E7'), sampleLoudness(-10.61) ], // In-game: F5-E8
     ["Vibraphone",      noteRange('F3', 'E6'), sampleLoudness(-13.00) ], // In-game: F5-E8
     ["Plucked strings", noteRange('F3', 'E6'), sampleLoudness(- 8.02) ], // In-game: F4-E7
+    ["Piano",           noteRange('F2', 'E6'), sampleLoudness(-20.00) ], // In-game: F3-E7
+    ["Lead",            noteRange('F2', 'E5'), sampleLoudness(-20.00) ],
+    ["Square",          noteRange('F2', 'E5'), sampleLoudness( -0.21) ],
     ["Steel drum",      noteRange('F2', 'E5'), sampleLoudness(-17.00) ], // In-game: F3-E6
+    ["Bass",            noteRange('F1', 'E4'), sampleLoudness(-18.00) ], // In-game: F2-E5
+    ["Sawtooth",        noteRange('F1', 'E4'), sampleLoudness(-20.00) ], // In-game: F2-E5
   ]
 
   const instrumentData: FactorioInstrumentData = {
