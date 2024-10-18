@@ -144,6 +144,8 @@ export const midiToSong = (originalMidi: Midi, filename: string): Song => {
     (track) => track.notes.length && !track.instrument.percussion,
   )
 
+  midi.tracks.forEach((track) => (track.name = track.name.trim()))
+
   // Unify drum tracks
   const drumInstrument = originalMidi.tracks.find(
     (track) => track.instrument.percussion,

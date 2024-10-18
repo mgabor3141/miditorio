@@ -1,73 +1,446 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Clavi' 1`] = `3.998`;
+exports[`K-means > auto clustering bach.mid 1`] = `
+[
+  [
+    "Tempo",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "Fl",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+]
+`;
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Flute' 1`] = `3.013`;
+exports[`K-means > auto clustering hall.mid 1`] = `
+[
+  [
+    "Piano",
+    7.075,
+  ],
+  [
+    "",
+    6.689,
+  ],
+]
+`;
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Flute' 2`] = `1`;
+exports[`K-means > auto clustering lune.mid 1`] = `
+[
+  [
+    "Piano",
+    4.75,
+  ],
+]
+`;
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Fretless bass' 1`] = `3.919`;
+exports[`K-means > auto clustering sea.mid 1`] = `
+[
+  [
+    "FRETLESS",
+    2,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "STEEL DRUM",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "MUTED GTR",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "STEEL GTR",
+    2,
+  ],
+  [
+    "",
+    2,
+  ],
+  [
+    "MARIMBA",
+    2,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "PICCOLO",
+    3,
+  ],
+  [
+    "STRINGS",
+    2,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "FR.HORN",
+    2,
+  ],
+  [
+    "VOICE OOHS",
+    1,
+  ],
+  [
+    "SLAPBASS 1",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "MARIMBA",
+    3,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    2,
+  ],
+  [
+    "",
+    2,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    2,
+  ],
+  [
+    "FRETLESS",
+    2,
+  ],
+  [
+    "GS/RESET",
+    1,
+  ],
+]
+`;
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Lead 6 (voice)' 1`] = `2.197`;
-
-exports[`K-means > auto clustering 'Toto-africa' / 'Marimba' 1`] = `5.699`;
-
-exports[`K-means > auto clustering 'Toto-africa' / 'Marimba' 2`] = `3.999`;
-
-exports[`K-means > auto clustering 'Toto-africa' / 'Overdriven guitar' 1`] = `2.994`;
-
-exports[`K-means > auto clustering 'Toto-africa' / 'Percussion' 1`] = `6.924`;
-
-exports[`K-means > auto clustering 'Toto-africa' / 'Synthbrass 2' 1`] = `4.895`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'FR.HORN' 1`] = `2`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'FRETLESS' 1`] = `2`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'FRETLESS' 2`] = `2`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'MARIMBA' 1`] = `2`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'MARIMBA' 2`] = `3`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'MUTED GTR' 1`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'Orchestra hit' 1`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'Orchestral harp' 1`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'PICCOLO' 1`] = `3`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'Reed organ' 1`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'Reed organ' 2`] = `2`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'SLAPBASS 1' 1`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'STEEL DRUM' 1`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'STEEL GTR' 1`] = `2`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'STRINGS' 1`] = `2`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'Slap bass 1' 1`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'Slap bass 1' 2`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'Slap bass 1' 3`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'Steel drums' 1`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'String ensemble 1' 1`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'String ensemble 1' 2`] = `2`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'Tenor sax' 1`] = `2`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'Trumpet' 1`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'VOICE OOHS' 1`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'Vibraphone' 1`] = `1`;
-
-exports[`K-means > auto clustering 'Under The Sea' / 'Vibraphone' 2`] = `2`;
+exports[`K-means > auto clustering toto.mid 1`] = `
+[
+  [
+    "AFRICA  #",
+    1,
+  ],
+  [
+    "",
+    4.887,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    3.914,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    2.988,
+  ],
+  [
+    "vocals",
+    1,
+  ],
+  [
+    "",
+    2.184,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    5.788,
+  ],
+  [
+    "Flute (Bridge)",
+    1,
+  ],
+  [
+    "",
+    3.012,
+  ],
+  [
+    "Flute Harmony (Bridge)",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    3.998,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    4,
+  ],
+  [
+    "",
+    5.062,
+  ],
+  [
+    "B 0",
+    2,
+  ],
+  [
+    "F 1",
+    3,
+  ],
+  [
+    "G#1",
+    5.379,
+  ],
+  [
+    "B 2",
+    1,
+  ],
+  [
+    "C 3",
+    1,
+  ],
+  [
+    "C#3",
+    2.965,
+  ],
+  [
+    "D#3",
+    3.825,
+  ],
+  [
+    "G#3",
+    3,
+  ],
+  [
+    "E 4",
+    4.312,
+  ],
+  [
+    "D#5",
+    2,
+  ],
+  [
+    "E 5",
+    2,
+  ],
+  [
+    "F 5",
+    3,
+  ],
+  [
+    "G 5",
+    2,
+  ],
+  [
+    "A 5",
+    2,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    1,
+  ],
+]
+`;
