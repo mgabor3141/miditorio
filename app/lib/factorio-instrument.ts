@@ -162,8 +162,8 @@ export const getFactorioInstrumentList = () => {
     ["Lead",            noteRange('F2', 'E5'), sampleLoudness(-20.00) ],
     ["Square",          noteRange('F2', 'E5'), sampleLoudness( -0.21) ],
     ["Steel drum",      noteRange('F2', 'E5'), sampleLoudness(-17.00) ], // In-game: F3-E6
-    ["Bass",            noteRange('F1', 'E4'), sampleLoudness(-18.00) ], // In-game: F2-E5
-    ["Sawtooth",        noteRange('F1', 'E4'), sampleLoudness(-20.00) ], // In-game: F2-E5
+    ["Bass",            noteRange('F1', 'E4'), sampleLoudness(-19.00) ], // In-game: F2-E5
+    ["Sawtooth",        noteRange('F1', 'E4'), sampleLoudness(-19.00) ], // In-game: F2-E5
   ]
 
   const instrumentData: FactorioInstrumentData = {
