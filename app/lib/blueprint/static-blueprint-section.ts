@@ -1,8 +1,8 @@
 import { BlueprintSection } from '@/app/lib/blueprint/blueprint'
 import { Entity } from '@/app/lib/factorio-blueprint-schema'
 import { localEntityNumberToAbsolute } from '@/app/lib/utils'
-import { Song } from '@/app/components/select-stage'
 import packageJson from '@/package.json'
+import { Song } from '@/app/lib/song'
 
 export const getStaticBlueprintSection = (
   entitiesSoFar: number,

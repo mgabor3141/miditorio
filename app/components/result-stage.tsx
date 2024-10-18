@@ -1,9 +1,9 @@
 import { Dispatch, useCallback, useState } from 'react'
-import { Song } from '@/app/components/select-stage'
 import { songToFactorio } from '@/app/lib/song-to-factorio'
 import signals from '@/app/lib/data/signals.json'
 import signalsDlc from '@/app/lib/data/signals-dlc.json'
 import { usePostHog } from 'posthog-js/react'
+import { Song } from '@/app/lib/song'
 
 /**
  * @param text

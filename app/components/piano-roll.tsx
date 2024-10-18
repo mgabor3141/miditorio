@@ -9,8 +9,9 @@ import {
   Text,
   TextStyle,
 } from 'pixi.js'
-import { NoteExtremes, Settings } from '@/app/components/select-stage'
+import { Settings } from '@/app/components/select-stage'
 import { gmInstrumentFamilies } from '@/app/lib/data/gm-instrument-families'
+import { NoteExtremes } from '@/app/lib/song'
 
 const getTrackColor = (track: Track) => {
   const INSTRUMENT_FAMILY_BASE_COLOR: Partial<

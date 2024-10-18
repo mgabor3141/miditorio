@@ -21,3 +21,5 @@ export const signalToFactorioDrumSound = {
 } as const
 
 export const factorioDrumSoundToSignal = invert(signalToFactorioDrumSound)
+
+export type FactorioDrumSound = keyof typeof factorioDrumSoundToSignal

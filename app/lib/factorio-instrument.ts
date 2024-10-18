@@ -11,9 +11,40 @@ import {
   FactorioInstrumentName,
   factorioInstrumentNameToId,
 } from '@/app/lib/data/factorio-instruments-by-id'
-import { gmPercussionToFactorioDrumkit } from '@/app/lib/data/gm-percussion-to-factorio-drumkit'
-import { noteToGmPercussion } from '@/app/lib/data/gm-percussion-note-names'
 import { factorioDrumSoundToSignal } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
+import { defaultDrumMap, drumMapWithOverrides } from '@/app/lib/drum-map'
+import { NoteExtremes } from '@/app/lib/song'
+import { Settings, TrackSettings } from '@/app/components/select-stage'
+
+export type HigherOrLower = 'higher' | 'lower'
+
+export type FactorioNoteResult =
+  | {
+      valid: true
+      factorioNote: number
+    }
+  | {
+      valid: false
+      outOfRangeDirection?: HigherOrLower
+      factorioNote: undefined
+    }
+
+/**
+ * I can't seem to make this type from {@link FactorioNoteResult} or vice versa,
+ *  so it's a separate declaration
+ */
+export type FactorioNoteResultWithInstrument =
+  | {
+      valid: true
+      factorioNote: number
+      instrumentName: FactorioInstrumentName
+    }
+  | {
+      valid: false
+      outOfRangeDirection?: HigherOrLower
+      factorioNote: undefined
+      instrumentName: undefined
+    }
 
 export type FactorioInstrument = {
   /**
@@ -27,18 +58,14 @@ export type FactorioInstrument = {
   id: FactorioInstrumentId
 
   /**
-   * Check if MIDI note is valid and in range of the Factorio instrument
+   * Check if MIDI note is valid and in range of the Factorio instrument.
+   * If so, return the note. If not, return which direction it is from the range.
    */
-  isNoteValid: (midiNote: MidiNote | Note) => {
-    valid: boolean
-    outOfRangeDirection?: 'above' | 'below'
-  }
-
-  /**
-   * Convert MIDI note to the Factorio instrument note value
-   * that can be sent on the circuit signal
-   */
-  noteToFactorioNote: (midiNote: MidiNote | Note) => number | undefined
+  noteToFactorioNote: (
+    midiNote: MidiNote | Note,
+    settings: TrackSettings,
+    globalSettings: Omit<Settings, 'tracks'>,
+  ) => FactorioNoteResult
 
   /**
    * Some instruments are louder than others at max volume.
@@ -47,40 +74,59 @@ export type FactorioInstrument = {
   volumeCorrection: number
 
   /**
-   * The lowest note that the instrument can play
+   * The lowest and highest notes that the instrument can play
    */
-  lowestNote?: MidiNote
-
-  /**
-   * The highest note that the instrument can play
-   */
-  highestNote?: MidiNote
+  noteExtremes?: NoteExtremes
 }
 
 const noteRange = (
-  lowestPlayableNote: MidiNote | NoteString,
-  highestPlayableNote: MidiNote | NoteString,
-): Pick<FactorioInstrument, 'isNoteValid' | 'noteToFactorioNote'> &
+  lowest: MidiNote | NoteString,
+  highest: MidiNote | NoteString,
+): Pick<FactorioInstrument, 'noteToFactorioNote'> &
   Partial<FactorioInstrument> => {
-  const lowestNote = Frequency(lowestPlayableNote).toMidi() as MidiNote
-  const highestNote = Frequency(highestPlayableNote).toMidi() as MidiNote
+  const lowestPlayableNote = Frequency(lowest).toMidi() as MidiNote
+  const highestPlayableNote = Frequency(highest).toMidi() as MidiNote
 
   return {
-    isNoteValid: (midiNote: MidiNote | Note) => {
-      const note = Number(midiNote)
+    noteToFactorioNote: (
+      note: MidiNote | Note,
+      { octaveShift },
+      { globalNoteShift },
+    ) => {
+      note =
+        typeof note === 'object' && 'midi' in note
+          ? (note.midi as MidiNote)
+          : note
+
+      const lowestFactorioNote = 1
+      const highestFactorioNote =
+        highestPlayableNote - lowestPlayableNote + lowestFactorioNote
+
+      note =
+        Number(note) -
+        lowestPlayableNote +
+        octaveShift * 12 +
+        globalNoteShift +
+        lowestFactorioNote
+
+      if (lowestFactorioNote <= note && note <= highestFactorioNote)
+        return {
+          valid: true,
+          factorioNote: note,
+        }
+
       return {
-        valid: note <= lowestNote && note >= highestNote,
+        valid: false,
         outOfRangeDirection:
-          (note > highestNote && 'above') ||
-          (note < lowestNote && 'below') ||
+          (note < lowestFactorioNote && 'lower') ||
+          (highestFactorioNote < note && 'higher') ||
           undefined,
       }
     },
-    // Factorio note signals are "indexed" from 1
-    noteToFactorioNote: (note: MidiNote | Note) =>
-      Number(note) - lowestNote + 1,
-    lowestNote: lowestNote,
-    highestNote: highestNote,
+    noteExtremes: {
+      min: lowestPlayableNote,
+      max: highestPlayableNote,
+    },
   }
 }
 
@@ -136,19 +182,20 @@ export const getFactorioInstrumentList = () => {
     Drumkit: {
       name: 'Drumkit',
       id: '2',
-      isNoteValid: () => ({ valid: true }),
-      noteToFactorioNote: (note) => {
-        const factorioSound =
-          gmPercussionToFactorioDrumkit[
-            noteToGmPercussion[
-              note.toString() as keyof typeof noteToGmPercussion
-            ]
-          ]
-
-        if (!factorioSound) return undefined
-        return parseInt(factorioDrumSoundToSignal[factorioSound])
-      },
       volumeCorrection: 0.9,
+      noteToFactorioNote: (note, { drumMapOverrides }) => {
+        const drumMap = drumMapWithOverrides(defaultDrumMap, drumMapOverrides)
+        const factorioSound = drumMap(note as MidiNote)
+
+        if (!factorioSound)
+          return {
+            valid: false,
+          }
+        return {
+          valid: true,
+          factorioNote: parseInt(factorioDrumSoundToSignal[factorioSound]),
+        }
+      },
     },
   }
 

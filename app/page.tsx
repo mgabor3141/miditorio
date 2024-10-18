@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { SelectStage, Song } from './components/select-stage'
+import { SelectStage } from './components/select-stage'
 import { InstrumentStage } from '@/app/components/instrument-stage'
 import { ResultStage } from '@/app/components/result-stage'
+import { Song } from '@/app/lib/song'
 
 export type Stage = 'select' | 'instrument' | 'result'
 

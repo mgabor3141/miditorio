@@ -4,12 +4,10 @@ import {
   RawSignal,
   toBlueprint,
 } from '@/app/lib/blueprint/blueprint'
-import { Song } from '@/app/components/select-stage'
-import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
-import { getFactorioInstrument } from '@/app/lib/factorio-instrument'
 import { roundToNearestClusterCenter } from '@/app/lib/kmeans'
 import groupBy from 'lodash.groupby'
 import { FactorioInstrumentName } from '@/app/lib/data/factorio-instruments-by-id'
+import { noteToFactorioNote, Song } from '@/app/lib/song'
 
 type FactorioNote = number
 type Chord = FactorioNote[]
@@ -32,37 +30,37 @@ export const songToFactorioData = ({ midi, settings }: Song): Speakers => {
 
   for (const trackNumber in midi.tracks) {
     const track = midi.tracks[trackNumber]
-    const { factorioInstrument, octaveShift, velocityValues } =
-      settings.tracks[trackNumber]
+    const trackSettings = settings.tracks[trackNumber]
 
-    if (!factorioInstrument) continue
+    track.notes.forEach((midiNote) => {
+      const { valid, factorioNote, instrumentName } = noteToFactorioNote(
+        midiNote,
+        trackSettings,
+        settings,
+      )
 
-    const factorioInstrumentData = getFactorioInstrument(factorioInstrument)
-
-    track.notes.forEach((note) => {
-      const shiftedNote = (note.midi + octaveShift) as MidiNote
-      const factorioNote =
-        factorioInstrumentData.noteToFactorioNote &&
-        factorioInstrumentData.noteToFactorioNote(shiftedNote)
-
-      if (
-        factorioInstrumentData.isNoteValid &&
-        factorioInstrumentData.isNoteValid(shiftedNote) &&
-        factorioNote
-      ) {
-        const { closestCenter, closestCenterNumber } =
-          roundToNearestClusterCenter(note.velocity, velocityValues)
-        const factorioDataInstrumentId = `${factorioInstrumentData.name}_${closestCenterNumber}`
+      if (valid) {
+        const {
+          closestCenter: volume,
+          closestCenterNumber: volumeGroupNumber,
+        } = roundToNearestClusterCenter(
+          midiNote.velocity,
+          trackSettings.velocityValues,
+        )
+        const factorioDataInstrumentId = `${instrumentName}_${volumeGroupNumber}`
 
         if (!instrumentsAfterVelocity[factorioDataInstrumentId]) {
           instrumentsAfterVelocity[factorioDataInstrumentId] = {
             chords: [],
-            instrumentName: factorioInstrument,
-            volume: closestCenter,
+            instrumentName,
+            volume,
           }
         }
 
-        const factorioTick = Math.round(note.time * 60) + 10 // Seconds to 1/60 sec tick
+        const START_OF_SONG_TICKS_MARGIN = 10
+        const factorioTick =
+          Math.round(midiNote.time * 60 * settings.speedMultiplier) + // Seconds to 1/60 sec tick
+          START_OF_SONG_TICKS_MARGIN
         if (
           !instrumentsAfterVelocity[factorioDataInstrumentId].chords[
             factorioTick
