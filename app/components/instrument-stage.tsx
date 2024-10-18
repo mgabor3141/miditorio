@@ -1,6 +1,6 @@
 import { PianoRoll } from '@/app/components/piano-roll'
 import React, { Dispatch, useEffect, useRef, useState } from 'react'
-import { Settings, Song } from '@/app/components/select-stage'
+import { Settings } from '@/app/components/select-stage'
 import {
   getFactorioInstrument,
   getFactorioInstrumentList,
@@ -10,6 +10,9 @@ import { Histogram } from '@/app/components/histogram'
 import { Note } from '@tonejs/midi/dist/Note'
 import { noteToGmPercussion } from '@/app/lib/data/gm-percussion-note-names'
 import { FactorioInstrumentName } from '@/app/lib/data/factorio-instruments-by-id'
+import { factorioDrumSoundToSignal } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
+import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
+import { getOutOfRangeNotes, noteExtremesToString, Song } from '@/app/lib/song'
 
 export const getVelocityValues = (
   notes: Note[],
@@ -122,121 +125,236 @@ export const InstrumentStage = ({
               height={600}
             />
           </div>
-          {selectedTrack !== undefined && (
-            <div className="panel-inset">
-              <div className="flex items-baseline gap-4">
-                <h3>{midi.tracks[selectedTrack].name}</h3>
-                <p className="smaller">
-                  {midi.tracks[selectedTrack].notes.length} notes from{' '}
-                  {trackExtremes[selectedTrack].min} to{' '}
-                  {trackExtremes[selectedTrack].max}
-                </p>
-              </div>
-              <p>
-                Factorio Instrument
-                <select
-                  className="mx-4 text-black"
-                  value={
-                    getFactorioInstrument(
-                      settings.tracks[selectedTrack].factorioInstrument,
-                    )?.name
-                  }
-                  onChange={({ currentTarget: { value } }) =>
-                    onSettingsChanged((settings) => {
-                      settings.tracks[selectedTrack].factorioInstrument =
-                        value as FactorioInstrumentName
+          {selectedTrack !== undefined &&
+            (() => {
+              const track = midi.tracks[selectedTrack]
+              const trackSettings = settings.tracks[selectedTrack]
+              const trackInstruments = trackSettings.factorioInstruments.map(
+                getFactorioInstrument,
+              )
 
-                      return settings
-                    })
-                  }
-                >
-                  {Object.keys(getFactorioInstrumentList()).map(
-                    (instrument) => (
-                      <option key={instrument} value={instrument}>
-                        {instrument}
-                      </option>
-                    ),
-                  )}
-                  <option key="none" value={undefined}>
-                    [Mute]
-                  </option>
-                </select>
-                Instrument range from{' '}
-                {
-                  getFactorioInstrument(
-                    settings.tracks[selectedTrack].factorioInstrument,
-                  )?.lowestNote
-                }{' '}
-                to{' '}
-                {
-                  getFactorioInstrument(
-                    settings.tracks[selectedTrack].factorioInstrument,
-                  )?.highestNote
-                }
-              </p>
-              <p>
-                Note volumes
-                <input
-                  type="number"
-                  className="ml-4"
-                  value={settings.tracks[selectedTrack].velocityValues.length}
-                  onInput={({ currentTarget: { value } }) =>
-                    onSettingsChanged((settings) => {
-                      settings.tracks[selectedTrack].velocityValues =
-                        getVelocityValues(
-                          midi.tracks[selectedTrack].notes,
-                          Number(value),
+              return (
+                <div className="panel-inset">
+                  <div className="flex items-baseline gap-4">
+                    <h2>{track.name}</h2>
+                    <p className="smaller">
+                      {track.notes.length} notes
+                      {!track.instrument.percussion && (
+                        <span>
+                          {' '}
+                          {noteExtremesToString(trackExtremes[selectedTrack])}
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                  {!track.instrument.percussion && (
+                    <>
+                      <h4>Configure pitch and instrument</h4>
+                      <p>
+                        Octave shift{' '}
+                        <input
+                          type="number"
+                          className="mx-4"
+                          value={trackSettings.octaveShift}
+                          onInput={({ currentTarget: { value } }) =>
+                            onSettingsChanged((settings) => {
+                              trackSettings.octaveShift = Number(value)
+
+                              return settings
+                            })
+                          }
+                          min={-16}
+                          max={16}
+                        />
+                        {trackSettings.octaveShift !== 0 &&
+                          `Shifted range: ` +
+                            noteExtremesToString({
+                              min:
+                                trackExtremes[selectedTrack].min +
+                                trackSettings.octaveShift * 12,
+                              max:
+                                trackExtremes[selectedTrack].max +
+                                trackSettings.octaveShift * 12,
+                            })}
+                      </p>
+                      {trackInstruments.map(
+                        (trackInstrument, instrumentNumber) => (
+                          <p key={instrumentNumber}>
+                            Factorio Instrument
+                            <select
+                              className="mx-4 text-black"
+                              value={trackInstrument?.name}
+                              onChange={({ currentTarget: { value } }) =>
+                                onSettingsChanged((settings) => {
+                                  settings.tracks[
+                                    selectedTrack
+                                  ].factorioInstruments[instrumentNumber] =
+                                    value as FactorioInstrumentName
+
+                                  return settings
+                                })
+                              }
+                            >
+                              {(
+                                Object.keys(
+                                  getFactorioInstrumentList(),
+                                ) as FactorioInstrumentName[]
+                              )
+                                .filter(
+                                  (instrumentName) =>
+                                    instrumentName !== 'Drumkit',
+                                )
+                                .map((instrument) => (
+                                  <option key={instrument} value={instrument}>
+                                    [
+                                    {noteExtremesToString(
+                                      getFactorioInstrument(instrument)
+                                        ?.noteExtremes,
+                                    )}
+                                    ] {instrument}
+                                  </option>
+                                ))}
+                              <option key="none" value={undefined}>
+                                None
+                              </option>
+                            </select>
+                          </p>
+                        ),
+                      )}
+
+                      {(() => {
+                        const outOfRangeNotes = getOutOfRangeNotes(
+                          track.notes,
+                          trackSettings,
+                          settings,
                         )
 
-                      return settings
-                    })
-                  }
-                  min={1}
-                  max={16}
-                />
-              </p>
+                        return outOfRangeNotes.higher ||
+                          outOfRangeNotes.lower ? (
+                          <p>
+                            {(['higher', 'lower'] as const)
+                              .flatMap((higherOrLower) => {
+                                const n = outOfRangeNotes[higherOrLower]
+                                return n
+                                  ? [
+                                      `${n} notes are ${higherOrLower} ${higherOrLower === 'higher' ? '↥' : '↧'}`,
+                                    ]
+                                  : []
+                              })
+                              .join(', ')}{' '}
+                            than the selected instruments&apos; range and will
+                            not play.
+                          </p>
+                        ) : (
+                          ''
+                        )
+                      })()}
+                    </>
+                  )}
+                  <h4>Configure dynamics</h4>
+                  <p>
+                    Note volumes
+                    <input
+                      type="number"
+                      className="ml-4"
+                      value={trackSettings.velocityValues.length}
+                      onInput={({ currentTarget: { value } }) =>
+                        onSettingsChanged((settings) => {
+                          trackSettings.velocityValues = getVelocityValues(
+                            track.notes,
+                            Number(value),
+                          )
 
-              <div className="panel-inset !bg-[#0E0E0E] w-[400px] box-content">
-                <Histogram
-                  data={Object.entries(
-                    midi.tracks[selectedTrack].notes.reduce(
-                      (acc, note) => {
-                        acc[note.velocity] = (acc[note.velocity] || 0) + 1
-                        return acc
-                      },
-                      {} as Record<string, number>,
-                    ),
-                  ).toSorted(([a], [b]) => Number(a) - Number(b))}
-                  clusterCenters={settings.tracks[selectedTrack].velocityValues}
-                  width={400}
-                  height={150}
-                />
-              </div>
-              {midi.tracks[selectedTrack].instrument.percussion && (
-                <div>
-                  <h3>Drum sounds</h3>
-                  {Object.entries(
-                    midi.tracks[selectedTrack].notes.reduce(
-                      (acc, note) => ({
-                        ...acc,
-                        [note.midi]: (acc[note.midi] || 0) + 1,
-                      }),
-                      {} as Record<string, number>,
-                    ),
-                  )
-                    .toSorted(
-                      ([_a, frequency], [_b, otherFrequency]) =>
-                        otherFrequency - frequency,
-                    )
-                    .map(([note, frequency]) => (
-                      <p key={note}>
-                        {frequency} - {noteToGmPercussion[note as never]}
-                      </p>
-                    ))}
+                          return settings
+                        })
+                      }
+                      min={1}
+                      max={16}
+                    />
+                  </p>
+
+                  <div className="panel-inset !bg-[#0E0E0E] w-[400px] box-content">
+                    <Histogram
+                      data={Object.entries(
+                        track.notes.reduce(
+                          (acc, note) => {
+                            acc[note.velocity] = (acc[note.velocity] || 0) + 1
+                            return acc
+                          },
+                          {} as Record<string, number>,
+                        ),
+                      ).toSorted(([a], [b]) => Number(a) - Number(b))}
+                      clusterCenters={trackSettings.velocityValues}
+                      width={400}
+                      height={150}
+                    />
+                  </div>
+                  {track.instrument.percussion && (
+                    <div>
+                      <h4>Configure drum sounds</h4>
+                      {Object.entries(
+                        track.notes.reduce(
+                          (acc, note) => ({
+                            ...acc,
+                            [note.midi]: (acc[note.midi] || 0) + 1,
+                          }),
+                          {} as Record<string, number>,
+                        ),
+                      )
+                        .toSorted(
+                          ([_a, frequency], [_b, otherFrequency]) =>
+                            otherFrequency - frequency,
+                        )
+                        .map(([note, numberOfOccurrences]) => (
+                          <p key={note}>
+                            {numberOfOccurrences}{' '}
+                            {numberOfOccurrences === 1 ? 'note' : 'notes'}
+                            {': - '}
+                            {noteToGmPercussion[
+                              note as keyof typeof noteToGmPercussion
+                            ] || `MIDI note #${note}`}
+                            <select
+                              className="mx-4 text-black"
+                              value={
+                                // Special case for drums, should be exactly 1 instrument
+                                trackInstruments[0]?.noteToFactorioNote(
+                                  Number(note) as MidiNote,
+                                  trackSettings,
+                                  settings,
+                                ).factorioNote
+                              }
+                              onChange={({ currentTarget: { value } }) =>
+                                onSettingsChanged((settings) => {
+                                  if (!trackSettings.drumMapOverrides)
+                                    trackSettings.drumMapOverrides = {}
+
+                                  trackSettings.drumMapOverrides[note] =
+                                    value as keyof typeof factorioDrumSoundToSignal
+
+                                  settings.tracks[selectedTrack] = trackSettings
+
+                                  return settings
+                                })
+                              }
+                            >
+                              {Object.keys(factorioDrumSoundToSignal).map(
+                                (drumSound) => (
+                                  <option key={drumSound} value={drumSound}>
+                                    {drumSound}
+                                  </option>
+                                ),
+                              )}
+                              <option key="none" value={undefined}>
+                                None
+                              </option>
+                            </select>
+                          </p>
+                        ))}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          )}
+              )
+            })()}
         </div>
       </div>
     </div>

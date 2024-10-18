@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="localhost:3000" type="JavascriptDebugType" nameIsGenerated="true" uri="http://localhost:3000" useFirstLineBreakpoints="true">
+  <configuration default="false" name="localhost:3000" type="JavascriptDebugType" nameIsGenerated="true" uri="http://localhost:3000">
     <method v="2" />
   </configuration>
 </component>
