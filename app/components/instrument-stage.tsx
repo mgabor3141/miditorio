@@ -10,7 +10,10 @@ import { Histogram } from '@/app/components/histogram'
 import { Note } from '@tonejs/midi/dist/Note'
 import { noteToGmPercussion } from '@/app/lib/data/gm-percussion-note-names'
 import { FactorioInstrumentName } from '@/app/lib/data/factorio-instruments-by-id'
-import { factorioDrumSoundToSignal } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
+import {
+  FactorioDrumSound,
+  factorioDrumSoundToSignal,
+} from '@/app/lib/data/factorio-drumkit-sounds-by-id'
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
 import { getOutOfRangeNotes, noteExtremesToString, Song } from '@/app/lib/song'
 
@@ -40,7 +43,7 @@ export type InstrumentStageProps = {
   song: Song
   onBack: Dispatch<void>
   onContinue: Dispatch<void>
-  onSettingsChanged: Dispatch<(settings: Settings) => Settings>
+  onSettingsChanged: Dispatch<Settings>
   className?: string
 }
 export const InstrumentStage = ({
@@ -132,6 +135,7 @@ export const InstrumentStage = ({
               const trackInstruments = trackSettings.factorioInstruments.map(
                 getFactorioInstrument,
               )
+              const NONE = 'None'
 
               return (
                 <div className="panel-inset">
@@ -149,20 +153,17 @@ export const InstrumentStage = ({
                   </div>
                   {!track.instrument.percussion && (
                     <>
-                      <h4>Configure pitch and instrument</h4>
+                      <h4>Configure pitch and instruments</h4>
                       <p>
-                        Octave shift{' '}
+                        Shift notes by octaves{' '}
                         <input
                           type="number"
                           className="mx-4"
                           value={trackSettings.octaveShift}
-                          onInput={({ currentTarget: { value } }) =>
-                            onSettingsChanged((settings) => {
-                              trackSettings.octaveShift = Number(value)
-
-                              return settings
-                            })
-                          }
+                          onInput={({ currentTarget: { value } }) => {
+                            trackSettings.octaveShift = Number(value)
+                            onSettingsChanged(settings)
+                          }}
                           min={-16}
                           max={16}
                         />
@@ -183,27 +184,45 @@ export const InstrumentStage = ({
                             Factorio Instrument
                             <select
                               className="mx-4 text-black"
-                              value={trackInstrument?.name}
-                              onChange={({ currentTarget: { value } }) =>
-                                onSettingsChanged((settings) => {
-                                  settings.tracks[
-                                    selectedTrack
-                                  ].factorioInstruments[instrumentNumber] =
-                                    value as FactorioInstrumentName
+                              value={trackInstrument?.name || NONE}
+                              onChange={({ currentTarget: { value } }) => {
+                                if (value === NONE) {
+                                  trackSettings.factorioInstruments =
+                                    trackSettings.factorioInstruments.slice(
+                                      0,
+                                      instrumentNumber,
+                                    )
 
-                                  return settings
-                                })
-                              }
+                                  if (
+                                    trackSettings.factorioInstruments.length ===
+                                    0
+                                  )
+                                    trackSettings.factorioInstruments = [
+                                      undefined,
+                                    ]
+                                } else {
+                                  trackSettings.factorioInstruments[
+                                    instrumentNumber
+                                  ] = value as FactorioInstrumentName
+                                }
+
+                                onSettingsChanged(settings)
+                              }}
                             >
                               {(
                                 Object.keys(
                                   getFactorioInstrumentList(),
                                 ) as FactorioInstrumentName[]
                               )
-                                .filter(
-                                  (instrumentName) =>
-                                    instrumentName !== 'Drumkit',
-                                )
+                                .filter((instrumentName) => {
+                                  if (instrumentName === trackInstrument?.name)
+                                    return true
+
+                                  return ![
+                                    'Drumkit',
+                                    ...trackSettings.factorioInstruments,
+                                  ].includes(instrumentName)
+                                })
                                 .map((instrument) => (
                                   <option key={instrument} value={instrument}>
                                     [
@@ -214,8 +233,8 @@ export const InstrumentStage = ({
                                     ] {instrument}
                                   </option>
                                 ))}
-                              <option key="none" value={undefined}>
-                                None
+                              <option key={NONE} value={NONE}>
+                                {NONE}
                               </option>
                             </select>
                           </p>
@@ -231,20 +250,47 @@ export const InstrumentStage = ({
 
                         return outOfRangeNotes.higher ||
                           outOfRangeNotes.lower ? (
-                          <p>
-                            {(['higher', 'lower'] as const)
-                              .flatMap((higherOrLower) => {
-                                const n = outOfRangeNotes[higherOrLower]
-                                return n
-                                  ? [
-                                      `${n} notes are ${higherOrLower} ${higherOrLower === 'higher' ? '↥' : '↧'}`,
-                                    ]
-                                  : []
-                              })
-                              .join(', ')}{' '}
-                            than the selected instruments&apos; range and will
-                            not play.
-                          </p>
+                          <>
+                            <p>
+                              <button
+                                className="button"
+                                onClick={() => {
+                                  settings.tracks[
+                                    selectedTrack
+                                  ].factorioInstruments = [
+                                    ...settings.tracks[selectedTrack]
+                                      .factorioInstruments,
+                                    undefined,
+                                  ]
+                                  onSettingsChanged(settings)
+                                }}
+                              >
+                                Add instrument
+                              </button>
+                            </p>
+                            <p>
+                              {(['higher', 'lower'] as const)
+                                .flatMap((higherOrLower) => {
+                                  const n = outOfRangeNotes[higherOrLower]
+                                  return n
+                                    ? [
+                                        `${higherOrLower === 'higher' ? '↥' : '↧'} ${n} notes are ${higherOrLower}`,
+                                      ]
+                                    : []
+                                })
+                                .map((str, i, array) => (
+                                  <>
+                                    {str}
+                                    {i === 0 && array.length === 2 && (
+                                      <>
+                                        ,<br />
+                                      </>
+                                    )}
+                                  </>
+                                ))}{' '}
+                              than what the selected instruments can play.
+                            </p>
+                          </>
                         ) : (
                           ''
                         )
@@ -258,16 +304,13 @@ export const InstrumentStage = ({
                       type="number"
                       className="ml-4"
                       value={trackSettings.velocityValues.length}
-                      onInput={({ currentTarget: { value } }) =>
-                        onSettingsChanged((settings) => {
-                          trackSettings.velocityValues = getVelocityValues(
-                            track.notes,
-                            Number(value),
-                          )
-
-                          return settings
-                        })
-                      }
+                      onInput={({ currentTarget: { value } }) => {
+                        trackSettings.velocityValues = getVelocityValues(
+                          track.notes,
+                          Number(value),
+                        )
+                        onSettingsChanged(settings)
+                      }}
                       min={1}
                       max={16}
                     />
@@ -321,31 +364,32 @@ export const InstrumentStage = ({
                                   Number(note) as MidiNote,
                                   trackSettings,
                                   settings,
-                                ).factorioNote
+                                ).factorioNote || NONE
                               }
-                              onChange={({ currentTarget: { value } }) =>
-                                onSettingsChanged((settings) => {
-                                  if (!trackSettings.drumMapOverrides)
-                                    trackSettings.drumMapOverrides = {}
+                              onChange={({ currentTarget: { value } }) => {
+                                if (!trackSettings.drumMapOverrides)
+                                  trackSettings.drumMapOverrides = {}
 
-                                  trackSettings.drumMapOverrides[note] =
-                                    value as keyof typeof factorioDrumSoundToSignal
+                                trackSettings.drumMapOverrides[note] =
+                                  value === NONE
+                                    ? undefined
+                                    : (value as FactorioDrumSound)
 
-                                  settings.tracks[selectedTrack] = trackSettings
-
-                                  return settings
-                                })
-                              }
+                                onSettingsChanged(settings)
+                              }}
                             >
-                              {Object.keys(factorioDrumSoundToSignal).map(
-                                (drumSound) => (
-                                  <option key={drumSound} value={drumSound}>
+                              {Object.entries(factorioDrumSoundToSignal).map(
+                                ([drumSound, factorioNote]) => (
+                                  <option
+                                    key={factorioNote}
+                                    value={factorioNote}
+                                  >
                                     {drumSound}
                                   </option>
                                 ),
                               )}
-                              <option key="none" value={undefined}>
-                                None
+                              <option key={NONE} value={NONE}>
+                                {NONE}
                               </option>
                             </select>
                           </p>

@@ -5,7 +5,7 @@ import { noteToGmPercussion } from '@/app/lib/data/gm-percussion-note-names'
 
 export type DrumMap = (note: MidiNote) => FactorioDrumSound | undefined
 
-export type DrumMapOverrides = Record<string, FactorioDrumSound>
+export type DrumMapOverrides = Record<string, FactorioDrumSound | undefined>
 
 export const drumMapWithOverrides =
   (drumMap: DrumMap, overrides?: DrumMapOverrides): DrumMap =>
