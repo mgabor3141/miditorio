@@ -1,0 +1,1793 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 11,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "factorioNote": 12,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "factorioNote": 11,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "factorioNote": 35,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "factorioNote": 12,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "factorioNote": 36,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "factorioNote": 23,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "factorioNote": 47,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "factorioNote": 24,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, -1 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "factorioNote": 48,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 12,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "factorioNote": 13,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "factorioNote": 12,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "factorioNote": 36,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "factorioNote": 13,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "factorioNote": 37,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "factorioNote": 24,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "factorioNote": 48,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "factorioNote": 25,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 0 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 13,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "factorioNote": 14,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "factorioNote": 13,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "factorioNote": 37,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "factorioNote": 14,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "factorioNote": 38,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "factorioNote": 25,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "factorioNote": 26,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 1 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 14,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "factorioNote": 15,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "factorioNote": 14,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "factorioNote": 38,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "factorioNote": 15,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "factorioNote": 39,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "factorioNote": 26,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "factorioNote": 27,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > -1 octaveShift, 2 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 23,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "factorioNote": 24,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "factorioNote": 23,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "factorioNote": 47,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "factorioNote": 24,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "factorioNote": 48,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "factorioNote": 35,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "factorioNote": 36,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, -1 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "factorioNote": 1,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 24,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "factorioNote": 1,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "factorioNote": 25,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "factorioNote": 24,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "factorioNote": 48,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "factorioNote": 25,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "factorioNote": 36,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 0 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "factorioNote": 1,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "factorioNote": 2,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "factorioNote": 1,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 25,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "factorioNote": 2,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "factorioNote": 26,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "factorioNote": 25,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "factorioNote": 26,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 1 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "factorioNote": 2,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "factorioNote": 3,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "factorioNote": 2,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 26,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "factorioNote": 3,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "factorioNote": 27,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "factorioNote": 26,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "factorioNote": 27,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 0 octaveShift, 2 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "factorioNote": 11,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "factorioNote": 12,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "factorioNote": 11,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 35,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "factorioNote": 12,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "factorioNote": 36,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "factorioNote": 35,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "factorioNote": 36,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, -1 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "factorioNote": 12,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "factorioNote": 13,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "factorioNote": 12,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 36,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "factorioNote": 13,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "factorioNote": 37,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "factorioNote": 36,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 0 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "factorioNote": 13,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "factorioNote": 14,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "factorioNote": 13,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 37,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "factorioNote": 14,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "factorioNote": 38,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 1 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "factorioNote": 14,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "factorioNote": 15,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "factorioNote": 14,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 38,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "factorioNote": 15,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "factorioNote": 39,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 1 octaveShift, 2 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "factorioNote": 23,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "factorioNote": 24,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "factorioNote": 23,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 47,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "factorioNote": 24,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "factorioNote": 48,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, -1 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "outOfRangeDirection": "lower",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "factorioNote": 24,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "factorioNote": 1,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "factorioNote": 25,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "factorioNote": 24,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "factorioNote": 48,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "factorioNote": 25,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 0 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "factorioNote": 1,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "factorioNote": 25,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "factorioNote": 2,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "factorioNote": 26,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "factorioNote": 25,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "factorioNote": 26,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 1 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 40 (E2) Celesta 1`] = `
+{
+  "factorioNote": 2,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 40 (E2) Piano 1`] = `
+{
+  "factorioNote": 26,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 41 (F2) Celesta 1`] = `
+{
+  "factorioNote": 3,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 41 (F2) Piano 1`] = `
+{
+  "factorioNote": 27,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 64 (E4) Celesta 1`] = `
+{
+  "factorioNote": 26,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 64 (E4) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 65 (F4) Celesta 1`] = `
+{
+  "factorioNote": 27,
+  "valid": true,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 65 (F4) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 88 (E6) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 88 (E6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 89 (E#6) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 89 (E#6) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 100 (E7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 100 (E7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 101 (E#7) Celesta 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
+
+exports[`Note conversion > 2 octaveShift, 2 noteShift, note 101 (E#7) Piano 1`] = `
+{
+  "outOfRangeDirection": "higher",
+  "valid": false,
+}
+`;
