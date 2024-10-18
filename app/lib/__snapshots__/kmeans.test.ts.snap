@@ -1,24 +1,24 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Clavi' 1`] = `3.982`;
+exports[`K-means > auto clustering 'Toto-africa' / 'Clavi' 1`] = `3.998`;
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Flute' 1`] = `3.03`;
+exports[`K-means > auto clustering 'Toto-africa' / 'Flute' 1`] = `3.013`;
 
 exports[`K-means > auto clustering 'Toto-africa' / 'Flute' 2`] = `1`;
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Fretless bass' 1`] = `3.822`;
+exports[`K-means > auto clustering 'Toto-africa' / 'Fretless bass' 1`] = `3.919`;
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Lead 6 (voice)' 1`] = `2.268`;
+exports[`K-means > auto clustering 'Toto-africa' / 'Lead 6 (voice)' 1`] = `2.197`;
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Marimba' 1`] = `5.534`;
+exports[`K-means > auto clustering 'Toto-africa' / 'Marimba' 1`] = `5.699`;
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Marimba' 2`] = `3.998`;
+exports[`K-means > auto clustering 'Toto-africa' / 'Marimba' 2`] = `3.999`;
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Overdriven guitar' 1`] = `2.973`;
+exports[`K-means > auto clustering 'Toto-africa' / 'Overdriven guitar' 1`] = `2.994`;
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Percussion' 1`] = `6.36`;
+exports[`K-means > auto clustering 'Toto-africa' / 'Percussion' 1`] = `6.924`;
 
-exports[`K-means > auto clustering 'Toto-africa' / 'Synthbrass 2' 1`] = `4.818`;
+exports[`K-means > auto clustering 'Toto-africa' / 'Synthbrass 2' 1`] = `4.895`;
 
 exports[`K-means > auto clustering 'Under The Sea' / 'FR.HORN' 1`] = `2`;
 
