@@ -153,12 +153,11 @@ export const InstrumentStage = ({
                   </div>
                   {!track.instrument.percussion && (
                     <>
-                      <h4>Configure pitch and instruments</h4>
+                      <h4>Shift all notes by</h4>
                       <p>
-                        Shift notes by octaves{' '}
                         <input
                           type="number"
-                          className="mx-4"
+                          className="mr-4"
                           value={trackSettings.octaveShift}
                           onInput={({ currentTarget: { value } }) => {
                             trackSettings.octaveShift = Number(value)
@@ -167,8 +166,11 @@ export const InstrumentStage = ({
                           min={-16}
                           max={16}
                         />
+                        octaves
+                      </p>
+                      <p>
                         {trackSettings.octaveShift !== 0 &&
-                          `Shifted range: ` +
+                          `New range: ` +
                             noteExtremesToString({
                               min:
                                 trackExtremes[selectedTrack].min +
@@ -178,12 +180,17 @@ export const InstrumentStage = ({
                                 trackSettings.octaveShift * 12,
                             })}
                       </p>
+                      <h4>Assign to Programmable Speaker instruments</h4>
+                      <p>
+                        Each note will be assigned to the first instrument that
+                        can play it.
+                      </p>
                       {trackInstruments.map(
                         (trackInstrument, instrumentNumber) => (
                           <p key={instrumentNumber}>
-                            Factorio Instrument
+                            Instrument #{instrumentNumber + 1}
                             <select
-                              className="mx-4 text-black"
+                              className="mx-4 text-black min-w-56"
                               value={trackInstrument?.name || NONE}
                               onChange={({ currentTarget: { value } }) => {
                                 if (value === NONE) {
@@ -253,7 +260,7 @@ export const InstrumentStage = ({
                           <>
                             <p>
                               <button
-                                className="button"
+                                className="button !h-auto"
                                 onClick={() => {
                                   settings.tracks[
                                     selectedTrack
@@ -298,102 +305,128 @@ export const InstrumentStage = ({
                     </>
                   )}
                   <h4>Configure dynamics</h4>
-                  <p>
-                    Note volumes
-                    <input
-                      type="number"
-                      className="ml-4"
-                      value={trackSettings.velocityValues.length}
-                      onInput={({ currentTarget: { value } }) => {
-                        trackSettings.velocityValues = getVelocityValues(
-                          track.notes,
-                          Number(value),
-                        )
-                        onSettingsChanged(settings)
-                      }}
-                      min={1}
-                      max={16}
-                    />
-                  </p>
+                  <div className="flex gap-3">
+                    <div className="text-justify my-3 flex-column">
+                      <p>
+                        The histogram shows the distribution of note velocities.
+                        You can select how many velocity groups you would like
+                        to round velocity values to.
+                      </p>
+                      <p>
+                        Each Programmable Speaker is only able to play notes
+                        from a single velocity group, so the more groups you add
+                        the more Speakers will be included in the final
+                        blueprint.
+                      </p>
+                      <p className="w-fit self-end">
+                        Note velocity groups
+                        <input
+                          type="number"
+                          className="ml-4"
+                          value={trackSettings.velocityValues.length}
+                          onInput={({ currentTarget: { value } }) => {
+                            trackSettings.velocityValues = getVelocityValues(
+                              track.notes,
+                              Number(value),
+                            )
+                            onSettingsChanged(settings)
+                          }}
+                          min={1}
+                          max={16}
+                        />
+                      </p>
+                    </div>
 
-                  <div className="panel-inset !bg-[#0E0E0E] w-[400px] box-content">
-                    <Histogram
-                      data={Object.entries(
-                        track.notes.reduce(
-                          (acc, note) => {
-                            acc[note.velocity] = (acc[note.velocity] || 0) + 1
-                            return acc
-                          },
-                          {} as Record<string, number>,
-                        ),
-                      ).toSorted(([a], [b]) => Number(a) - Number(b))}
-                      clusterCenters={trackSettings.velocityValues}
-                      width={400}
-                      height={150}
-                    />
+                    <div className="panel-inset !bg-[#0E0E0E] min-w-[400px] box-content flex-column self-center">
+                      <div className="flex flex-space-between text-gray-500">
+                        <span>quiet</span>
+                        <span>loud</span>
+                      </div>
+                      <Histogram
+                        data={Object.entries(
+                          track.notes.reduce(
+                            (acc, note) => {
+                              acc[note.velocity] = (acc[note.velocity] || 0) + 1
+                              return acc
+                            },
+                            {} as Record<string, number>,
+                          ),
+                        ).toSorted(([a], [b]) => Number(a) - Number(b))}
+                        clusterCenters={trackSettings.velocityValues}
+                        width={400}
+                        height={150}
+                      />
+                    </div>
                   </div>
                   {track.instrument.percussion && (
                     <div>
-                      <h4>Configure drum sounds</h4>
-                      {Object.entries(
-                        track.notes.reduce(
-                          (acc, note) => ({
-                            ...acc,
-                            [note.midi]: (acc[note.midi] || 0) + 1,
-                          }),
-                          {} as Record<string, number>,
-                        ),
-                      )
-                        .toSorted(
-                          ([_a, frequency], [_b, otherFrequency]) =>
-                            otherFrequency - frequency,
+                      <h4>Assign Drumkit sounds</h4>
+                      <div className="grid grid-cols-[max-content_max-content_1fr] w-fit gap-y-1 gap-x-3 items-center">
+                        {Object.entries(
+                          track.notes.reduce(
+                            (acc, note) => ({
+                              ...acc,
+                              [note.midi]: (acc[note.midi] || 0) + 1,
+                            }),
+                            {} as Record<string, number>,
+                          ),
                         )
-                        .map(([note, numberOfOccurrences]) => (
-                          <p key={note}>
-                            {numberOfOccurrences}{' '}
-                            {numberOfOccurrences === 1 ? 'note' : 'notes'}
-                            {': - '}
-                            {noteToGmPercussion[
-                              note as keyof typeof noteToGmPercussion
-                            ] || `MIDI note #${note}`}
-                            <select
-                              className="mx-4 text-black"
-                              value={
-                                // Special case for drums, should be exactly 1 instrument
-                                trackInstruments[0]?.noteToFactorioNote(
-                                  Number(note) as MidiNote,
-                                  trackSettings,
-                                  settings,
-                                ).factorioNote || NONE
-                              }
-                              onChange={({ currentTarget: { value } }) => {
-                                if (!trackSettings.drumMapOverrides)
-                                  trackSettings.drumMapOverrides = {}
+                          .toSorted(
+                            ([_a, frequency], [_b, otherFrequency]) =>
+                              otherFrequency - frequency,
+                          )
+                          .map(([note, numberOfOccurrences]) => (
+                            <>
+                              <div key={`${note} name`}>
+                                {noteToGmPercussion[
+                                  note as keyof typeof noteToGmPercussion
+                                ] || `MIDI note #${note}`}
+                              </div>
+                              <div>
+                                {numberOfOccurrences}{' '}
+                                {numberOfOccurrences === 1 ? 'note' : 'notes'}
+                              </div>
+                              <div>
+                                <select
+                                  className="mx-4 text-black"
+                                  value={
+                                    // Special case for drums, should be exactly 1 instrument
+                                    trackInstruments[0]?.noteToFactorioNote(
+                                      Number(note) as MidiNote,
+                                      trackSettings,
+                                      settings,
+                                    ).factorioNote || NONE
+                                  }
+                                  onChange={({ currentTarget: { value } }) => {
+                                    if (!trackSettings.drumMapOverrides)
+                                      trackSettings.drumMapOverrides = {}
 
-                                trackSettings.drumMapOverrides[note] =
-                                  value === NONE
-                                    ? undefined
-                                    : (value as FactorioDrumSound)
+                                    trackSettings.drumMapOverrides[note] =
+                                      value === NONE
+                                        ? undefined
+                                        : (value as FactorioDrumSound)
 
-                                onSettingsChanged(settings)
-                              }}
-                            >
-                              {Object.entries(factorioDrumSoundToSignal).map(
-                                ([drumSound, factorioNote]) => (
-                                  <option
-                                    key={factorioNote}
-                                    value={factorioNote}
-                                  >
-                                    {drumSound}
+                                    onSettingsChanged(settings)
+                                  }}
+                                >
+                                  {Object.entries(
+                                    factorioDrumSoundToSignal,
+                                  ).map(([drumSound, factorioNote]) => (
+                                    <option
+                                      key={factorioNote}
+                                      value={factorioNote}
+                                    >
+                                      {drumSound}
+                                    </option>
+                                  ))}
+                                  <option key={NONE} value={NONE}>
+                                    {NONE}
                                   </option>
-                                ),
-                              )}
-                              <option key={NONE} value={NONE}>
-                                {NONE}
-                              </option>
-                            </select>
-                          </p>
-                        ))}
+                                </select>
+                              </div>
+                            </>
+                          ))}
+                      </div>
                     </div>
                   )}
                 </div>
