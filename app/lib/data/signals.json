@@ -721,6 +721,7 @@
 {"type":"entity","name":"big-remnants"},
 {"type":"entity","name":"medium-remnants"},
 {"type":"entity","name":"medium-small-remnants"},
+{"type":"entity","name":"cargo-pod-container-remnants"},
 {"type":"entity","name":"small-scorchmark"},
 {"type":"entity","name":"small-scorchmark-tintable"},
 {"type":"entity","name":"medium-scorchmark"},

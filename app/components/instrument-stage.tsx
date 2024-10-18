@@ -294,7 +294,7 @@ export const InstrumentStage = ({
                             </p>
                           </>
                         ) : (
-                          ''
+                          <p>All notes are within range 🗸</p>
                         )
                       })()}
                     </>

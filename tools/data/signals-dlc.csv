@@ -1138,6 +1138,7 @@ entity, 1x2-remnants
 entity, big-remnants
 entity, medium-remnants
 entity, medium-small-remnants
+entity, cargo-pod-container-remnants
 entity, small-scorchmark
 entity, small-scorchmark-tintable
 entity, medium-scorchmark
@@ -1191,6 +1192,7 @@ entity, entity-ghost
 entity, item-on-ground
 entity, item-request-proxy
 entity, tile-ghost
+entity, wube-logo-space-platform
 space-location, nauvis
 space-location, vulcanus
 space-location, gleba
