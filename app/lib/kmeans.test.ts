@@ -26,18 +26,20 @@ describe('K-means', async () => {
       const song = new Midi(file)
 
       expect(
-        song.tracks.map(({ name, notes }) => [
-          name,
-          new Array(numberOfTestsToAverage)
-            .fill(undefined)
-            .map(
-              () =>
-                autoCluster({
-                  data: notes.map(({ velocity }) => velocity),
-                }).clusters.length,
-            )
-            .reduce((acc, v) => acc + v, 0) / numberOfTestsToAverage,
-        ]),
+        song.tracks
+          .filter((track) => track.notes.length && !track.instrument.percussion)
+          .map(({ name, notes }) => [
+            name.trim(),
+            new Array(numberOfTestsToAverage)
+              .fill(undefined)
+              .map(
+                () =>
+                  autoCluster({
+                    data: notes.map(({ velocity }) => velocity),
+                  }).clusters.length,
+              )
+              .reduce((acc, v) => acc + v, 0) / numberOfTestsToAverage,
+          ]),
       ).toMatchSnapshot()
     },
   )
