@@ -7,7 +7,7 @@ export type ClusterResult = {
 export function autoCluster({
   data,
   meanDeviationDecreaseThreshold = 0.01,
-  minimumGroupCenterDistance = 1 / 14,
+  minimumGroupCenterDistance = 1 / 16,
   maxK = 16,
 }: {
   data: number[]
