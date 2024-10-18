@@ -34,10 +34,10 @@ export default function Home() {
         {song && (
           <InstrumentStage
             song={song}
-            onSettingsChanged={(setSettings) => {
+            onSettingsChanged={(newSettings) => {
               setSong((song) => {
                 if (!song) return
-                return { ...song, settings: setSettings(song.settings) }
+                return { ...song, settings: newSettings }
               })
             }}
             onBack={() => {
@@ -45,7 +45,8 @@ export default function Home() {
               setFlowStage('select')
             }}
             onContinue={() => setFlowStage('result')}
-            // this is hidden so that we can keep the state when coming back to this page
+            // this is just hidden instead of gone so that we can
+            //  keep the state when coming back to this page
             className={flowStage === 'instrument' ? '' : 'display-none'}
           />
         )}

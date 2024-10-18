@@ -193,7 +193,7 @@ export const getFactorioInstrumentList = () => {
           }
         return {
           valid: true,
-          factorioNote: parseInt(factorioDrumSoundToSignal[factorioSound]),
+          factorioNote: Number(factorioDrumSoundToSignal[factorioSound]),
         }
       },
     },
