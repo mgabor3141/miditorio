@@ -7,17 +7,18 @@ import signals from '@/app/lib/data/signals.json'
 import * as utils from '@/app/lib/utils'
 import stringify from 'json-stable-stringify'
 import { midiToSong } from '@/app/lib/song'
+import { readdir } from 'fs/promises'
 
-const TEST_FILES = ['debussy-clair-de-lune.mid', 'bwv1013_04.mid']
+describe('Song to Factorio', async () => {
+  const testFiles = await readdir('test-data/')
 
-describe('Song to Factorio', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
     const { random } = mkAlea('seed')
     vi.spyOn(Math, 'random').mockImplementation(() => random())
   })
 
-  test.sequential.for(TEST_FILES)(
+  test.sequential.for(testFiles)(
     'factorio data consistency - %s',
     async (testFile, { expect }) => {
       const file = await readFile(`test-data/${testFile}`)
@@ -29,7 +30,7 @@ describe('Song to Factorio', () => {
     },
   )
 
-  test.sequential.for(TEST_FILES)(
+  test.sequential.for(testFiles)(
     'blueprint json consistency - %s',
     async (testFile, { expect }) => {
       vi.spyOn(utils, 'encodeBlueprint').mockImplementation((json) =>
@@ -45,7 +46,7 @@ describe('Song to Factorio', () => {
     },
   )
 
-  test.sequential.for(TEST_FILES)(
+  test.sequential.for(testFiles)(
     'final blueprint consistency - %s',
     async (testFile, { expect }) => {
       const file = await readFile(`test-data/${testFile}`)

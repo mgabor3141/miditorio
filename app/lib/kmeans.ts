@@ -6,9 +6,9 @@ export type ClusterResult = {
 // Main function to automatically determine the number of clusters
 export function autoCluster({
   data,
-  meanDeviationDecreaseThreshold = 0.05,
+  meanDeviationDecreaseThreshold = 0.01,
   minimumGroupCenterDistance = 1 / 14,
-  maxK = 10,
+  maxK = 16,
 }: {
   data: number[]
   meanDeviationDecreaseThreshold?: number
