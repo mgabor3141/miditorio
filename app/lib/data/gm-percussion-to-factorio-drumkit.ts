@@ -1,10 +1,10 @@
 import { gmPercussionToNote } from '@/app/lib/data/gm-percussion-note-names'
-import { factorioDrumSoundToSignal } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
+import { factorioDrumSoundToNoteNumber } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
 
 export const gmPercussionToFactorioDrumkit: Partial<
   Record<
     keyof typeof gmPercussionToNote,
-    keyof typeof factorioDrumSoundToSignal
+    keyof typeof factorioDrumSoundToNoteNumber
   >
 > = {
   'High Q': 'High Q',

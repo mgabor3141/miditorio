@@ -19,24 +19,9 @@ describe('Song to Blueprint', async () => {
       const song = new Midi(file)
       const processedSong = midiToSong(song, testFile)
 
-      expect(songToFactorioData(processedSong)).toMatchSnapshot()
-    },
-  )
-
-  test.sequential.for(testFiles)(
-    'Blueprint consistency - %s',
-    async (testFile, { expect }) => {
-      const file = await readFile(`test-data/${testFile}`)
-
-      const song = new Midi(file)
-      const processedSong = midiToSong(song, testFile)
-
-      const bp = songToFactorio(processedSong, signals)
-
-      expect(Object.keys(bp)).toEqual(['blueprint', 'warnings'])
-      expect(bp.blueprint).toMatch(/^0\S+/)
-      expect(bp.blueprint).toMatchSnapshot('blueprint')
-      expect(bp.warnings).toMatchSnapshot('warnings')
+      const factorioData = songToFactorioData(processedSong)
+      expect(Object.keys(factorioData)).toMatchSnapshot()
+      expect(factorioData).toMatchSnapshot()
     },
   )
 

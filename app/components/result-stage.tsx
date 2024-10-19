@@ -57,6 +57,8 @@ export const ResultStage = ({ song, onBack }: ResultStageProps) => {
     setCopySuccess(copyAttempt)
     setBlueprintString(blueprint)
     postHog?.capture('Generated blueprint', {
+      Title: song.midi.name,
+      'Song Settings': song.settings,
       'Factorio Version': targetVersion,
       Blueprint: blueprint,
       Warnings: warnings,

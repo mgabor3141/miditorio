@@ -57,9 +57,9 @@ export const songToFactorioData = ({ midi, settings }: Song): Speakers => {
           }
         }
 
-        const START_OF_SONG_TICKS_MARGIN = 10
+        const START_OF_SONG_TICKS_MARGIN = 4
         const factorioTick =
-          Math.round(midiNote.time * 60 * settings.speedMultiplier) + // Seconds to 1/60 sec tick
+          Math.round((midiNote.time * 60) / settings.speedMultiplier) + // Seconds to 1/60 sec tick
           START_OF_SONG_TICKS_MARGIN
         if (
           !instrumentsAfterVelocity[factorioDataInstrumentId].chords[

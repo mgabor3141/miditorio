@@ -5,7 +5,6 @@ import { SelectStage } from './components/select-stage'
 import { InstrumentStage } from '@/app/components/instrument-stage'
 import { ResultStage } from '@/app/components/result-stage'
 import { Song } from '@/app/lib/song'
-import posthog from 'posthog-js'
 import { usePostHog } from 'posthog-js/react'
 
 export type Stage = 'select' | 'instrument' | 'result'
@@ -23,7 +22,7 @@ export default function Home() {
   }, [flowStage, song])
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-8 xl:p-20">
+    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-dvh p-8 pb-20 gap-8 xl:p-20">
       <header className="text-center">
         <a href="/" className="!text-3xl !text-[#ffe6c0] bold">
           miditorio.com
@@ -44,7 +43,8 @@ export default function Home() {
               })
               setSong((song) => {
                 if (!song) return
-                return { ...song, settings: newSettings }
+                // Unwrap to copy, make sure dependencies change
+                return { ...song, settings: { ...newSettings } }
               })
             }}
             onBack={() => {

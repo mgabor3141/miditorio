@@ -11,7 +11,7 @@ import {
   FactorioInstrumentName,
   factorioInstrumentNameToId,
 } from '@/app/lib/data/factorio-instruments-by-id'
-import { factorioDrumSoundToSignal } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
+import { factorioDrumSoundToNoteNumber } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
 import { defaultDrumMap, drumMapWithOverrides } from '@/app/lib/drum-map'
 import { NoteExtremes } from '@/app/lib/song'
 import { Settings, TrackSettings } from '@/app/components/select-stage'
@@ -184,8 +184,13 @@ export const getFactorioInstrumentList = () => {
       id: '2',
       volumeCorrection: 0.9,
       noteToFactorioNote: (note, { drumMapOverrides }) => {
+        note =
+          typeof note === 'object' && 'midi' in note
+            ? (note.midi as MidiNote)
+            : note
+
         const drumMap = drumMapWithOverrides(defaultDrumMap, drumMapOverrides)
-        const factorioSound = drumMap(note as MidiNote)
+        const factorioSound = drumMap(note)
 
         if (!factorioSound)
           return {
@@ -193,7 +198,7 @@ export const getFactorioInstrumentList = () => {
           }
         return {
           valid: true,
-          factorioNote: Number(factorioDrumSoundToSignal[factorioSound]),
+          factorioNote: Number(factorioDrumSoundToNoteNumber[factorioSound]),
         }
       },
     },

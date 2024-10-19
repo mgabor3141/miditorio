@@ -10,11 +10,14 @@ import {
   toFactorioInstrument,
 } from '@/app/lib/factorio-instrument'
 import { getVelocityValues } from '@/app/components/instrument-stage'
+import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
 
 export type NoteExtremes = {
   min: number
   max: number
 }
+
+export type NoteDistribution = Record<number, number>
 
 export type Song = {
   midi: Midi
@@ -22,6 +25,7 @@ export type Song = {
     noteExtremes: NoteExtremes
     trackExtremes: NoteExtremes[]
     totalNotes: number
+    trackNoteDistribution: NoteDistribution[]
   }
   settings: Settings
 }
@@ -57,7 +61,7 @@ export const getNoteExtremes = (
 }
 
 export const noteToFactorioNote = (
-  note: Note,
+  note: MidiNote | Note,
   trackSettings: TrackSettings,
   settings: Omit<Settings, 'tracks'>,
 ): FactorioNoteResultWithInstrument => {
@@ -90,17 +94,10 @@ export const noteToFactorioNote = (
 }
 
 export const getOutOfRangeNotes = (
-  input: Midi | Note[],
+  noteDistribution: NoteDistribution,
   trackSettings: TrackSettings,
   settings: Omit<Settings, 'tracks'>,
 ): { higher: number; lower: number } => {
-  const notes =
-    'tracks' in input
-      ? input.tracks
-          .filter((track) => !track.instrument.percussion)
-          .flatMap((track) => track.notes)
-      : input
-
   const result = {
     higher: 0,
     lower: 0,
@@ -110,11 +107,15 @@ export const getOutOfRangeNotes = (
     // No instruments are assigned, so we consider nothing out of range
     return result
 
-  notes.forEach((note) => {
-    const factorioNoteResult = noteToFactorioNote(note, trackSettings, settings)
+  Object.entries(noteDistribution).forEach(([note, numberOfOccurrences]) => {
+    const factorioNoteResult = noteToFactorioNote(
+      Number(note) as MidiNote,
+      trackSettings,
+      settings,
+    )
 
     if (!factorioNoteResult.valid && factorioNoteResult.outOfRangeDirection)
-      result[factorioNoteResult.outOfRangeDirection]++
+      result[factorioNoteResult.outOfRangeDirection] += numberOfOccurrences
   })
 
   return result
@@ -168,11 +169,22 @@ export const midiToSong = (originalMidi: Midi, filename: string): Song => {
       )
   }
 
+  const trackNoteDistribution = midi.tracks.map((track) =>
+    track.notes.reduce(
+      (acc, currentValue) => ({
+        ...acc,
+        [currentValue.midi]: (acc[currentValue.midi] || 0) + 1,
+      }),
+      {} as NoteDistribution,
+    ),
+  )
+
   return {
     midi,
     additionalInfo: {
       noteExtremes: getNoteExtremes(midi),
       trackExtremes: midi.tracks.map((track) => getNoteExtremes(track.notes)),
+      trackNoteDistribution,
       totalNotes: midi.tracks.reduce(
         (acc, track) => acc + track.notes.reduce((trAcc) => trAcc + 1, 0),
         0,

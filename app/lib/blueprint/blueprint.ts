@@ -118,6 +118,7 @@ export const toBlueprint = ({
 
   const finalBlueprint = {
     blueprint: {
+      label: song.midi.name,
       icons: [
         {
           signal: {
