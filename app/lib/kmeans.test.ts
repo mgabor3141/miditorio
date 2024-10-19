@@ -1,16 +1,13 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { mkAlea } from '@spissvinkel/alea'
+import { describe, expect, test } from 'vitest'
 import { autoCluster } from '@/app/lib/kmeans'
 import { readFile, readdir } from 'fs/promises'
 import { Midi } from '@tonejs/midi'
 
 describe('K-means', async () => {
-  const testFiles = await readdir('test-data/')
-
-  beforeEach(() => {
-    const { random } = mkAlea('seed')
-    vi.spyOn(Math, 'random').mockImplementation(() => random())
-  })
+  const testFiles = (await readdir('test-data/')).filter(
+    // Exclude files that are trivial to cluster
+    (file) => !['bach.mid', 'sea.mid'].includes(file),
+  )
 
   test('random mock', () => {
     expect(Math.random()).toMatchInlineSnapshot(`0.03475257847458124`)

@@ -1,23 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`K-means > auto clustering bach.mid 1`] = `
-[
-  [
-    "",
-    1,
-  ],
-]
-`;
-
 exports[`K-means > auto clustering hall.mid 1`] = `
 [
   [
     "Piano",
-    7.399,
+    7.445,
   ],
   [
     "",
-    8.789,
+    8.803,
   ],
 ]
 `;
@@ -26,116 +17,7 @@ exports[`K-means > auto clustering lune.mid 1`] = `
 [
   [
     "Piano",
-    5.609,
-  ],
-]
-`;
-
-exports[`K-means > auto clustering sea.mid 1`] = `
-[
-  [
-    "FRETLESS",
-    2,
-  ],
-  [
-    "",
-    1,
-  ],
-  [
-    "STEEL DRUM",
-    1,
-  ],
-  [
-    "",
-    1,
-  ],
-  [
-    "MUTED GTR",
-    1,
-  ],
-  [
-    "",
-    1,
-  ],
-  [
-    "STEEL GTR",
-    2,
-  ],
-  [
-    "",
-    2,
-  ],
-  [
-    "MARIMBA",
-    2,
-  ],
-  [
-    "",
-    1,
-  ],
-  [
-    "PICCOLO",
-    3,
-  ],
-  [
-    "STRINGS",
-    2,
-  ],
-  [
-    "",
-    1,
-  ],
-  [
-    "FR.HORN",
-    2,
-  ],
-  [
-    "VOICE OOHS",
-    1,
-  ],
-  [
-    "SLAPBASS 1",
-    1,
-  ],
-  [
-    "",
-    1,
-  ],
-  [
-    "",
-    1,
-  ],
-  [
-    "",
-    1,
-  ],
-  [
-    "MARIMBA",
-    3,
-  ],
-  [
-    "",
-    1,
-  ],
-  [
-    "",
-    2,
-  ],
-  [
-    "",
-    2,
-  ],
-  [
-    "",
-    1,
-  ],
-  [
-    "",
-    2,
-  ],
-  [
-    "FRETLESS",
-    2,
+    5.629,
   ],
 ]
 `;
@@ -144,27 +26,27 @@ exports[`K-means > auto clustering toto.mid 1`] = `
 [
   [
     "",
-    5.235,
+    5.229,
   ],
   [
     "",
-    4.355,
+    4.363,
   ],
   [
     "",
-    3.044,
+    3.046,
   ],
   [
     "",
-    2.222,
+    2.236,
   ],
   [
     "",
-    6.253,
+    6.169,
   ],
   [
     "",
-    3.974,
+    3.984,
   ],
   [
     "",
@@ -172,11 +54,11 @@ exports[`K-means > auto clustering toto.mid 1`] = `
   ],
   [
     "",
-    3.997,
+    3.998,
   ],
   [
     "",
-    4.021,
+    4.02,
   ],
 ]
 `;
