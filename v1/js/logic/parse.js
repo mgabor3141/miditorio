@@ -25,7 +25,7 @@ function handleFileSelect(event) {
 
 		posthog?.capture('Selected midi file', {
 			'File Name': f.name,
-			v1: true
+			'Factorio Version': '1',
 		});
 
 		song = new Song();
