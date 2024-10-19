@@ -21,6 +21,7 @@ export type Song = {
   additionalInfo: {
     noteExtremes: NoteExtremes
     trackExtremes: NoteExtremes[]
+    totalNotes: number
   }
   settings: Settings
 }
@@ -172,6 +173,10 @@ export const midiToSong = (originalMidi: Midi, filename: string): Song => {
     additionalInfo: {
       noteExtremes: getNoteExtremes(midi),
       trackExtremes: midi.tracks.map((track) => getNoteExtremes(track.notes)),
+      totalNotes: midi.tracks.reduce(
+        (acc, track) => acc + track.notes.reduce((trAcc) => trAcc + 1, 0),
+        0,
+      ),
     },
     settings: {
       tracks: midi.tracks.map((track) => ({
