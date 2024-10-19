@@ -22,7 +22,7 @@ export default function Home() {
   }, [flowStage, song])
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-dvh p-8 pb-20 gap-8 xl:p-20">
+    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-dvh p-8 pb-20 gap-8 xl:p-20 2xl:px-40">
       <header className="text-center">
         <a href="/" className="!text-3xl !text-[#ffe6c0] bold">
           miditorio.com
