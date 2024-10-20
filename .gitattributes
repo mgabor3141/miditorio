@@ -5,4 +5,4 @@ test-data/* linguist-vendored
 yarn.lock linguist-generated
 app/lib/data/* linguist-generated
 tools/data/* linguist-generated
-*.snap linguist-generated
+**/*.snap linguist-generated
