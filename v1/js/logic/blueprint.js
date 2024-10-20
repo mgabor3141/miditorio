@@ -291,6 +291,7 @@ function getBlueprint() {
 	bpstring = encode(bp);
 
 	posthog?.capture('Generated blueprint', {
+		Title: song.name,
 		'Factorio Version': '1',
 		Blueprint: bpstring,
 	})
