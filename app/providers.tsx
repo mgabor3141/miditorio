@@ -24,7 +24,17 @@ if (typeof window !== 'undefined') {
   })
 }
 
-const theme = extendTheme({})
+const theme = extendTheme({
+  components: {
+    NumberInput: {
+      baseStyle: {
+        stepper: {
+          borderStart: 0,
+        },
+      },
+    },
+  },
+})
 
 export function Providers({
   children,

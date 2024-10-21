@@ -201,24 +201,24 @@ export const InstrumentStage = ({
               </p>
               <h4>Shift all notes by</h4>
               <p>
-                <NumberInput size="lg" maxW={32} defaultValue={15} min={10}>
+                <NumberInput
+                  className="inline-block mr-4"
+                  value={settings.globalNoteShift}
+                  onChange={(value) => {
+                    settings.globalNoteShift = Number(value)
+                    onSettingsChanged(settings)
+                  }}
+                  clampValueOnBlur={false}
+                  width={16}
+                  min={-16}
+                  max={16}
+                >
                   <NumberInputField />
                   <NumberInputStepper>
                     <NumberIncrementStepper />
                     <NumberDecrementStepper />
                   </NumberInputStepper>
                 </NumberInput>
-                <input
-                  type="number"
-                  className="mr-4"
-                  value={settings.globalNoteShift}
-                  onInput={({ currentTarget: { value } }) => {
-                    settings.globalNoteShift = Number(value)
-                    onSettingsChanged(settings)
-                  }}
-                  min={-16}
-                  max={16}
-                />
                 semitones
               </p>
               {(() => {
