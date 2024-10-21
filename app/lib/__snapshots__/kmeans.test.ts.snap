@@ -1,0 +1,64 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`K-means > auto clustering hall.mid 1`] = `
+[
+  [
+    "Piano",
+    7.445,
+  ],
+  [
+    "",
+    8.803,
+  ],
+]
+`;
+
+exports[`K-means > auto clustering lune.mid 1`] = `
+[
+  [
+    "Piano",
+    5.629,
+  ],
+]
+`;
+
+exports[`K-means > auto clustering toto.mid 1`] = `
+[
+  [
+    "",
+    5.229,
+  ],
+  [
+    "",
+    4.363,
+  ],
+  [
+    "",
+    3.046,
+  ],
+  [
+    "",
+    2.236,
+  ],
+  [
+    "",
+    6.169,
+  ],
+  [
+    "",
+    3.984,
+  ],
+  [
+    "",
+    1,
+  ],
+  [
+    "",
+    3.998,
+  ],
+  [
+    "",
+    4.02,
+  ],
+]
+`;

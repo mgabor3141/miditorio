@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Project Sources" pattern="file[miditorio]:*/&amp;&amp;!file[miditorio]:.idea//*&amp;&amp;!file[miditorio]:.yarn//*&amp;&amp;!file:yarn.lock&amp;&amp;!file:tsconfig.tsbuildinfo&amp;&amp;!file:.pnp.loader.mjs&amp;&amp;!file:.pnp.cjs" />
+</component>
