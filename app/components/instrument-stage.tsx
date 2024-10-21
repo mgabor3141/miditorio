@@ -202,7 +202,7 @@ export const InstrumentStage = ({
               <h4>Shift all notes by</h4>
               <p>
                 <NumberInput
-                  className="inline-block mr-4"
+                  className="inline-block mr-2"
                   value={settings.globalNoteShift}
                   onChange={(value) => {
                     settings.globalNoteShift = Number(value)
@@ -258,15 +258,9 @@ export const InstrumentStage = ({
               })()}
               <h3>Playback speed</h3>
               <p>This allows playback on different game speeds.</p>
-              {/*<p> TODO */}
-              {/*  BPM:{' '}*/}
-              {/*  {song.midi.header.tempos*/}
-              {/*    .map((tempo) => tempo.bpm.toFixed(0))*/}
-              {/*    .join(', ')}*/}
-              {/*</p>*/}
               <p>
                 <NumberInput
-                  className="inline-block mr-4"
+                  className="inline-block mr-2"
                   value={settings.speedMultiplier}
                   onChange={(value) => {
                     settings.speedMultiplier = Number(value)
@@ -283,7 +277,29 @@ export const InstrumentStage = ({
                     <NumberDecrementStepper />
                   </NumberInputStepper>
                 </NumberInput>
-                x
+                times normal speed
+              </p>
+              <p>
+                Song BPM:{' '}
+                {(() => {
+                  const printBpm = (bpm: number, multiply = 1) =>
+                    Number(bpm * multiply).toFixed()
+
+                  const printBpmRange = (bpm: number[], multiply = 1) => {
+                    if (bpm.length === 1) {
+                      return printBpm(bpm[0], multiply)
+                    } else {
+                      const minBpm = bpm.reduce((a, b) => Math.min(a, b))
+                      const maxBpm = bpm.reduce((a, b) => Math.max(a, b))
+
+                      return `${printBpm(minBpm)}-${printBpm(maxBpm)}`
+                    }
+                  }
+
+                  const bpm = song.midi.header.tempos.map(({ bpm }) => bpm)
+
+                  return `${printBpmRange(bpm)}${settings.speedMultiplier !== 1 ? ` => ${printBpmRange(bpm, settings.speedMultiplier)}` : ''}`
+                })()}
               </p>
             </>
           ) : (
@@ -314,7 +330,7 @@ export const InstrumentStage = ({
                       <h4>Shift notes of this track by</h4>
                       <p>
                         <NumberInput
-                          className="inline-block mr-4"
+                          className="inline-block mr-2"
                           value={trackSettings.octaveShift}
                           onChange={(value) => {
                             trackSettings.octaveShift = Number(value)
