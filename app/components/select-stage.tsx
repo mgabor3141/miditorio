@@ -81,11 +81,6 @@ export const SelectStage = ({ setSong }: SelectStageProps) => {
               </a>
               .
             </p>
-            <p>
-              If you would like to generate a blueprint for Factorio 1.x, the
-              current released version, please use{' '}
-              <a href="v1/">miditorio v1</a>.
-            </p>
           </div>
 
           <button className="button button-green mr0" onClick={openFilePicker}>
