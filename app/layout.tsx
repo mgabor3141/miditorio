@@ -3,7 +3,7 @@ import './factorio.css'
 import { Titillium_Web } from 'next/font/google'
 
 import type { Metadata } from 'next'
-import { CSPostHogProvider } from './providers'
+import { Providers } from './providers'
 import React from 'react'
 
 const titilliumWeb = Titillium_Web({
@@ -24,11 +24,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <CSPostHogProvider>
+      <Providers>
         <body className={`antialiased ${titilliumWeb.className}`}>
           {children}
         </body>
-      </CSPostHogProvider>
+      </Providers>
     </html>
   )
 }

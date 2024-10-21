@@ -3,6 +3,7 @@ import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
 import React from 'react'
 import packageJson from '@/package.json'
+import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 
 if (
   !process.env.NEXT_PUBLIC_POSTHOG_KEY ||
@@ -22,10 +23,19 @@ if (typeof window !== 'undefined') {
     version: packageJson.version,
   })
 }
-export function CSPostHogProvider({
+
+const theme = extendTheme({})
+
+export function Providers({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  return <PostHogProvider client={posthog}>{children}</PostHogProvider>
+  return (
+    <PostHogProvider client={posthog}>
+      <ChakraProvider theme={theme} disableGlobalStyle={true}>
+        {children}
+      </ChakraProvider>
+    </PostHogProvider>
+  )
 }

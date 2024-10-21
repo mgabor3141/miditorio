@@ -17,6 +17,13 @@ import {
 } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
 import { getOutOfRangeNotes, noteExtremesToString, Song } from '@/app/lib/song'
+import {
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+} from '@chakra-ui/react'
 
 const NONE = 'None'
 
@@ -194,6 +201,13 @@ export const InstrumentStage = ({
               </p>
               <h4>Shift all notes by</h4>
               <p>
+                <NumberInput size="lg" maxW={32} defaultValue={15} min={10}>
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
                 <input
                   type="number"
                   className="mr-4"
