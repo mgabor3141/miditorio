@@ -18,7 +18,7 @@ import {
 import { Midi, Track } from '@tonejs/midi'
 import { gmInstrumentFamilies } from '@/app/lib/data/gm-instrument-families'
 import { Settings } from '@/app/components/select-stage'
-import { NoteExtremes } from '@/app/lib/song'
+import { AdditionalInfo } from '@/app/lib/song'
 
 const PixiContext = createContext<Application>(null!)
 
@@ -101,6 +101,7 @@ const getTrackColor = (track: Track) => {
     // world: '#',
     // percussive: '#',
     // 'sound effects': '#',
+    drums: '#155385',
   }
 
   return (
@@ -113,21 +114,22 @@ const getTrackColor = (track: Track) => {
 export type PianoRollProps = {
   midi: Midi
   settings: Settings
-  noteExtremes: NoteExtremes
+  additionalInfo: AdditionalInfo
   selectedTrack?: number
 }
 export const PianoRoll = ({
   midi,
-  settings: _,
-  noteExtremes,
+  settings,
+  additionalInfo: { noteExtremes, trackExtremes },
   selectedTrack,
 }: PianoRollProps) => {
   const app = useContext(PixiContext)
   const [initialWidth, setInitialWidth] = useState<
     { width: number; height: number } | undefined
   >()
-  const [trackTextures, setTrackTextures] = useState<RenderTexture[]>([])
   const [lastResizeTimestamp, setLastResizeTimestamp] = useState(0)
+
+  const [sprites, setSprites] = useState<Sprite[]>([])
 
   useEffect(() => {
     const width = app.canvas.clientWidth
@@ -165,74 +167,106 @@ export const PianoRoll = ({
       app.render()
 
       requestAnimationFrame(() => {
-        const { min, max } = noteExtremes
-
         const tempContainer = new Container()
-        const trackRenderTextures = midi.tracks
-          .filter((track) => !track.instrument.percussion)
-          .map((track) => {
-            const renderTexture = RenderTexture.create({
-              width,
-              height,
-              antialias: true,
-              resolution: 2 * window.devicePixelRatio,
-            })
+        const trackRenderTextures = midi.tracks.map((track, trackNumber) => {
+          const { min, max } = track.instrument.percussion
+            ? trackExtremes[trackNumber]
+            : noteExtremes
 
-            track.notes.forEach((note) => {
-              tempContainer.addChild(
-                new Graphics()
-                  .roundRect(
-                    (note.ticks / midi.durationTicks) * width,
-                    height - ((note.midi - min) / (max - min)) * height,
-                    Math.max(
-                      (note.durationTicks / midi.durationTicks) * width,
-                      1,
-                    ),
-                    height / (max - min),
-                    2,
-                  )
-                  .fill(getTrackColor(track)),
-              )
-            })
-
-            app.renderer.render({
-              container: tempContainer,
-              target: renderTexture,
-            })
-
-            tempContainer.children.forEach((child) => child.destroy())
-            tempContainer.removeChildren()
-            return renderTexture
+          const renderTexture = RenderTexture.create({
+            width,
+            height,
+            antialias: true,
+            resolution: 2 * window.devicePixelRatio,
           })
 
+          track.notes.forEach((note) => {
+            tempContainer.addChild(
+              new Graphics()
+                .roundRect(
+                  (note.ticks / midi.durationTicks) * width,
+                  height - ((note.midi - min) / (max - min)) * height,
+                  Math.max(
+                    (note.durationTicks / midi.durationTicks) * width,
+                    1,
+                  ),
+                  height / (max - min),
+                  2,
+                )
+                .fill(getTrackColor(track)),
+            )
+          })
+
+          app.renderer.render({
+            container: tempContainer,
+            target: renderTexture,
+          })
+
+          tempContainer.children.forEach((child) => child.destroy())
+          tempContainer.removeChildren()
+          return renderTexture
+        })
+
         tempContainer.destroy()
-        setTrackTextures(trackRenderTextures)
+
+        app.stage.removeChildren()
+
+        // Add textures to stage
+        const newSprites = trackRenderTextures.map((texture) => {
+          const sprite = new Sprite({
+            texture,
+            width,
+            height,
+          })
+
+          app.stage.addChild(sprite)
+
+          return sprite
+        })
+        setSprites(newSprites)
+
         console.log('Piano roll render complete!')
       })
     })
-  }, [app, initialWidth, midi, noteExtremes])
+  }, [app, initialWidth, midi, noteExtremes, trackExtremes])
 
   useEffect(() => {
     const width = app.canvas.clientWidth
     const height = app.canvas.clientHeight
+    const { min, max } = noteExtremes
 
-    app.stage.removeChildren()
+    sprites.forEach((sprite, trackNumber) => {
+      const isPercussion = midi.tracks[trackNumber].instrument.percussion
+      const isSelectedPercussion =
+        selectedTrack && midi.tracks[selectedTrack].instrument.percussion
 
-    trackTextures.forEach((texture, trackNumber) =>
-      app.stage.addChild(
-        new Sprite({
-          texture,
-          alpha:
-            selectedTrack === undefined || trackNumber === selectedTrack
-              ? 1
-              : 0.25,
-          zIndex: trackNumber === selectedTrack ? 2 : 1,
-          width,
-          height,
-        }),
-      ),
-    )
-  }, [trackTextures, selectedTrack, app, lastResizeTimestamp])
+      sprite.width = width
+      sprite.height = height
+
+      if (isPercussion && isSelectedPercussion) sprite.alpha = 1
+      else if (isPercussion || isSelectedPercussion) sprite.alpha = 0
+      else
+        sprite.alpha =
+          selectedTrack === undefined || trackNumber === selectedTrack
+            ? 1
+            : 0.25
+      sprite.zIndex = trackNumber === selectedTrack ? 2 : 1
+      sprite.y =
+        -(
+          (settings.tracks[trackNumber].octaveShift * 12 +
+            (isPercussion ? settings.globalNoteShift : 0)) /
+          (max - min)
+        ) * height
+    })
+  }, [
+    selectedTrack,
+    app,
+    lastResizeTimestamp,
+    noteExtremes,
+    settings,
+    sprites,
+    midi.tracks,
+  ])
 
   useEffect(() => {
     const handleResize = ({ timeStamp }: Event) =>

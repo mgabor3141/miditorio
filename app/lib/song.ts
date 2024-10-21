@@ -19,14 +19,16 @@ export type NoteExtremes = {
 
 export type NoteDistribution = Record<number, number>
 
+export type AdditionalInfo = {
+  noteExtremes: NoteExtremes
+  trackExtremes: NoteExtremes[]
+  totalNotes: number
+  trackNoteDistribution: NoteDistribution[]
+}
+
 export type Song = {
   midi: Midi
-  additionalInfo: {
-    noteExtremes: NoteExtremes
-    trackExtremes: NoteExtremes[]
-    totalNotes: number
-    trackNoteDistribution: NoteDistribution[]
-  }
+  additionalInfo: AdditionalInfo
   settings: Settings
 }
 

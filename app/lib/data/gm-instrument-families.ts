@@ -15,4 +15,5 @@ export const gmInstrumentFamilies = [
   'world',
   'percussive',
   'sound effects',
+  'drums',
 ] as const

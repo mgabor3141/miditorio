@@ -62,16 +62,9 @@ export const InstrumentStage = ({
   const [selectedTrack, setSelectedTrack] = useState<number | undefined>(
     undefined,
   )
-  const {
-    midi,
-    additionalInfo: {
-      noteExtremes,
-      trackExtremes,
-      totalNotes,
-      trackNoteDistribution,
-    },
-    settings,
-  } = song
+  const { midi, additionalInfo, settings } = song
+
+  const { trackExtremes, totalNotes, trackNoteDistribution } = additionalInfo
 
   useEffect(() => {
     panel.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -98,7 +91,7 @@ export const InstrumentStage = ({
         <PixiProvider>
           <PianoRoll
             midi={midi}
-            noteExtremes={noteExtremes}
+            additionalInfo={additionalInfo}
             settings={settings}
             selectedTrack={selectedTrack}
           />
@@ -431,57 +424,62 @@ export const InstrumentStage = ({
                         ),
                       )}
 
-                      {(() => {
-                        const { higher, lower } = outOfRangeNotes[selectedTrack]
+                      {!(
+                        trackInstruments.length === 1 &&
+                        trackInstruments[0] === undefined
+                      ) &&
+                        (() => {
+                          const { higher, lower } =
+                            outOfRangeNotes[selectedTrack]
 
-                        return higher || lower ? (
-                          <>
-                            <p>
-                              <button
-                                className="button !h-auto"
-                                onClick={() => {
-                                  settings.tracks[
-                                    selectedTrack
-                                  ].factorioInstruments = [
-                                    ...settings.tracks[selectedTrack]
-                                      .factorioInstruments,
-                                    undefined,
-                                  ]
-                                  onSettingsChanged(settings)
-                                }}
-                              >
-                                Add instrument
-                              </button>
-                            </p>
-                            <div className="panel alert-warning w-fit">
-                              {(['higher', 'lower'] as const)
-                                .flatMap((higherOrLower) => {
-                                  const n = { higher, lower }[higherOrLower]
-                                  return n
-                                    ? [
-                                        `${higherOrLower === 'higher' ? '↥' : '↧'} ${n} notes are ${higherOrLower}`,
-                                      ]
-                                    : []
-                                })
-                                .map((str, i, array) => (
-                                  <>
-                                    {str}
-                                    {i === 0 && array.length === 2 && (
-                                      <>
-                                        ,<br />
-                                      </>
-                                    )}
-                                  </>
-                                ))}{' '}
-                              than what the selected instrument
-                              {trackInstruments.length === 1 ? '' : 's'} can
-                              play.
-                            </div>
-                          </>
-                        ) : (
-                          <p>All notes are within range 🗸</p>
-                        )
-                      })()}
+                          return higher || lower ? (
+                            <>
+                              <p>
+                                <button
+                                  className="button !h-auto"
+                                  onClick={() => {
+                                    settings.tracks[
+                                      selectedTrack
+                                    ].factorioInstruments = [
+                                      ...settings.tracks[selectedTrack]
+                                        .factorioInstruments,
+                                      undefined,
+                                    ]
+                                    onSettingsChanged(settings)
+                                  }}
+                                >
+                                  Add instrument
+                                </button>
+                              </p>
+                              <div className="panel alert-warning w-fit">
+                                {(['higher', 'lower'] as const)
+                                  .flatMap((higherOrLower) => {
+                                    const n = { higher, lower }[higherOrLower]
+                                    return n
+                                      ? [
+                                          `${higherOrLower === 'higher' ? '↥' : '↧'} ${n} notes are ${higherOrLower}`,
+                                        ]
+                                      : []
+                                  })
+                                  .map((str, i, array) => (
+                                    <>
+                                      {str}
+                                      {i === 0 && array.length === 2 && (
+                                        <>
+                                          ,<br />
+                                        </>
+                                      )}
+                                    </>
+                                  ))}{' '}
+                                than what the selected instrument
+                                {trackInstruments.length === 1 ? '' : 's'} can
+                                play.
+                              </div>
+                            </>
+                          ) : (
+                            <p>All notes are within range 🗸</p>
+                          )
+                        })()}
                     </>
                   )}
                   <h4>Configure dynamics</h4>
