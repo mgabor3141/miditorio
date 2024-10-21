@@ -210,8 +210,8 @@ export const InstrumentStage = ({
                   }}
                   clampValueOnBlur={false}
                   width={16}
-                  min={-16}
-                  max={16}
+                  min={-128}
+                  max={128}
                 >
                   <NumberInputField />
                   <NumberInputStepper>
@@ -265,18 +265,24 @@ export const InstrumentStage = ({
               {/*    .join(', ')}*/}
               {/*</p>*/}
               <p>
-                <input
-                  type="number"
-                  className="mr-4"
+                <NumberInput
+                  className="inline-block mr-4"
                   value={settings.speedMultiplier}
-                  onInput={({ currentTarget: { value } }) => {
+                  onChange={(value) => {
                     settings.speedMultiplier = Number(value)
                     onSettingsChanged(settings)
                   }}
-                  min={0.01}
-                  max={4}
+                  width={16}
+                  min={0.001}
                   step={0.1}
-                />
+                  max={100}
+                >
+                  <NumberInputField />
+                  <NumberInputStepper>
+                    <NumberIncrementStepper />
+                    <NumberDecrementStepper />
+                  </NumberInputStepper>
+                </NumberInput>
                 x
               </p>
             </>
@@ -307,17 +313,23 @@ export const InstrumentStage = ({
                     <>
                       <h4>Shift notes of this track by</h4>
                       <p>
-                        <input
-                          type="number"
-                          className="mr-4"
+                        <NumberInput
+                          className="inline-block mr-4"
                           value={trackSettings.octaveShift}
-                          onInput={({ currentTarget: { value } }) => {
+                          onChange={(value) => {
                             trackSettings.octaveShift = Number(value)
                             onSettingsChanged(settings)
                           }}
+                          width={16}
                           min={-16}
                           max={16}
-                        />
+                        >
+                          <NumberInputField />
+                          <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                          </NumberInputStepper>
+                        </NumberInput>
                         octaves
                       </p>
                       <p>
@@ -472,20 +484,26 @@ export const InstrumentStage = ({
                       </p>
                       <p className="w-fit self-end">
                         Note velocity groups
-                        <input
-                          type="number"
-                          className="ml-4"
+                        <NumberInput
+                          className="inline-block ml-4"
                           value={trackSettings.velocityValues.length}
-                          onInput={({ currentTarget: { value } }) => {
+                          onChange={(value) => {
                             trackSettings.velocityValues = getVelocityValues(
                               track.notes,
                               Number(value),
                             )
                             onSettingsChanged(settings)
                           }}
+                          width={16}
                           min={1}
-                          max={16}
-                        />
+                          max={32}
+                        >
+                          <NumberInputField />
+                          <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                          </NumberInputStepper>
+                        </NumberInput>
                       </p>
                     </div>
 

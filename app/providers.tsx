@@ -30,6 +30,9 @@ const theme = extendTheme({
       baseStyle: {
         stepper: {
           borderStart: 0,
+          _active: {
+            background: 'radial-gradient(closest-side, #aaa, transparent)',
+          },
         },
       },
     },
