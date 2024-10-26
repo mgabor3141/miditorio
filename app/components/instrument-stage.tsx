@@ -88,7 +88,7 @@ export const InstrumentStage = ({
   }, [])
 
   return (
-    <div className={`panel pt0 !mt-8 !mb-32 ${className}`} ref={panel}>
+    <div className={`panel pt0 !mt-8 !mb-24 ${className}`} ref={panel}>
       <div className="panel-inset !pl-0 !bg-[#0E0E0E]">
         <PixiProvider>
           <PianoRoll

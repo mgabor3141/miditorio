@@ -320,7 +320,7 @@ a {
 }
 a:hover {
   color: #9ad1ea;
-  text-decoration: underline;
+  /*text-decoration: underline;*/
 }
 a i {
   margin-right: 4px;
