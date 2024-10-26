@@ -69,9 +69,7 @@ export default function Home() {
           )}
         </>
       </div>
-      <main className="px-20 xl:max-w-3xl m-auto">
-        <Info />
-      </main>
+      <Info />
     </>
   )
 }
