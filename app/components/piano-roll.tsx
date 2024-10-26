@@ -9,6 +9,7 @@ import {
 } from 'pixi.js'
 import {
   createContext,
+  Dispatch,
   ReactNode,
   useContext,
   useEffect,
@@ -116,12 +117,14 @@ export type PianoRollProps = {
   settings: Settings
   additionalInfo: AdditionalInfo
   selectedTrack?: number
+  onDoneRender?: Dispatch<void>
 }
 export const PianoRoll = ({
   midi,
   settings,
   additionalInfo: { noteExtremes, trackExtremes },
   selectedTrack,
+  onDoneRender,
 }: PianoRollProps) => {
   const app = useContext(PixiContext)
   const [initialWidth, setInitialWidth] = useState<
@@ -226,9 +229,11 @@ export const PianoRoll = ({
         setSprites(newSprites)
 
         console.log('Piano roll render complete!')
+
+        if (onDoneRender) onDoneRender()
       })
     })
-  }, [app, initialWidth, midi, noteExtremes, trackExtremes])
+  }, [app, initialWidth, midi, noteExtremes, onDoneRender, trackExtremes])
 
   useEffect(() => {
     const width = app.canvas.clientWidth

@@ -1,5 +1,12 @@
 import { PianoRoll, PixiProvider } from '@/app/components/piano-roll'
-import React, { Dispatch, useEffect, useMemo, useRef, useState } from 'react'
+import React, {
+  Dispatch,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { Settings } from '@/app/components/select-stage'
 import {
   getFactorioInstrument,
@@ -60,10 +67,6 @@ export const InstrumentStage = ({
 
   const { trackExtremes, totalNotes, trackNoteDistribution } = additionalInfo
 
-  useEffect(() => {
-    panel.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, [])
-
   const outOfRangeNotes: { higher: number; lower: number }[] = useMemo(
     () =>
       midi.tracks.map((_, trackNumber) =>
@@ -76,11 +79,16 @@ export const InstrumentStage = ({
     [midi.tracks, settings, trackNoteDistribution],
   )
 
+  const onDoneRender = useCallback(() => {
+    if (!panel.current) return
+    window.scrollTo({
+      top: window.scrollY + panel.current.getBoundingClientRect().top - 16,
+      behavior: 'smooth',
+    })
+  }, [])
+
   return (
-    <div
-      className={`panel pt0 flex-column w-full !mb-16 ${className}`}
-      ref={panel}
-    >
+    <div className={`panel pt0 !mt-8 !mb-32 ${className}`} ref={panel}>
       <div className="panel-inset !pl-0 !bg-[#0E0E0E]">
         <PixiProvider>
           <PianoRoll
@@ -88,6 +96,7 @@ export const InstrumentStage = ({
             additionalInfo={additionalInfo}
             settings={settings}
             selectedTrack={selectedTrack}
+            onDoneRender={onDoneRender}
           />
         </PixiProvider>
       </div>
