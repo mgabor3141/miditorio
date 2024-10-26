@@ -17,13 +17,7 @@ import {
 } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
 import { getOutOfRangeNotes, noteExtremesToString, Song } from '@/app/lib/song'
-import {
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-} from '@chakra-ui/react'
+import { NumberInputWithLabel } from '@/app/components/number-input-with-label'
 
 const NONE = 'None'
 
@@ -193,27 +187,18 @@ export const InstrumentStage = ({
                 specific settings.
               </p>
               <h4>Shift all notes by</h4>
-              <p>
-                <NumberInput
-                  className="inline-block mr-2"
-                  value={settings.globalNoteShift}
-                  onChange={(value) => {
-                    settings.globalNoteShift = Number(value)
-                    onSettingsChanged(settings)
-                  }}
-                  clampValueOnBlur={false}
-                  width={16}
-                  min={-128}
-                  max={128}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                semitones
-              </p>
+              <NumberInputWithLabel
+                value={settings.globalNoteShift}
+                onChange={(value) => {
+                  settings.globalNoteShift = Number(value)
+                  onSettingsChanged(settings)
+                }}
+                clampValueOnBlur={false}
+                width={16}
+                min={-128}
+                max={128}
+                labelAfter="semitones"
+              />
               {(() => {
                 const { higher, lower } = outOfRangeNotes.reduce(
                   (previousValue, { higher, lower }) => ({
@@ -251,27 +236,18 @@ export const InstrumentStage = ({
               })()}
               <h3>Playback speed</h3>
               <p>This allows playback on different game speeds.</p>
-              <p>
-                <NumberInput
-                  className="inline-block mr-2"
-                  value={settings.speedMultiplier}
-                  onChange={(value) => {
-                    settings.speedMultiplier = Number(value)
-                    onSettingsChanged(settings)
-                  }}
-                  width={16}
-                  min={0.001}
-                  step={0.1}
-                  max={100}
-                >
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
-                times normal speed
-              </p>
+              <NumberInputWithLabel
+                value={settings.speedMultiplier}
+                onChange={(value) => {
+                  settings.speedMultiplier = Number(value)
+                  onSettingsChanged(settings)
+                }}
+                width={16}
+                min={0.001}
+                step={0.1}
+                max={100}
+                labelAfter="times normal speed"
+              />
               <p>
                 Song BPM:{' '}
                 {(() => {
@@ -321,26 +297,17 @@ export const InstrumentStage = ({
                   {!track.instrument.percussion && (
                     <>
                       <h4>Shift notes of this track by</h4>
-                      <p>
-                        <NumberInput
-                          className="inline-block mr-2"
-                          value={trackSettings.octaveShift}
-                          onChange={(value) => {
-                            trackSettings.octaveShift = Number(value)
-                            onSettingsChanged(settings)
-                          }}
-                          width={16}
-                          min={-16}
-                          max={16}
-                        >
-                          <NumberInputField />
-                          <NumberInputStepper>
-                            <NumberIncrementStepper />
-                            <NumberDecrementStepper />
-                          </NumberInputStepper>
-                        </NumberInput>
-                        octaves
-                      </p>
+                      <NumberInputWithLabel
+                        value={trackSettings.octaveShift}
+                        onChange={(value) => {
+                          trackSettings.octaveShift = Number(value)
+                          onSettingsChanged(settings)
+                        }}
+                        width={16}
+                        min={-16}
+                        max={16}
+                        labelAfter="octaves"
+                      />
                       <p>
                         {(trackSettings.octaveShift !== 0 ||
                           settings.globalNoteShift !== 0) &&
@@ -496,29 +463,21 @@ export const InstrumentStage = ({
                         the more Speakers will be included in the final
                         blueprint.
                       </p>
-                      <p className="w-fit self-end">
-                        Note velocity groups
-                        <NumberInput
-                          className="inline-block ml-4"
-                          value={trackSettings.velocityValues.length}
-                          onChange={(value) => {
-                            trackSettings.velocityValues = getVelocityValues(
-                              track.notes,
-                              Number(value),
-                            )
-                            onSettingsChanged(settings)
-                          }}
-                          width={16}
-                          min={1}
-                          max={32}
-                        >
-                          <NumberInputField />
-                          <NumberInputStepper>
-                            <NumberIncrementStepper />
-                            <NumberDecrementStepper />
-                          </NumberInputStepper>
-                        </NumberInput>
-                      </p>
+                      <NumberInputWithLabel
+                        labelBefore="Note velocity groups"
+                        className="w-fit self-end"
+                        value={trackSettings.velocityValues.length}
+                        onChange={(value) => {
+                          trackSettings.velocityValues = getVelocityValues(
+                            track.notes,
+                            Number(value),
+                          )
+                          onSettingsChanged(settings)
+                        }}
+                        width={16}
+                        min={1}
+                        max={32}
+                      />
                     </div>
 
                     <div className="panel-inset !bg-[#0E0E0E] min-w-[400px] box-content flex-column self-center">
