@@ -1,8 +1,8 @@
 import { PianoRoll, PixiProvider } from '@/app/components/piano-roll'
 import React, {
   Dispatch,
+  Fragment,
   useCallback,
-  useEffect,
   useMemo,
   useRef,
   useState,
@@ -228,14 +228,14 @@ export const InstrumentStage = ({
                           : []
                       })
                       .map((str, i, array) => (
-                        <>
+                        <Fragment key={i}>
                           {str}
                           {i === 0 && array.length === 2 && (
                             <>
                               ,<br />
                             </>
                           )}
-                        </>
+                        </Fragment>
                       ))}{' '}
                     than what their respective instruments can play.
                   </div>
@@ -393,7 +393,7 @@ export const InstrumentStage = ({
                                   </option>
                                 ))}
                               <option key={NONE} value={NONE}>
-                                {NONE}
+                                Mute
                               </option>
                             </select>
                           </p>
@@ -438,14 +438,14 @@ export const InstrumentStage = ({
                                       : []
                                   })
                                   .map((str, i, array) => (
-                                    <>
+                                    <Fragment key={i}>
                                       {str}
                                       {i === 0 && array.length === 2 && (
                                         <>
                                           ,<br />
                                         </>
                                       )}
-                                    </>
+                                    </Fragment>
                                   ))}{' '}
                                 than what the selected instrument
                                 {trackInstruments.length === 1 ? '' : 's'} can
@@ -527,8 +527,8 @@ export const InstrumentStage = ({
                             ([_a, frequency], [_b, otherFrequency]) =>
                               otherFrequency - frequency,
                           )
-                          .map(([note, numberOfOccurrences]) => (
-                            <>
+                          .map(([note, numberOfOccurrences], i) => (
+                            <Fragment key={i}>
                               <div key={`${note} name`}>
                                 {noteToGmPercussion[
                                   note as keyof typeof noteToGmPercussion
@@ -579,11 +579,11 @@ export const InstrumentStage = ({
                                     </option>
                                   ))}
                                   <option key={NONE} value={NONE}>
-                                    {NONE}
+                                    Mute
                                   </option>
                                 </select>
                               </div>
-                            </>
+                            </Fragment>
                           ))}
                       </div>
                     </div>

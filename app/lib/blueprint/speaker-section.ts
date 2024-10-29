@@ -49,7 +49,7 @@ export const getSpeakerSection = (
           },
           parameters: {
             playback_volume: instrument.volumeCorrection * volume,
-            playback_mode: 'surface',
+            playback_mode: 'global',
             allow_polyphony: true,
           },
         },

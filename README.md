@@ -1,4 +1,4 @@
-# miditorio
+# Miditorio
 
 Convert midi songs to Factorio blueprints
 

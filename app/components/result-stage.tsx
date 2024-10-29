@@ -98,7 +98,7 @@ export const ResultStage = ({ song, onBack }: ResultStageProps) => {
           className={`  ${targetVersion !== '1' ? 'hidden' : 'panel m0 alert-success w-full'}`}
         >
           To create blueprints for Factorio 1.x, please use{' '}
-          <a href="v1/">miditorio v1</a>.
+          <a href="v1/">Miditorio v1</a>.
         </div>
 
         <div className="flex items-center gap-4">

@@ -62,6 +62,19 @@ export const getNoteExtremes = (
   }
 }
 
+export const expandNoteExtremesToMinimum = (
+  { min, max }: NoteExtremes,
+  minimum: number = 12,
+): NoteExtremes => {
+  const range = max - min
+  const needs = Math.floor(minimum > range ? minimum - range : 0)
+
+  return {
+    min: min - needs,
+    max: max + needs,
+  }
+}
+
 export const noteToFactorioNote = (
   note: MidiNote | Note,
   trackSettings: TrackSettings,
@@ -157,7 +170,7 @@ export const midiToSong = (originalMidi: Midi, filename: string): Song => {
   if (drumInstrument) {
     const unifiedDrumTrack = midi.addTrack()
     unifiedDrumTrack.instrument = drumInstrument
-    unifiedDrumTrack.name = 'Percussion'
+    unifiedDrumTrack.name = 'Drumkit'
     originalMidi.tracks
       .filter((track) => track.instrument.percussion)
       .flatMap((track) => track.notes)

@@ -29,7 +29,7 @@ export default function Home() {
       >
         <header className="text-center mt-14">
           <a href="/" className="!text-3xl !text-[#ffe6c0] bold">
-            miditorio.com
+            Miditorio
           </a>
           <p className="text-gray-300">
             Create Factorio blueprints from any song!

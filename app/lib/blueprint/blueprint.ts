@@ -74,7 +74,7 @@ export const toBlueprint = ({
   const MAX_FACTORIO_SPEAKER_SIGNALS = 2 ** 8 - 2
   if (Object.keys(speakers).length > MAX_FACTORIO_SPEAKER_SIGNALS) {
     warnings.push(
-      `This song with these settings would have required ${Object.keys(speakers).length} Programmable Speakers, ` +
+      `This song with these settings would have required ${Object.keys(speakers).length} speakers, ` +
         `so miditorio had to limit them to ${MAX_FACTORIO_SPEAKER_SIGNALS}. ` +
         'Try reducing the number of note velocity groups in your instrument settings.',
     )

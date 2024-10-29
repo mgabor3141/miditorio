@@ -13,7 +13,7 @@ const titilliumWeb = Titillium_Web({
 })
 
 export const metadata: Metadata = {
-  title: 'miditorio – Factorio music converter',
+  title: 'Miditorio – Factorio music converter',
   description: 'Create Factorio blueprints from any song!',
 }
 

@@ -59,7 +59,7 @@ export const getStaticBlueprintSection = (
       player_description:
         `\n[font=heading-1]${song.midi.name}[/font]\n\n` +
         '[virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green]' +
-        '\n\nConverted using miditorio.com\n' +
+        '\n\nConverted using Miditorio\n' +
         `version ${packageJson.version}`,
     },
     {

@@ -19,7 +19,7 @@ import {
 import { Midi, Track } from '@tonejs/midi'
 import { gmInstrumentFamilies } from '@/app/lib/data/gm-instrument-families'
 import { Settings } from '@/app/components/select-stage'
-import { AdditionalInfo } from '@/app/lib/song'
+import { AdditionalInfo, expandNoteExtremesToMinimum } from '@/app/lib/song'
 
 const PixiContext = createContext<Application>(null!)
 
@@ -172,9 +172,11 @@ export const PianoRoll = ({
       requestAnimationFrame(() => {
         const tempContainer = new Container()
         const trackRenderTextures = midi.tracks.map((track, trackNumber) => {
-          const { min, max } = track.instrument.percussion
-            ? trackExtremes[trackNumber]
-            : noteExtremes
+          const { min, max } = expandNoteExtremesToMinimum(
+            track.instrument.percussion
+              ? trackExtremes[trackNumber]
+              : noteExtremes,
+          )
 
           const renderTexture = RenderTexture.create({
             width,
