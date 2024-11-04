@@ -7,10 +7,10 @@ import {
   FactorioNoteResultWithInstrument,
   getFactorioInstrument,
   HigherOrLower,
-  toFactorioInstrument,
 } from '@/app/lib/factorio-instrument'
 import { getVelocityValues } from '@/app/components/instrument-stage'
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
+import { assignInstruments } from './instrument-assignment'
 
 export type NoteExtremes = {
   min: number
@@ -207,7 +207,7 @@ export const midiToSong = (originalMidi: Midi, filename: string): Song => {
     },
     settings: {
       tracks: midi.tracks.map((track) => ({
-        factorioInstruments: [toFactorioInstrument(track.instrument)],
+        factorioInstruments: assignInstruments(track),
         velocityValues: getVelocityValues(track.notes),
         octaveShift: 0,
       })),

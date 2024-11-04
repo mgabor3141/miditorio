@@ -13,7 +13,7 @@ const config: Config = {
         foreground: 'var(--foreground)',
       },
       animation: {
-        shimmer: "shimmer 2s linear infinite"
+        shimmer: "shimmer 30s linear infinite"
       },
       keyframes: {
         shimmer: {
@@ -21,7 +21,7 @@ const config: Config = {
             "backgroundPosition": "0 0"
           },
           to: {
-            "backgroundPosition": "-200% 0"
+            "backgroundPosition": "-400% 0"
           }
         }
       }

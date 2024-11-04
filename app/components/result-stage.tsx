@@ -139,9 +139,9 @@ export const ResultStage = ({ song }: ResultStageProps) => {
                   transform transition-all hover:scale-105
                   relative
                   before:absolute before:inset-0
-                  before:animate-[shimmer_3s_linear_infinite]
+                  before:animate-shimmer
                   before:bg-[linear-gradient(110deg,transparent,45%,#ffffff33,55%,transparent)]
-                  before:bg-[length:200%_100%]
+                  before:bg-[length:400%_100%]
                   before:content-['']
                   before:mix-blend-screen
                   before:transition-[background-image]

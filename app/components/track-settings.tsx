@@ -18,6 +18,7 @@ import { NumberInputWithLabel } from './number-input-with-label'
 import { Histogram } from './histogram'
 import { getVelocityValues } from './instrument-stage'
 import { OutOfRangeWarning } from '@/app/components/out-of-range-warning'
+import { assignInstruments } from '../lib/instrument-assignment'
 
 const NONE = 'None'
 
@@ -43,6 +44,12 @@ export const TrackSettings = ({
   const trackInstruments = trackSettings.factorioInstruments.map(
     getFactorioInstrument,
   )
+
+  const autoAssignInstruments = () => {
+    const assigned = assignInstruments(track)
+    trackSettings.factorioInstruments = assigned
+    onSettingsChanged(settings)
+  }
 
   return (
     <>
@@ -84,64 +91,139 @@ export const TrackSettings = ({
                     settings.globalNoteShift,
                 })}
           </p>
-          <h4>Assign to Programmable Speaker instruments</h4>
-          <p>
+          <h4>Assign to programmable speaker instruments</h4>
+          <p className="mb-4">
             Each note will be assigned to the first instrument that can play it.
           </p>
-          {trackInstruments.map((trackInstrument, instrumentNumber) => (
-            <p key={instrumentNumber}>
-              Instrument #{instrumentNumber + 1}
-              <select
-                className="mx-4 text-black min-w-56"
-                value={trackInstrument?.name || NONE}
-                onChange={({ currentTarget: { value } }) => {
-                  if (value === NONE) {
-                    trackSettings.factorioInstruments =
-                      trackSettings.factorioInstruments.slice(
+          <div className="flex gap-2 mb-4">
+            <button className="button" onClick={autoAssignInstruments}>
+              Reset to auto-assigned
+            </button>
+            <button
+              className="button"
+              onClick={() => {
+                trackSettings.factorioInstruments = [undefined]
+                onSettingsChanged(settings)
+              }}
+            >
+              Clear all
+            </button>
+          </div>
+          {trackInstruments.map((trackInstrument, instrumentNumber) => {
+            // Calculate how many notes this instrument can play
+            const notesPlayedByThisInstrument = track.notes.filter((note) => {
+              // Check all previous instruments first
+              for (let i = 0; i < instrumentNumber; i++) {
+                const previousInstrument = trackInstruments[i]
+                if (!previousInstrument) continue
+
+                const result = previousInstrument.noteToFactorioNote(
+                  note.midi as MidiNote,
+                  trackSettings,
+                  settings,
+                )
+
+                // If a previous instrument can play it, this note won't be played by current instrument
+                if (result.valid) return false
+              }
+
+              // Check if current instrument can play it
+              if (!trackInstrument) return false
+              return trackInstrument.noteToFactorioNote(
+                note.midi as MidiNote,
+                trackSettings,
+                settings,
+              ).valid
+            }).length
+
+            const coveragePercentage = Math.round(
+              (notesPlayedByThisInstrument / track.notes.length) * 100,
+            )
+
+            return (
+              <p key={instrumentNumber} className="flex items-center gap-1">
+                <button
+                  className="text-gray-400 hover:text-white p-2"
+                  onClick={() => {
+                    trackSettings.factorioInstruments = [
+                      ...trackSettings.factorioInstruments.slice(
                         0,
                         instrumentNumber,
-                      )
+                      ),
+                      ...trackSettings.factorioInstruments.slice(
+                        instrumentNumber + 1,
+                      ),
+                    ]
 
-                    if (trackSettings.factorioInstruments.length === 0)
+                    if (trackSettings.factorioInstruments.length === 0) {
                       trackSettings.factorioInstruments = [undefined]
-                  } else {
-                    trackSettings.factorioInstruments[instrumentNumber] =
-                      value as FactorioInstrumentName
-                  }
+                    }
 
-                  onSettingsChanged(settings)
-                }}
-              >
-                {(
-                  Object.keys(
-                    getFactorioInstrumentList(),
-                  ) as FactorioInstrumentName[]
-                )
-                  .filter((instrumentName) => {
-                    if (instrumentName === trackInstrument?.name) return true
+                    onSettingsChanged(settings)
+                  }}
+                >
+                  ✕
+                </button>
+                <select
+                  className="text-black min-w-56 mr-2"
+                  value={trackInstrument?.name || NONE}
+                  onChange={({ currentTarget: { value } }) => {
+                    if (value === NONE) {
+                      trackSettings.factorioInstruments =
+                        trackSettings.factorioInstruments.slice(
+                          0,
+                          instrumentNumber,
+                        )
 
-                    return ![
-                      'Drumkit',
-                      ...trackSettings.factorioInstruments,
-                    ].includes(instrumentName)
-                  })
-                  .map((instrument) => (
-                    <option key={instrument} value={instrument}>
-                      [
-                      {noteExtremesToString(
-                        getFactorioInstrument(instrument)?.noteExtremes,
-                      )}
-                      ] {instrument}
-                    </option>
-                  ))}
-                <option key={NONE} value={NONE}>
-                  Mute
-                </option>
-              </select>
-            </p>
-          ))}
+                      if (trackSettings.factorioInstruments.length === 0)
+                        trackSettings.factorioInstruments = [undefined]
+                    } else {
+                      trackSettings.factorioInstruments[instrumentNumber] =
+                        value as FactorioInstrumentName
+                    }
 
-          {!(trackInstruments.length === 1 && trackInstruments[0] === undefined) && (
+                    onSettingsChanged(settings)
+                  }}
+                >
+                  {(
+                    Object.keys(
+                      getFactorioInstrumentList(),
+                    ) as FactorioInstrumentName[]
+                  )
+                    .filter((instrumentName) => {
+                      if (instrumentName === trackInstrument?.name) return true
+
+                      return ![
+                        'Drumkit',
+                        ...trackSettings.factorioInstruments,
+                      ].includes(instrumentName)
+                    })
+                    .map((instrument) => (
+                      <option key={instrument} value={instrument}>
+                        [
+                        {noteExtremesToString(
+                          getFactorioInstrument(instrument)?.noteExtremes,
+                        )}
+                        ] {instrument}
+                      </option>
+                    ))}
+                  <option key={NONE} value={NONE}>
+                    Mute
+                  </option>
+                </select>
+
+                {trackInstrument && notesPlayedByThisInstrument > 0 && (
+                  <span className="text-sm opacity-75">
+                    {notesPlayedByThisInstrument} notes ({coveragePercentage}%)
+                  </span>
+                )}
+              </p>
+            )
+          })}
+
+          {!(
+            trackInstruments.length === 1 && trackInstruments[0] === undefined
+          ) && (
             <>
               {outOfRangeNotes.higher || outOfRangeNotes.lower ? (
                 <>
@@ -159,7 +241,7 @@ export const TrackSettings = ({
                       Add instrument
                     </button>
                   </p>
-                  <OutOfRangeWarning 
+                  <OutOfRangeWarning
                     outOfRangeNotes={outOfRangeNotes}
                     instrumentText={`the selected instrument${trackInstruments.length === 1 ? '' : 's'}`}
                   />
@@ -180,7 +262,7 @@ export const TrackSettings = ({
             values to.
           </p>
           <p>
-            Each Programmable Speaker is only able to play notes from a single
+            Each programmable speaker is only able to play notes from a single
             velocity group, so the more groups you add the more Speakers will be
             included in the final blueprint.
           </p>

@@ -233,14 +233,14 @@ export const toFactorioInstrument = (
     case 'organ':
       return 'Square'
     case 'guitar':
-      return 'Sawtooth'
+      return 'Lead'
     case 'bass':
       return 'Bass'
     case 'strings':
       if (instrument.name === 'pizzicato strings') return 'Plucked strings'
       return 'Lead'
     case 'ensemble':
-      return 'Sawtooth'
+      return 'Lead'
     case 'brass':
       return 'Lead'
     case 'reed':
@@ -251,7 +251,7 @@ export const toFactorioInstrument = (
       if (instrument.name === 'lead 1 (square)') return 'Square'
       if (instrument.name === 'lead 2 (sawtooth)') return 'Sawtooth'
       if (instrument.name === 'lead 8 (bass + lead)') return 'Bass'
-      return 'Sawtooth'
+      return 'Lead'
     case 'synth pad':
       return 'Vibraphone'
     case 'synth effects':
