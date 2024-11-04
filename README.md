@@ -1,2 +1,5 @@
-# miditorio
-Convert midi songs to Factorio blueprints
+# Miditorio
+
+Create Factorio blueprints from any song
+
+https://miditorio.com

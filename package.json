@@ -1,0 +1,61 @@
+{
+  "name": "miditorio",
+  "version": "2.1.0",
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "tsc": "tsc --noEmit",
+    "lint": "prettier --write . && next lint --fix",
+    "test": "vitest",
+    "test:update": "vitest --update",
+    "parse-signals": "NODE_OPTIONS=\"\" node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types tools/process-factorio-signals.ts"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.25.7",
+    "@chakra-ui/next-js": "^2.4.2",
+    "@chakra-ui/react": "^2.10.3",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@tonejs/midi": "^2.0.28",
+    "@visx/group": "^3.3.0",
+    "@visx/scale": "^3.5.0",
+    "@visx/shape": "^3.5.0",
+    "framer-motion": "^11.11.9",
+    "lodash.groupby": "^4.6.0",
+    "next": "^14.2.15",
+    "pixi.js": "^8.4.1",
+    "posthog-js": "^1.167.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tone": "15.0.4",
+    "use-file-picker": "^2.1.2"
+  },
+  "devDependencies": {
+    "@spissvinkel/alea": "^1.2.1",
+    "@svgr/webpack": "^8.1.0",
+    "@testing-library/react": "^16.0.1",
+    "@types/json-stable-stringify": "^1",
+    "@types/lodash.groupby": "^4",
+    "@types/node": "^22.7.5",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.2",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.15",
+    "eslint-config-prettier": "^9.1.0",
+    "jsdom": "^25.0.1",
+    "json-stable-stringify": "^1.1.1",
+    "postcss": "^8.4.47",
+    "prettier": "^3.3.3",
+    "tailwindcss": "^3.4.13",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.8",
+    "vitest": "^2.1.2"
+  },
+  "packageManager": "yarn@4.5.0",
+  "engines": {
+    "node": "^22"
+  }
+}
