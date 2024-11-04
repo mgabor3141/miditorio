@@ -132,9 +132,21 @@ export const ResultStage = ({ song }: ResultStageProps) => {
             </p>
             <div className="flex justify-center">
               <a
-                href="https://ko-fi.com/miditorio"
+                href="https://ko-fi.com/mgabor"
                 target="_blank"
-                className="button button-green w-fit transform transition-all hover:scale-105"
+                className="
+                  button button-green w-fit
+                  transform transition-all hover:scale-105
+                  relative
+                  before:absolute before:inset-0
+                  before:animate-[shimmer_3s_linear_infinite]
+                  before:bg-[linear-gradient(110deg,transparent,45%,#ffffff33,55%,transparent)]
+                  before:bg-[length:200%_100%]
+                  before:content-['']
+                  before:mix-blend-screen
+                  before:transition-[background-image]
+                  hover:before:bg-[linear-gradient(110deg,transparent,45%,#ffffff55,55%,transparent)]
+                "
                 onClick={() => postHog?.capture('Clicked Donate')}
               >
                 ☕ Buy me a coffee
