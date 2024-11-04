@@ -46,9 +46,34 @@ export const TrackSettings = ({
   )
 
   const autoAssignInstruments = () => {
-    const assigned = assignInstruments(track)
-    trackSettings.factorioInstruments = assigned
+    settings.tracks[selectedTrack].factorioInstruments = assignInstruments(
+      track,
+      trackSettings,
+      settings,
+    )
     onSettingsChanged(settings)
+  }
+
+  const wouldAutoAssignmentChange = () => {
+    const autoAssignedInstruments = assignInstruments(
+      track,
+      trackSettings,
+      settings,
+    )
+
+    // If lengths are different, there would be a change
+    if (
+      autoAssignedInstruments.length !==
+      trackSettings.factorioInstruments.length
+    ) {
+      return true
+    }
+
+    // Check if any instruments are different
+    return autoAssignedInstruments.some(
+      (instrument, index) =>
+        instrument !== trackSettings.factorioInstruments[index],
+    )
   }
 
   return (
@@ -65,50 +90,40 @@ export const TrackSettings = ({
       {!track.instrument.percussion && (
         <>
           <h4>Shift notes of this track by</h4>
-          <NumberInputWithLabel
-            value={trackSettings.octaveShift}
-            onChange={(value) => {
-              trackSettings.octaveShift = Number(value)
-              onSettingsChanged(settings)
-            }}
-            width={16}
-            min={-16}
-            max={16}
-            labelAfter="octaves"
-          />
-          <p>
-            {(trackSettings.octaveShift !== 0 ||
-              settings.globalNoteShift !== 0) &&
-              `New range: ` +
-                noteExtremesToString({
-                  min:
-                    trackExtremes.min +
-                    trackSettings.octaveShift * 12 +
-                    settings.globalNoteShift,
-                  max:
-                    trackExtremes.max +
-                    trackSettings.octaveShift * 12 +
-                    settings.globalNoteShift,
-                })}
-          </p>
-          <h4>Assign to programmable speaker instruments</h4>
-          <p className="mb-4">
-            Each note will be assigned to the first instrument that can play it.
-          </p>
-          <div className="flex gap-2 mb-4">
-            <button className="button" onClick={autoAssignInstruments}>
-              Reset to auto-assigned
-            </button>
-            <button
-              className="button"
-              onClick={() => {
-                trackSettings.factorioInstruments = [undefined]
+          <div className="flex items-center gap-8 my-3 items-baseline">
+            <NumberInputWithLabel
+              value={trackSettings.octaveShift}
+              onChange={(value) => {
+                trackSettings.octaveShift = Number(value)
                 onSettingsChanged(settings)
               }}
-            >
-              Clear all
-            </button>
+              width={16}
+              min={-16}
+              max={16}
+              labelAfter="octaves"
+              className="m0"
+            />
+            <p className="text-sm opacity-75">
+              {(trackSettings.octaveShift !== 0 ||
+                settings.globalNoteShift !== 0) &&
+                `New range: ` +
+                  noteExtremesToString({
+                    min:
+                      trackExtremes.min +
+                      trackSettings.octaveShift * 12 +
+                      settings.globalNoteShift,
+                    max:
+                      trackExtremes.max +
+                      trackSettings.octaveShift * 12 +
+                      settings.globalNoteShift,
+                  })}
+            </p>
           </div>
+          <h4>Assign to programmable speaker instruments</h4>
+          <p className="mb-4">
+            Each note will be played by the first instrument that can play it
+            from the following list.
+          </p>
           {trackInstruments.map((trackInstrument, instrumentNumber) => {
             // Calculate how many notes this instrument can play
             const notesPlayedByThisInstrument = track.notes.filter((note) => {
@@ -225,27 +240,36 @@ export const TrackSettings = ({
             trackInstruments.length === 1 && trackInstruments[0] === undefined
           ) && (
             <>
+              <div className="flex mt-3">
+                {outOfRangeNotes.higher || outOfRangeNotes.lower ? (
+                  <button
+                    className="button m0"
+                    onClick={() => {
+                      settings.tracks[selectedTrack].factorioInstruments = [
+                        ...settings.tracks[selectedTrack].factorioInstruments,
+                        undefined,
+                      ]
+                      onSettingsChanged(settings)
+                    }}
+                  >
+                    Add instrument
+                  </button>
+                ) : (
+                  ''
+                )}
+
+                {wouldAutoAssignmentChange() && (
+                  <button className="button m0" onClick={autoAssignInstruments}>
+                    Auto-assign best instruments
+                  </button>
+                )}
+              </div>
+
               {outOfRangeNotes.higher || outOfRangeNotes.lower ? (
-                <>
-                  <p>
-                    <button
-                      className="button !h-auto"
-                      onClick={() => {
-                        settings.tracks[selectedTrack].factorioInstruments = [
-                          ...settings.tracks[selectedTrack].factorioInstruments,
-                          undefined,
-                        ]
-                        onSettingsChanged(settings)
-                      }}
-                    >
-                      Add instrument
-                    </button>
-                  </p>
-                  <OutOfRangeWarning
-                    outOfRangeNotes={outOfRangeNotes}
-                    instrumentText={`the selected instrument${trackInstruments.length === 1 ? '' : 's'}`}
-                  />
-                </>
+                <OutOfRangeWarning
+                  outOfRangeNotes={outOfRangeNotes}
+                  instrumentText={`the selected instrument${trackInstruments.length === 1 ? '' : 's'}`}
+                />
               ) : (
                 <p>All notes are within range 🗸</p>
               )}
@@ -307,6 +331,17 @@ export const TrackSettings = ({
       {track.instrument.percussion && (
         <div>
           <h4>Assign Drumkit sounds</h4>
+          <div className="mt-4 mb-2">
+            <button
+              onClick={() => {
+                trackSettings.drumMapOverrides = {}
+                onSettingsChanged(settings)
+              }}
+              className="button"
+            >
+              Reset to defaults
+            </button>
+          </div>
           <div className="grid grid-cols-[max-content_max-content_1fr] w-fit gap-y-1 gap-x-3 items-center">
             {Object.entries(
               track.notes.reduce(
@@ -327,10 +362,6 @@ export const TrackSettings = ({
                     {noteToGmPercussion[
                       note as keyof typeof noteToGmPercussion
                     ] || `MIDI note #${note}`}
-                  </div>
-                  <div key={`${note} number-of-occurrences`}>
-                    {numberOfOccurrences}{' '}
-                    {numberOfOccurrences === 1 ? 'note' : 'notes'}
                   </div>
                   <div key={`${note} select`}>
                     <select
@@ -373,6 +404,13 @@ export const TrackSettings = ({
                       </option>
                     </select>
                   </div>
+                  <p
+                    key={`${note} number-of-occurrences`}
+                    className="text-sm opacity-75"
+                  >
+                    {numberOfOccurrences}{' '}
+                    {numberOfOccurrences === 1 ? 'note' : 'notes'}
+                  </p>
                 </Fragment>
               ))}
           </div>

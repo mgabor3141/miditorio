@@ -57,10 +57,10 @@ export const getStaticBlueprintSection = (
         is_on: false,
       },
       player_description:
-        `\n[font=heading-1]${song.midi.name}[/font]\n\n` +
-        '[virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green][virtual-signal=signal-green]\n[virtual-signal=signal-green]' +
-        '\n\nConverted using Miditorio\n' +
-        `version ${packageJson.version}`,
+        `[item=programmable-speaker] [font=heading-1]${song.midi.name}[/font]` +
+        '\n\nToggle this combinator to play or reset' +
+        '\n\nConverted using Miditorio' +
+        `\nversion ${packageJson.version}`,
     },
     {
       entity_number: en(2),

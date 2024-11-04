@@ -85,7 +85,7 @@ export const InstrumentStage = ({
       {/* Title */}
       <div className="flex justify-between items-center gap-3 w-full flex-col sm:flex-row">
         <button
-          className="button !text-center !min-w-fit"
+          className="button !text-center !min-w-[140px]"
           onClick={() => onBack()}
         >
           Choose another
@@ -103,14 +103,18 @@ export const InstrumentStage = ({
           </div>
         </div>
         <button
-          className={`button-green-right !mr-3 !text-center ${selectedTrack === midi.tracks.length ? 'invisible' : ''}`}
+          className={`button-green-right !mr-3 !min-w-[140px] !text-center ${selectedTrack === midi.tracks.length ? 'invisible' : ''}`}
           onClick={() =>
             setSelectedTrack((track) => (track !== undefined ? track + 1 : 0))
           }
           aria-hidden={selectedTrack === midi.tracks.length}
           tabIndex={selectedTrack === midi.tracks.length ? -1 : undefined}
         >
-          Continue
+          {selectedTrack === undefined
+            ? 'Continue'
+            : selectedTrack === midi.tracks.length - 1
+              ? 'Export blueprint'
+              : 'Next track'}
         </button>
       </div>
 
@@ -158,7 +162,7 @@ export const InstrumentStage = ({
             className={`mr0 max-w-full !min-w-0 text-ellipsis overflow-hidden ${selectedTrack === midi.tracks.length ? 'button-green' : 'button'}`}
             onClick={() => setSelectedTrack(midi.tracks.length)}
           >
-            Results
+            Blueprint
           </div>
         </div>
         {/* Track settings */}

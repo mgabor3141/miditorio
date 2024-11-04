@@ -17,14 +17,14 @@ const copyToClipboard = async (text: string): Promise<boolean> => {
     await navigator.clipboard.write(data)
     return true
   } catch (e: unknown) {
-    console.warn(`Could not copy to clipboard. Update your browser.`, e)
+    console.warn(`Could not copy to clipboard.`, e)
     return false
   }
 }
 
 type Version = '1' | '2' | '2SA'
 const versionOptions: Record<Version, string> = {
-  '1': 'Factorio 1.x',
+  '1': 'Factorio 1.x (versions before October 2024)',
   '2': 'Factorio 2.x',
   '2SA': 'Factorio 2.x with Space Age DLC',
 }
@@ -39,12 +39,6 @@ export const ResultStage = ({ song }: ResultStageProps) => {
   const [copySuccess, setCopySuccess] = useState<boolean>(false)
   const [blueprintString, setBlueprintString] = useState('')
   const [warnings, setWarnings] = useState<string[]>([])
-
-  const resetResults = () => {
-    setCopySuccess(false)
-    setWarnings([])
-    setBlueprintString('')
-  }
 
   const getBlueprint = useCallback(async () => {
     setCopySuccess(false)
@@ -68,7 +62,8 @@ export const ResultStage = ({ song }: ResultStageProps) => {
   return (
     <div className="flex-column items-start gap-4">
       <div className="flex-column gap-2">
-        <p className="mb-2">I am going to use this blueprint in:</p>
+        <h2 className="mb0">Export blueprint</h2>
+        <p>Factorio version:</p>
         {Object.entries(versionOptions).map(([value, title]) => (
           <div className="flex gap-2 ml-4" key={value}>
             <label>
@@ -76,7 +71,7 @@ export const ResultStage = ({ song }: ResultStageProps) => {
                 type="radio"
                 name="target-version"
                 onChange={({ target: { value } }) => {
-                  resetResults()
+                  setCopySuccess(false)
                   setTargetVersion(value as Version)
                 }}
                 value={value}
@@ -88,15 +83,15 @@ export const ResultStage = ({ song }: ResultStageProps) => {
         ))}
       </div>
 
-      <div
-        className={`  ${targetVersion !== '1' ? 'hidden' : 'panel m0 alert-success w-full'}`}
-      >
-        To create blueprints for Factorio 1.x, please use{' '}
-        <a href="v1/" className="underline">
-          Miditorio v1
-        </a>
-        .
-      </div>
+      {targetVersion === '1' && (
+        <div className="panel m0 alert-success max-w-lg">
+          To create blueprints for Factorio 1.x, please use{' '}
+          <a href="v1/" className="underline">
+            Miditorio v1
+          </a>
+          .
+        </div>
+      )}
 
       <div className="flex items-center gap-4">
         <button
@@ -119,62 +114,53 @@ export const ResultStage = ({ song }: ResultStageProps) => {
         </div>
       )}
 
-      {blueprintString && (
-        <>
-          <div className="panel alert-success flex-column gap-2 m0 w-full max-w-lg mx-auto">
-            <h3 className="text-center mb-2">
-              🎵 Enjoying the new and improved Miditorio?
-            </h3>
-            <p className="!mt-0 text-center mb-4">
-              The app was recently rebuilt from scratch for the release of
-              Factorio 2.0! If you find it useful, consider supporting its
-              development with a small donation.
-            </p>
-            <div className="flex justify-center">
-              <a
-                href="https://ko-fi.com/mgabor"
-                target="_blank"
-                className="
-                  button button-green w-fit
-                  transform transition-all hover:scale-105
-                  relative
-                  before:absolute before:inset-0
-                  before:animate-shimmer
-                  before:bg-[linear-gradient(110deg,transparent,45%,#ffffff33,55%,transparent)]
-                  before:bg-[length:400%_100%]
-                  before:content-['']
-                  before:mix-blend-screen
-                  before:transition-[background-image]
-                  hover:before:bg-[linear-gradient(110deg,transparent,45%,#ffffff55,55%,transparent)]
-                "
-                onClick={() => postHog?.capture('Clicked Donate')}
-              >
-                ☕ Buy me a coffee
-              </a>
-            </div>
-          </div>
-          <textarea
-            value={blueprintString}
-            readOnly={true}
-            cols={50}
-            rows={3}
-            className="mt-2"
-          />
-          <p>
-            As a reminder, click this button on your in-game shortcut bar to
-            import blueprints:{' '}
-            <img
-              alt="ImportString.png"
-              src="https://wiki.factorio.com/images/thumb/ImportString.png/25px-ImportString.png"
-              decoding="async"
-              width="25"
-              height="24"
-              srcSet="https://wiki.factorio.com/images/thumb/ImportString.png/38px-ImportString.png 1.5x, https://wiki.factorio.com/images/thumb/ImportString.png/50px-ImportString.png 2x"
-              className="inline align-middle"
-            />
+      <div
+        className={`
+          flex-column gap-2 m0 w-full max-w-lg mx-auto
+          transition-all duration-500 ease-out
+          ${blueprintString ? 'opacity-100 visible animate-fade-in-up' : 'opacity-0 invisible'}
+        `}
+      >
+        <div className="panel alert-success flex-column gap-2 m0 w-full">
+          <h3 className="text-center mb-2">
+            🎵 Enjoying the new and improved Miditorio?
+          </h3>
+          <p className="!mt-0 text-center mb-4">
+            The app was recently rebuilt from scratch for the release of
+            Factorio: Space Age. If you find it useful, consider supporting its
+            development with a small donation.
           </p>
-        </>
-      )}
+          <div className="flex justify-center">
+            <a
+              href="https://ko-fi.com/mgabor"
+              target="_blank"
+              className="
+                button button-green w-fit
+                transform transition-all hover:scale-105
+                relative
+                before:absolute before:inset-0
+                before:animate-shimmer
+                before:bg-[linear-gradient(110deg,transparent,45%,#ffffff33,55%,transparent)]
+                before:bg-[length:400%_100%]
+                before:content-['']
+                before:mix-blend-screen
+                before:transition-[background-image]
+                hover:before:bg-[linear-gradient(110deg,transparent,45%,#ffffff55,55%,transparent)]
+              "
+              onClick={() => postHog?.capture('Clicked Donate')}
+            >
+              ☕ Buy me a coffee
+            </a>
+          </div>
+        </div>
+        <textarea
+          value={blueprintString}
+          readOnly={true}
+          cols={50}
+          rows={3}
+          className="mt-2"
+        />
+      </div>
     </div>
   )
 }

@@ -52,6 +52,10 @@ export default function Home() {
               }}
               onBack={() => {
                 setSong(undefined)
+                window.scrollTo({
+                  top: 0,
+                  behavior: 'smooth',
+                })
                 setFlowStage('select')
               }}
               // this is just hidden instead of gone so that we can

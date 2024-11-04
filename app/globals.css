@@ -28,3 +28,15 @@ body {
     text-wrap: balance;
   }
 }
+
+.faq-section {
+  @apply mb-8;
+}
+
+.faq-heading {
+  @apply mb-4;
+}
+
+.faq-paragraph {
+  @apply mb-4 last:mb-0;
+}

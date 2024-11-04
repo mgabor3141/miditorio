@@ -44,4 +44,4 @@ export const OutOfRangeWarning = ({
       than what {instrumentText} can play.
     </div>
   )
-} 
+}
