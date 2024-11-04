@@ -13,6 +13,7 @@ import { Note } from '@tonejs/midi/dist/Note'
 import { getOutOfRangeNotes, Song } from '@/app/lib/song'
 import { NumberInputWithLabel } from '@/app/components/number-input-with-label'
 import { TrackSettings } from './track-settings'
+import { OutOfRangeWarning } from '@/app/components/out-of-range-warning'
 
 export const getVelocityValues = (
   notes: Note[],
@@ -195,39 +196,14 @@ export const InstrumentStage = ({
                 labelAfter="semitones"
               />
               {(() => {
-                const { higher, lower } = outOfRangeNotes.reduce(
+                const summedOutOfRangeNotes = outOfRangeNotes.reduce(
                   (previousValue, { higher, lower }) => ({
                     higher: previousValue.higher + higher,
                     lower: previousValue.lower + lower,
                   }),
                 )
 
-                return higher || lower ? (
-                  <div className="panel alert-warning w-fit">
-                    {(['higher', 'lower'] as const) // TODO deduplicate
-                      .flatMap((higherOrLower) => {
-                        const n = { higher, lower }[higherOrLower]
-                        return n
-                          ? [
-                              `${higherOrLower === 'higher' ? '↥' : '↧'} ${n} notes are ${higherOrLower}`,
-                            ]
-                          : []
-                      })
-                      .map((str, i, array) => (
-                        <Fragment key={i}>
-                          {str}
-                          {i === 0 && array.length === 2 && (
-                            <>
-                              ,<br />
-                            </>
-                          )}
-                        </Fragment>
-                      ))}{' '}
-                    than what their respective instruments can play.
-                  </div>
-                ) : (
-                  <p>All notes are within range for all instruments 🗸</p>
-                )
+                return <OutOfRangeWarning outOfRangeNotes={summedOutOfRangeNotes} />
               })()}
               <h3>Playback speed</h3>
               <p>This allows playback on different game speeds.</p>

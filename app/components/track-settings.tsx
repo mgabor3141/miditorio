@@ -17,6 +17,7 @@ import { noteExtremesToString } from '../lib/song'
 import { NumberInputWithLabel } from './number-input-with-label'
 import { Histogram } from './histogram'
 import { getVelocityValues } from './instrument-stage'
+import { OutOfRangeWarning } from '@/app/components/out-of-range-warning'
 
 const NONE = 'None'
 
@@ -140,13 +141,9 @@ export const TrackSettings = ({
             </p>
           ))}
 
-          {!(
-            trackInstruments.length === 1 && trackInstruments[0] === undefined
-          ) &&
-            (() => {
-              const { higher, lower } = outOfRangeNotes
-
-              return higher || lower ? (
+          {!(trackInstruments.length === 1 && trackInstruments[0] === undefined) && (
+            <>
+              {outOfRangeNotes.higher || outOfRangeNotes.lower ? (
                 <>
                   <p>
                     <button
@@ -162,34 +159,16 @@ export const TrackSettings = ({
                       Add instrument
                     </button>
                   </p>
-                  <div className="panel alert-warning w-fit">
-                    {(['higher', 'lower'] as const)
-                      .flatMap((higherOrLower) => {
-                        const n = { higher, lower }[higherOrLower]
-                        return n
-                          ? [
-                              `${higherOrLower === 'higher' ? '↥' : '↧'} ${n} notes are ${higherOrLower}`,
-                            ]
-                          : []
-                      })
-                      .map((str, i, array) => (
-                        <Fragment key={i}>
-                          {str}
-                          {i === 0 && array.length === 2 && (
-                            <>
-                              ,<br />
-                            </>
-                          )}
-                        </Fragment>
-                      ))}{' '}
-                    than what the selected instrument
-                    {trackInstruments.length === 1 ? '' : 's'} can play.
-                  </div>
+                  <OutOfRangeWarning 
+                    outOfRangeNotes={outOfRangeNotes}
+                    instrumentText={`the selected instrument${trackInstruments.length === 1 ? '' : 's'}`}
+                  />
                 </>
               ) : (
                 <p>All notes are within range 🗸</p>
-              )
-            })()}
+              )}
+            </>
+          )}
         </>
       )}
       <h4>Configure dynamics</h4>
