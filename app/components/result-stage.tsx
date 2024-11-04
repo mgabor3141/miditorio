@@ -1,4 +1,4 @@
-import { Dispatch, useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { songToFactorio } from '@/app/lib/song-to-factorio'
 import signals from '@/app/lib/data/signals.json'
 import signalsDlc from '@/app/lib/data/signals-dlc.json'
@@ -31,9 +31,8 @@ const versionOptions: Record<Version, string> = {
 
 export type ResultStageProps = {
   song: Song
-  onBack: Dispatch<void>
 }
-export const ResultStage = ({ song, onBack }: ResultStageProps) => {
+export const ResultStage = ({ song }: ResultStageProps) => {
   const postHog = usePostHog()
 
   const [targetVersion, setTargetVersion] = useState<Version>('2')
@@ -67,62 +66,103 @@ export const ResultStage = ({ song, onBack }: ResultStageProps) => {
   }, [postHog, song, targetVersion])
 
   return (
-    <div className="panel w-[500px]">
-      <div className="panel-inset flex-column items-start gap-4">
-        <button className="button" onClick={() => onBack()}>
-          Back
-        </button>
+    <div className="flex-column items-start gap-4">
+      <div className="flex-column gap-2">
+        <p className="mb-2">I am going to use this blueprint in:</p>
+        {Object.entries(versionOptions).map(([value, title]) => (
+          <div className="flex gap-2 ml-4" key={value}>
+            <label>
+              <input
+                type="radio"
+                name="target-version"
+                onChange={({ target: { value } }) => {
+                  resetResults()
+                  setTargetVersion(value as Version)
+                }}
+                value={value}
+                checked={value === targetVersion}
+              />
+              {title}
+            </label>
+          </div>
+        ))}
+      </div>
 
-        <div className="flex-column gap-2">
-          <p className="mb-2">I am going to use this blueprint in:</p>
-          {Object.entries(versionOptions).map(([value, title]) => (
-            <div className="flex gap-2 ml-4" key={value}>
-              <label>
-                <input
-                  type="radio"
-                  name="target-version"
-                  onChange={({ target: { value } }) => {
-                    resetResults()
-                    setTargetVersion(value as Version)
-                  }}
-                  value={value}
-                  checked={value === targetVersion}
-                />
-                {title}
-              </label>
+      <div
+        className={`  ${targetVersion !== '1' ? 'hidden' : 'panel m0 alert-success w-full'}`}
+      >
+        To create blueprints for Factorio 1.x, please use{' '}
+        <a href="v1/" className="underline">
+          Miditorio v1
+        </a>
+        .
+      </div>
+
+      <div className="flex items-center gap-4">
+        <button
+          className={`button button-green box-border ${targetVersion === '1' ? 'disabled' : ''}`}
+          onClick={getBlueprint}
+          disabled={targetVersion === '1'}
+        >
+          Copy blueprint
+        </button>
+        <p>{copySuccess && 'Copied to clipboard 🗸'}</p>
+      </div>
+      {warnings.length > 0 && (
+        <div className="panel alert-warning flex-column gap-2 m0 w-full">
+          {warnings.map((warning, i) => (
+            <div key={i} className="flex items-start gap-2">
+              <p>⚠️</p>
+              <p className="!mt-0">{warning}</p>
             </div>
           ))}
         </div>
+      )}
 
-        <div
-          className={`  ${targetVersion !== '1' ? 'hidden' : 'panel m0 alert-success w-full'}`}
-        >
-          To create blueprints for Factorio 1.x, please use{' '}
-          <a href="v1/">Miditorio v1</a>.
-        </div>
-
-        <div className="flex items-center gap-4">
-          <button
-            className={`button button-green box-border ${targetVersion === '1' ? 'disabled' : ''}`}
-            onClick={getBlueprint}
-            disabled={targetVersion === '1'}
-          >
-            Get blueprint!
-          </button>
-          <p>{copySuccess && 'Copied 🗸'}</p>
-        </div>
-        {warnings.length > 0 && (
-          <div className="panel alert-warning flex-column gap-2 m0 w-full">
-            {warnings.map((warning, i) => (
-              <div key={i} className="flex items-start gap-2">
-                <p>⚠️</p>
-                <p className="!mt-0">{warning}</p>
-              </div>
-            ))}
+      {blueprintString && (
+        <>
+          <div className="panel alert-success flex-column gap-2 m0 w-full max-w-lg mx-auto">
+            <h3 className="text-center mb-2">
+              🎵 Enjoying the new and improved Miditorio?
+            </h3>
+            <p className="!mt-0 text-center mb-4">
+              The app was recently rebuilt from scratch for the release of
+              Factorio 2.0! If you find it useful, consider supporting its
+              development with a small donation.
+            </p>
+            <div className="flex justify-center">
+              <a
+                href="https://ko-fi.com/miditorio"
+                target="_blank"
+                className="button button-green w-fit transform transition-all hover:scale-105"
+                onClick={() => postHog?.capture('Clicked Donate')}
+              >
+                ☕ Buy me a coffee
+              </a>
+            </div>
           </div>
-        )}
-        <textarea value={blueprintString} readOnly={true} cols={50} rows={6} />
-      </div>
+          <textarea
+            value={blueprintString}
+            readOnly={true}
+            cols={50}
+            rows={3}
+            className="mt-2"
+          />
+          <p>
+            As a reminder, click this button on your in-game shortcut bar to
+            import blueprints:{' '}
+            <img
+              alt="ImportString.png"
+              src="https://wiki.factorio.com/images/thumb/ImportString.png/25px-ImportString.png"
+              decoding="async"
+              width="25"
+              height="24"
+              srcSet="https://wiki.factorio.com/images/thumb/ImportString.png/38px-ImportString.png 1.5x, https://wiki.factorio.com/images/thumb/ImportString.png/50px-ImportString.png 2x"
+              className="inline align-middle"
+            />
+          </p>
+        </>
+      )}
     </div>
   )
 }

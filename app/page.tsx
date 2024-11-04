@@ -3,12 +3,11 @@
 import { useEffect, useState } from 'react'
 import { SelectStage } from './components/select-stage'
 import { InstrumentStage } from '@/app/components/instrument-stage'
-import { ResultStage } from '@/app/components/result-stage'
 import { Song } from '@/app/lib/song'
 import { usePostHog } from 'posthog-js/react'
 import { Info } from '@/app/components/info'
 
-export type Stage = 'select' | 'instrument' | 'result'
+export type Stage = 'select' | 'instrument'
 
 export default function Home() {
   const postHog = usePostHog()
@@ -55,16 +54,9 @@ export default function Home() {
                 setSong(undefined)
                 setFlowStage('select')
               }}
-              onContinue={() => setFlowStage('result')}
               // this is just hidden instead of gone so that we can
               //  keep the state when coming back to this page
               className={flowStage === 'instrument' ? '' : 'display-none'}
-            />
-          )}
-          {flowStage === 'result' && song && (
-            <ResultStage
-              song={song}
-              onBack={() => setFlowStage('instrument')}
             />
           )}
         </>

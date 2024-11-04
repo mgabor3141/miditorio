@@ -1,12 +1,5 @@
 import { PianoRoll, PixiProvider } from '@/app/components/piano-roll'
-import React, {
-  Dispatch,
-  Fragment,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import React, { Dispatch, useCallback, useMemo, useRef, useState } from 'react'
 import { Settings } from '@/app/components/select-stage'
 import { autoCluster, kMeansClustering } from '@/app/lib/kmeans'
 import { Note } from '@tonejs/midi/dist/Note'
@@ -14,6 +7,7 @@ import { getOutOfRangeNotes, Song } from '@/app/lib/song'
 import { NumberInputWithLabel } from '@/app/components/number-input-with-label'
 import { TrackSettings } from './track-settings'
 import { OutOfRangeWarning } from '@/app/components/out-of-range-warning'
+import { ResultStage } from '@/app/components/result-stage'
 
 export const getVelocityValues = (
   notes: Note[],
@@ -35,14 +29,12 @@ export const getVelocityValues = (
 export type InstrumentStageProps = {
   song: Song
   onBack: Dispatch<void>
-  onContinue: Dispatch<void>
   onSettingsChanged: Dispatch<Settings>
   className?: string
 }
 export const InstrumentStage = ({
   song,
   onBack,
-  onContinue,
   className,
   onSettingsChanged,
 }: InstrumentStageProps) => {
@@ -82,7 +74,9 @@ export const InstrumentStage = ({
             midi={midi}
             additionalInfo={additionalInfo}
             settings={settings}
-            selectedTrack={selectedTrack}
+            selectedTrack={
+              selectedTrack === midi.tracks.length ? undefined : selectedTrack
+            }
             onDoneRender={onDoneRender}
           />
         </PixiProvider>
@@ -109,15 +103,12 @@ export const InstrumentStage = ({
           </div>
         </div>
         <button
-          className="button-green-right !mr-3 !text-center"
-          onClick={() => {
-            if (
-              selectedTrack === undefined ||
-              selectedTrack < midi.tracks.length - 1
-            )
-              setSelectedTrack((track) => (track !== undefined ? track + 1 : 0))
-            else onContinue()
-          }}
+          className={`button-green-right !mr-3 !text-center ${selectedTrack === midi.tracks.length ? 'invisible' : ''}`}
+          onClick={() =>
+            setSelectedTrack((track) => (track !== undefined ? track + 1 : 0))
+          }
+          aria-hidden={selectedTrack === midi.tracks.length}
+          tabIndex={selectedTrack === midi.tracks.length ? -1 : undefined}
         >
           Continue
         </button>
@@ -125,7 +116,7 @@ export const InstrumentStage = ({
 
       {/* Main section */}
       <div className="flex flex-col sm:flex-row gap-x-3 w-full min-h-[40dvh]">
-        {/* Tracks */}
+        {/* Sidebar */}
         <div className="panel-inset-lighter flex-column gap-2 flex-start flex-1 min-w-32 max-w-fit basis-1/5 ">
           <div
             key="all"
@@ -161,12 +152,20 @@ export const InstrumentStage = ({
               })()}
             </button>
           ))}
+          <hr className="m-0" />
+          <div
+            key="results"
+            className={`mr0 max-w-full !min-w-0 text-ellipsis overflow-hidden ${selectedTrack === midi.tracks.length ? 'button-green' : 'button'}`}
+            onClick={() => setSelectedTrack(midi.tracks.length)}
+          >
+            Results
+          </div>
         </div>
         {/* Track settings */}
         <div className="flex-1 basis-4/5 panel-inset">
           {selectedTrack === undefined ? (
             <>
-              <h2>Conversion settings – overview</h2>
+              <h2>Conversion settings – Overview</h2>
               <p>
                 Check each track and decide which Factorio instrument it will be
                 assigned to.
@@ -203,7 +202,9 @@ export const InstrumentStage = ({
                   }),
                 )
 
-                return <OutOfRangeWarning outOfRangeNotes={summedOutOfRangeNotes} />
+                return (
+                  <OutOfRangeWarning outOfRangeNotes={summedOutOfRangeNotes} />
+                )
               })()}
               <h3>Playback speed</h3>
               <p>This allows playback on different game speeds.</p>
@@ -238,10 +239,14 @@ export const InstrumentStage = ({
 
                   const bpm = song.midi.header.tempos.map(({ bpm }) => bpm)
 
+                  if (bpm.length === 0) return 'unknown'
+
                   return `${printBpmRange(bpm)}${settings.speedMultiplier !== 1 ? ` => ${printBpmRange(bpm, settings.speedMultiplier)}` : ''}`
                 })()}
               </p>
             </>
+          ) : selectedTrack === midi.tracks.length ? (
+            <ResultStage song={song} />
           ) : (
             /* Track settings */
             <TrackSettings
