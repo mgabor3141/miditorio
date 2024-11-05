@@ -30,7 +30,8 @@ export const PixiProvider = ({
 }>) => {
   const appRef = useRef<Application | null>(null)
   const pixiRootDiv = useRef<HTMLDivElement | null>(null)
-  const [isReady, setIsReady] = useState(false)
+  const [isAppReady, setIsAppReady] = useState(false)
+  const [isCanvasReady, setIsCanvasReady] = useState(false)
 
   useEffect(() => {
     let isThisUseEffectReady = false
@@ -49,13 +50,13 @@ export const PixiProvider = ({
       } else {
         appRef.current = app
         isThisUseEffectReady = true
-        setIsReady(true)
+        setIsAppReady(true)
       }
     })()
 
     return () => {
       if (isThisUseEffectReady && appRef.current) {
-        setIsReady(false)
+        setIsAppReady(false)
         appRef.current.destroy()
       } else {
         isCancelled = true
@@ -64,21 +65,23 @@ export const PixiProvider = ({
   }, [])
 
   useEffect(() => {
-    if (isReady && appRef.current && pixiRootDiv.current) {
+    if (isAppReady && appRef.current && pixiRootDiv.current) {
       appRef.current.resizeTo = pixiRootDiv.current
       pixiRootDiv.current?.replaceChildren()
       pixiRootDiv.current?.appendChild(appRef.current.canvas)
+      setIsCanvasReady(true)
     }
-  }, [isReady])
+  }, [isAppReady])
 
   return (
-    <div ref={pixiRootDiv} className="w-full min-h-[30svh] max-h-[30svh]">
-      {isReady && appRef.current && (
+    <>
+      <div ref={pixiRootDiv} className="w-full min-h-[30svh] max-h-[30svh]" />
+      {isAppReady && isCanvasReady && appRef.current && (
         <PixiContext.Provider value={appRef.current}>
           {children}
         </PixiContext.Provider>
       )}
-    </div>
+    </>
   )
 }
 
@@ -135,11 +138,8 @@ export const PianoRoll = ({
   const [sprites, setSprites] = useState<Sprite[]>([])
 
   useEffect(() => {
-    const width = app.canvas.clientWidth
-    const height = app.canvas.clientHeight
-
-    setInitialWidth({ width, height })
-  }, [app])
+    setInitialWidth(app.canvas.getBoundingClientRect())
+  }, [app, app.canvas])
 
   useEffect(() => {
     if (!initialWidth) return
