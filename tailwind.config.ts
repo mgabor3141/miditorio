@@ -12,6 +12,9 @@ const config: Config = {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
       },
+      boxShadow: {
+        'main-button': '0 10px 35px 10px rgba(0, 0, 0, 0.7)',
+      },
       animation: {
         shimmer: 'shimmer 30s linear infinite',
         'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
