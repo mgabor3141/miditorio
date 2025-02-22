@@ -1,6 +1,6 @@
 {
   "name": "miditorio",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "dev": "next dev",
@@ -57,5 +57,8 @@
   "packageManager": "yarn@4.5.0",
   "engines": {
     "node": "^22"
+  },
+  "volta": {
+    "node": "22.14.0"
   }
 }

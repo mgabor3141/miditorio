@@ -380,7 +380,6 @@
 {"type":"virtual","name":"signal-stack-size"},
 {"type":"virtual","name":"signal-heart"},
 {"type":"virtual","name":"signal-skull"},
-{"type":"virtual","name":"signal-ghost"},
 {"type":"virtual","name":"signal-any-quality"},
 {"type":"recipe","name":"wooden-chest"},
 {"type":"recipe","name":"iron-chest"},
