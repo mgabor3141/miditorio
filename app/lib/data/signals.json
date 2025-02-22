@@ -278,7 +278,6 @@
 {"type":"virtual","name":"signal-stack-size"},
 {"type":"virtual","name":"signal-heart"},
 {"type":"virtual","name":"signal-skull"},
-{"type":"virtual","name":"signal-ghost"},
 {"type":"recipe","name":"wooden-chest"},
 {"type":"recipe","name":"iron-chest"},
 {"type":"recipe","name":"steel-chest"},
