@@ -1,4 +1,4 @@
-import { Dispatch, useEffect, useState } from 'react'
+import { Dispatch, useCallback, useEffect, useState } from 'react'
 import { useFilePicker } from 'use-file-picker'
 import { Midi } from '@tonejs/midi'
 import { usePostHog } from 'posthog-js/react'
@@ -26,53 +26,137 @@ export type Settings = {
 export type SelectStageProps = {
   setSong: Dispatch<Song | undefined>
 }
+
+const useDragAndDrop = (onFile: (file: ArrayBuffer, fileName: string) => Promise<void>) => {
+  const [isDragging, setIsDragging] = useState(false)
+
+  useEffect(() => {
+    const handleDragEnter = (e: DragEvent) => {
+      e.preventDefault()
+      setIsDragging(true)
+    }
+
+    const handleDragOver = (e: DragEvent) => {
+      e.preventDefault()
+    }
+
+    const handleDragLeave = (e: DragEvent) => {
+      e.preventDefault()
+      if (e.target === document.documentElement) {
+        setIsDragging(false)
+      }
+    }
+
+    const handleDrop = async (e: DragEvent) => {
+      e.preventDefault()
+      setIsDragging(false)
+
+      const files = Array.from(e.dataTransfer?.files || [])
+      const midiFile = files.find(
+        (file) =>
+          file.type === 'audio/midi' ||
+          file.type === 'audio/x-midi' ||
+          file.name.endsWith('.mid'),
+      )
+
+      if (midiFile) {
+        try {
+          const buffer = await midiFile.arrayBuffer()
+          await onFile(buffer, midiFile.name)
+        } catch {
+          // Error handling is done in the onFile callback
+        }
+      }
+    }
+
+    document.addEventListener('dragenter', handleDragEnter)
+    document.addEventListener('dragover', handleDragOver)
+    document.addEventListener('dragleave', handleDragLeave)
+    document.addEventListener('drop', handleDrop)
+
+    return () => {
+      document.removeEventListener('dragenter', handleDragEnter)
+      document.removeEventListener('dragover', handleDragOver)
+      document.removeEventListener('dragleave', handleDragLeave)
+      document.removeEventListener('drop', handleDrop)
+    }
+  }, [onFile])
+
+  return isDragging
+}
+
 export const SelectStage = ({ setSong }: SelectStageProps) => {
   const postHog = usePostHog()
   const [loadingMessage, setLoadingMessage] = useState('')
 
-  const { openFilePicker, filesContent } = useFilePicker({
+  const processFile = useCallback(async (file: ArrayBuffer, fileName: string) => {
+    postHog.capture('Selected midi file', {
+      'File Name': fileName,
+    })
+    setSong(undefined)
+
+    requestAnimationFrame(() => {
+      setLoadingMessage('Loading file...')
+      requestAnimationFrame(() => {
+        const song = new Midi(file.slice(0))
+        setSong(midiToSong(song, fileName))
+        setLoadingMessage('')
+      })
+    })
+  }, [postHog, setSong])
+
+  const { openFilePicker } = useFilePicker({
     accept: ['audio/midi', 'audio/x-midi'],
     readAs: 'ArrayBuffer',
     onFilesSuccessfullySelected: async ({ filesContent }) => {
-      postHog.capture('Selected midi file', {
-        'File Name': filesContent[0].name,
-      })
-      setSong(undefined)
+      await processFile(filesContent[0].content, filesContent[0].name)
     },
   })
 
-  useEffect(() => {
-    if (filesContent[0]) {
-      requestAnimationFrame(() => {
-        setLoadingMessage('Loading file...')
-
-        requestAnimationFrame(() => {
-          if (loadingMessage && filesContent.length) {
-            const song = new Midi(filesContent[0].content.slice(0))
-            const processedSong = midiToSong(song, filesContent[0].name)
-            console.log('Finished processing: ', processedSong)
-            setSong(processedSong)
-
-            setLoadingMessage('')
-          }
-        })
-      })
-    }
-  }, [filesContent, loadingMessage, setSong])
+  const isDragging = useDragAndDrop(processFile)
 
   return (
-    <div className="flex-grow flex flex-col items-center">
-      <div className="flex-grow-[4]"></div>
-      <div className="shadow-[0_10px_35px_10px_rgba(0,_0,_0,_0.7)]">
+    <>
+      {isDragging && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            fontSize: '1.5rem',
+            zIndex: 1000,
+            pointerEvents: 'none',
+          }}
+        >
+          Drop MIDI file
+        </div>
+      )}
+      <div className="flex-grow flex flex-col items-center">
+        <div className="flex-grow-[4]"></div>
         {loadingMessage ? (
-          <div className="panel m0">{loadingMessage}</div>
+          <div className="panel m0 shadow-main-button">{loadingMessage}</div>
         ) : (
-          <button className="button button-green mr0" onClick={openFilePicker}>
-            Select MIDI file
-          </button>
+          <>
+            <div className="flex flex-col items-center shadow-main-button">
+              <button
+                className="button button-green mr0"
+                onClick={openFilePicker}
+              >
+                Select MIDI file
+              </button>
+            </div>
+            <div className="text-sm mt-1 opacity-75">or drag and drop</div>
+          </>
         )}
+        <div className="flex-grow"></div>
       </div>
-      <div className="flex-grow"></div>
-    </div>
+    </>
   )
 }
