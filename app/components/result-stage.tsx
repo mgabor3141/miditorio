@@ -4,6 +4,7 @@ import signals from '@/app/lib/data/signals.json'
 import signalsDlc from '@/app/lib/data/signals-dlc.json'
 import { usePostHog } from 'posthog-js/react'
 import { Song } from '@/app/lib/song'
+import { PlaybackMode } from '@/app/lib/factorio-blueprint-schema'
 
 /**
  * @param text
@@ -29,6 +30,12 @@ const versionOptions: Record<Version, string> = {
   '2SA': 'Factorio 2.x with Space Age DLC',
 }
 
+const playbackModeOptions: Record<PlaybackMode, [string, string]> = {
+  'global': ['Global' ,'The song can be heard everywhere'],
+  'surface': ['Surface', 'The song can be heard on speaker\'s surface'],
+  'local': ['Local', 'The song can be heard within the audible range around the speaker'],
+}
+
 export type ResultStageProps = {
   song: Song
 }
@@ -36,6 +43,7 @@ export const ResultStage = ({ song }: ResultStageProps) => {
   const postHog = usePostHog()
 
   const [targetVersion, setTargetVersion] = useState<Version>('2')
+  const [playbackMode, setPlaybackMode] = useState<PlaybackMode>('global')
   const [copySuccess, setCopySuccess] = useState<boolean>(false)
   const [blueprintString, setBlueprintString] = useState('')
   const [warnings, setWarnings] = useState<string[]>([])
@@ -44,7 +52,7 @@ export const ResultStage = ({ song }: ResultStageProps) => {
     setCopySuccess(false)
     const signalSet = targetVersion === '2SA' ? signalsDlc : signals
 
-    const { blueprint, warnings } = songToFactorio(song, signalSet)
+    const { blueprint, warnings } = songToFactorio(song, signalSet, playbackMode)
     const copyAttempt = await copyToClipboard(blueprint)
     setWarnings(warnings)
     setCopySuccess(copyAttempt)
@@ -53,11 +61,12 @@ export const ResultStage = ({ song }: ResultStageProps) => {
       Title: song.midi.name,
       'Song Settings': song.settings,
       'Factorio Version': targetVersion,
+      'Playback Mode': playbackMode,
       Blueprint: blueprint,
       Warnings: warnings,
       'Clipboard Success': copyAttempt,
     })
-  }, [postHog, song, targetVersion])
+  }, [postHog, song, targetVersion, playbackMode])
 
   return (
     <div className="flex-column items-start gap-4">
@@ -92,6 +101,28 @@ export const ResultStage = ({ song }: ResultStageProps) => {
           .
         </div>
       )}
+
+      <div className="flex-column gap-2">
+        <p>Playback mode:</p>
+        {Object.entries(playbackModeOptions).map(([value, texts]) => (
+          <div className="flex gap-2 ml-4" key={value} title={texts[1]}>
+            <label>
+              <input
+                type="radio"
+                name="playback-mode"
+                onChange={({ target: { value } }) => {
+                  setCopySuccess(false)
+                  setPlaybackMode(value as PlaybackMode)
+                }}
+                value={value}
+                disabled={targetVersion === '1'}
+                checked={value === playbackMode}
+              />
+              {texts[0]}
+            </label>
+          </div>
+        ))}
+      </div>
 
       <div className="flex items-center gap-4">
         <button

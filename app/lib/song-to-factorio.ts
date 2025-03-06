@@ -8,6 +8,7 @@ import { roundToNearestClusterCenter } from '@/app/lib/kmeans'
 import groupBy from 'lodash.groupby'
 import { FactorioInstrumentName } from '@/app/lib/data/factorio-instruments-by-id'
 import { noteToFactorioNote, Song } from '@/app/lib/song'
+import { PlaybackMode } from './factorio-blueprint-schema'
 
 type FactorioNote = number
 type Chord = FactorioNote[]
@@ -22,10 +23,11 @@ export type Speakers = Record<
     chords: Chord[]
     instrumentName: FactorioInstrumentName
     volume: number
+    playbackMode: PlaybackMode
   }
 >
 
-export const songToFactorioData = ({ midi, settings }: Song): Speakers => {
+export const songToFactorioData = ({ midi, settings }: Song, playbackMode: PlaybackMode): Speakers => {
   const instrumentsAfterVelocity: Speakers = {}
 
   for (const trackNumber in midi.tracks) {
@@ -54,6 +56,7 @@ export const songToFactorioData = ({ midi, settings }: Song): Speakers => {
             chords: [],
             instrumentName,
             volume,
+            playbackMode,
           }
         }
 
@@ -83,8 +86,9 @@ export const songToFactorioData = ({ midi, settings }: Song): Speakers => {
 export const songToFactorio = (
   song: Song,
   signals: RawSignal[],
+  playbackMode: PlaybackMode
 ): BlueprintResult => {
-  const instruments = songToFactorioData(song)
+  const instruments = songToFactorioData(song, playbackMode)
 
   type Event = {
     time: number

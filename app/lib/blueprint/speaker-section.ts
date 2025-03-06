@@ -19,7 +19,7 @@ export const getSpeakerSection = (
   const en = localEntityNumberToAbsolute(entitiesSoFar)
 
   Object.values(speakers).forEach(
-    ({ instrumentName, volume }, speakerIndex) => {
+    ({ instrumentName, volume, playbackMode }, speakerIndex) => {
       const instrument = getFactorioInstrument(instrumentName)
       const speakerEntity = en(speakerIndex * 2 + 1)
       const speakerCombinatorEntity = en(speakerIndex * 2 + 2)
@@ -49,7 +49,7 @@ export const getSpeakerSection = (
           },
           parameters: {
             playback_volume: instrument.volumeCorrection * volume,
-            playback_mode: 'global',
+            playback_mode: playbackMode,
             allow_polyphony: true,
           },
         },

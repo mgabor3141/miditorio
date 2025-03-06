@@ -30,7 +30,7 @@ export type Networks = {
   green: boolean
 }
 
-export type PlaybackMode = 'surface' | 'global'
+export type PlaybackMode = 'local' | 'surface' | 'global'
 
 export type Entity = {
   entity_number: number
