@@ -8,6 +8,7 @@
     "start": "next start",
     "tsc": "tsc --noEmit",
     "lint": "prettier --write . && next lint --fix",
+    "lint:check": "next lint && prettier --check .",
     "test": "vitest",
     "test:update": "vitest --update",
     "parse-signals": "NODE_OPTIONS=\"\" node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types tools/process-factorio-signals.ts"

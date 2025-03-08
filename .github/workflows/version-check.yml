@@ -1,0 +1,48 @@
+name: Version Check
+
+on:
+  pull_request:
+    branches: ['main']
+
+jobs:
+  version-check:
+    name: Check Version Bump
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Get PR version
+        id: pr_version
+        run: |
+          PR_VERSION=$(node -p "require('./package.json').version")
+          echo "version=$PR_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+
+      - name: Get main version
+        id: main_version
+        run: |
+          MAIN_VERSION=$(node -p "require('./main/package.json').version")
+          echo "version=$MAIN_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Compare versions
+        run: |
+          PR_VERSION="${{ steps.pr_version.outputs.version }}"
+          MAIN_VERSION="${{ steps.main_version.outputs.version }}"
+
+          if ! npx semver --range ">$MAIN_VERSION" "$PR_VERSION"; then
+            echo "Error: Version in PR ($PR_VERSION) is not higher than version in main ($MAIN_VERSION)"
+            exit 1
+          fi
+          echo "Version check passed: $PR_VERSION > $MAIN_VERSION"
