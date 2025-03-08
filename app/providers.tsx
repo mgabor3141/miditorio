@@ -5,23 +5,23 @@ import React from 'react'
 import packageJson from '@/package.json'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 
-if (
-  !process.env.NEXT_PUBLIC_POSTHOG_KEY ||
-  !process.env.NEXT_PUBLIC_POSTHOG_HOST
-) {
-  throw new Error('Posthog env vars not set')
-}
-
 if (typeof window !== 'undefined') {
-  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-    person_profiles: 'identified_only',
-    persistence: 'memory',
-  })
+  if (
+    !process.env.NEXT_PUBLIC_POSTHOG_KEY ||
+    !process.env.NEXT_PUBLIC_POSTHOG_HOST
+  ) {
+    console.error('Posthog env vars not set')
+  } else {
+    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
+      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+      person_profiles: 'identified_only',
+      persistence: 'memory',
+    })
 
-  posthog.register({
-    version: packageJson.version,
-  })
+    posthog.register({
+      version: packageJson.version,
+    })
+  }
 }
 
 const theme = extendTheme({
