@@ -31,9 +31,12 @@ const versionOptions: Record<Version, string> = {
 }
 
 const playbackModeOptions: Record<PlaybackMode, [string, string]> = {
-  'global': ['Global' ,'The song can be heard everywhere'],
-  'surface': ['Surface', 'The song can be heard on speaker\'s surface'],
-  'local': ['Local', 'The song can be heard within the audible range around the speaker'],
+  global: ['Global', 'The song plays everywhere'],
+  surface: ['Surface', "The song plays on the speakers' surface"],
+  local: [
+    'Local - not recommended for large songs',
+    'The song plays where the speakers are. With many speakers, this could cause an uneven mix.',
+  ],
 }
 
 export type ResultStageProps = {
@@ -52,7 +55,11 @@ export const ResultStage = ({ song }: ResultStageProps) => {
     setCopySuccess(false)
     const signalSet = targetVersion === '2SA' ? signalsDlc : signals
 
-    const { blueprint, warnings } = songToFactorio(song, signalSet, playbackMode)
+    const { blueprint, warnings } = songToFactorio(
+      song,
+      signalSet,
+      playbackMode,
+    )
     const copyAttempt = await copyToClipboard(blueprint)
     setWarnings(warnings)
     setCopySuccess(copyAttempt)

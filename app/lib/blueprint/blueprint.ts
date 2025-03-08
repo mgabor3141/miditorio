@@ -1,6 +1,6 @@
 import { encodeBlueprint } from '@/app/lib/utils'
 import { Speakers } from '@/app/lib/song-to-factorio'
-import { Entity, Wire } from '@/app/lib/factorio-blueprint-schema'
+import { Entity, PlaybackMode, Wire } from '@/app/lib/factorio-blueprint-schema'
 import { getSpeakerSection } from '@/app/lib/blueprint/speaker-section'
 import { getStaticBlueprintSection } from '@/app/lib/blueprint/static-blueprint-section'
 import { getDataSection } from '@/app/lib/blueprint/data-section'
@@ -60,11 +60,13 @@ export const toBlueprint = ({
   combinatorValues,
   speakers,
   rawSignals,
+  playbackMode,
 }: {
   song: Song
   combinatorValues: CombinatorValuePair[]
   speakers: Speakers
   rawSignals: RawSignal[]
+  playbackMode: PlaybackMode
 }): BlueprintResult => {
   const warnings = []
   const signals = prepareSignals(rawSignals)
@@ -86,7 +88,7 @@ export const toBlueprint = ({
       firstSpeakerCombinatorEntity,
       secondSpeakerCombinatorEntity,
     },
-  } = getSpeakerSection(0, { speakers })
+  } = getSpeakerSection(0, { speakers, playbackMode })
   const {
     blueprintSection: staticBlueprintSection,
     keyEntities: { playCombinatorEntity, dataToArithmeticConnectionEntity },

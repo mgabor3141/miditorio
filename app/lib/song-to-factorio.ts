@@ -23,11 +23,10 @@ export type Speakers = Record<
     chords: Chord[]
     instrumentName: FactorioInstrumentName
     volume: number
-    playbackMode: PlaybackMode
   }
 >
 
-export const songToFactorioData = ({ midi, settings }: Song, playbackMode: PlaybackMode): Speakers => {
+export const songToFactorioData = ({ midi, settings }: Song): Speakers => {
   const instrumentsAfterVelocity: Speakers = {}
 
   for (const trackNumber in midi.tracks) {
@@ -56,7 +55,6 @@ export const songToFactorioData = ({ midi, settings }: Song, playbackMode: Playb
             chords: [],
             instrumentName,
             volume,
-            playbackMode,
           }
         }
 
@@ -86,9 +84,9 @@ export const songToFactorioData = ({ midi, settings }: Song, playbackMode: Playb
 export const songToFactorio = (
   song: Song,
   signals: RawSignal[],
-  playbackMode: PlaybackMode
+  playbackMode: PlaybackMode,
 ): BlueprintResult => {
-  const instruments = songToFactorioData(song, playbackMode)
+  const instruments = songToFactorioData(song)
 
   type Event = {
     time: number
@@ -164,5 +162,6 @@ export const songToFactorio = (
     combinatorValues,
     speakers: instrumentsAfterChords,
     rawSignals: signals,
+    playbackMode,
   })
 }
