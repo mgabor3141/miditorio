@@ -37,13 +37,13 @@ export type FactorioNoteResultWithInstrument =
   | {
       valid: true
       factorioNote: number
-      instrumentName: FactorioInstrumentName
+      instrument: FactorioInstrument
     }
   | {
       valid: false
       outOfRangeDirection?: HigherOrLower
       factorioNote: undefined
-      instrumentName: undefined
+      instrument: undefined
     }
 
 export type FactorioInstrument = {

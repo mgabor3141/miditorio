@@ -4,56 +4,49 @@ import {
   RawSignal,
   toBlueprint,
 } from '@/app/lib/blueprint/blueprint'
-import { roundToNearestClusterCenter } from '@/app/lib/kmeans'
-import groupBy from 'lodash.groupby'
 import { FactorioInstrumentName } from '@/app/lib/data/factorio-instruments-by-id'
 import { noteToFactorioNote, Song } from '@/app/lib/song'
 
-type FactorioNote = number
+type FactorioNote = {
+  pitch: number
+  volume: number
+}
 type Chord = FactorioNote[]
 
 /**
  * This maps from a string ID with the following format:
  * `Name_velocityGroupNumber`, example `Piano_0`
+ *
+ * TODO: This is outdated, velocityGroupNumber is no longer a thing,
+ *  so the type could be refactored and simplified.
  */
 export type Speakers = Record<
   string,
   {
     chords: Chord[]
     instrumentName: FactorioInstrumentName
-    volume: number
   }
 >
 
 export const songToFactorioData = ({ midi, settings }: Song): Speakers => {
-  const instrumentsAfterVelocity: Speakers = {}
+  const instrumentsAfterChords: Speakers = {}
 
   for (const trackNumber in midi.tracks) {
     const track = midi.tracks[trackNumber]
     const trackSettings = settings.tracks[trackNumber]
 
     track.notes.forEach((midiNote) => {
-      const { valid, factorioNote, instrumentName } = noteToFactorioNote(
+      const { valid, factorioNote, instrument } = noteToFactorioNote(
         midiNote,
         trackSettings,
         settings,
       )
 
       if (valid) {
-        const {
-          closestCenter: volume,
-          closestCenterNumber: volumeGroupNumber,
-        } = roundToNearestClusterCenter(
-          midiNote.velocity,
-          trackSettings.velocityValues,
-        )
-        const factorioDataInstrumentId = `${instrumentName}_${volumeGroupNumber}`
-
-        if (!instrumentsAfterVelocity[factorioDataInstrumentId]) {
-          instrumentsAfterVelocity[factorioDataInstrumentId] = {
+        if (!instrumentsAfterChords[instrument.name]) {
+          instrumentsAfterChords[instrument.name] = {
             chords: [],
-            instrumentName,
-            volume,
+            instrumentName: instrument.name,
           }
         }
 
@@ -61,23 +54,20 @@ export const songToFactorioData = ({ midi, settings }: Song): Speakers => {
         const factorioTick =
           Math.round((midiNote.time * 60) / settings.speedMultiplier) + // Seconds to 1/60 sec tick
           START_OF_SONG_TICKS_MARGIN
-        if (
-          !instrumentsAfterVelocity[factorioDataInstrumentId].chords[
-            factorioTick
-          ]
-        )
-          instrumentsAfterVelocity[factorioDataInstrumentId].chords[
-            factorioTick
-          ] = []
+        if (!instrumentsAfterChords[instrument.name].chords[factorioTick])
+          instrumentsAfterChords[instrument.name].chords[factorioTick] = []
 
-        instrumentsAfterVelocity[factorioDataInstrumentId].chords[
-          factorioTick
-        ].push(factorioNote)
+        instrumentsAfterChords[instrument.name].chords[factorioTick].push({
+          pitch: factorioNote,
+          volume: Math.round(
+            midiNote.velocity * instrument.volumeCorrection * 100,
+          ),
+        })
       }
     })
   }
 
-  return instrumentsAfterVelocity
+  return instrumentsAfterChords
 }
 
 export const songToFactorio = (
@@ -89,7 +79,8 @@ export const songToFactorio = (
   type Event = {
     time: number
     track: number
-    noteValue: number
+    pitch: number
+    volume: number
   }
   let instrumentNumber = 0
   const instrumentsAfterChords: Speakers = {}
@@ -100,11 +91,12 @@ export const songToFactorio = (
       maxNotesInChord = Math.max(maxNotesInChord, chord.length)
 
       return chord.map(
-        (noteValue, noteNumberInChord): Event => ({
+        ({ pitch, volume }, noteNumberInChord): Event => ({
           // We need to add 1 as we can't address instrument 0 in Factorio
           track: instrumentNumber + noteNumberInChord + 1,
-          noteValue,
           time,
+          pitch,
+          volume,
         }),
       )
     })
@@ -120,40 +112,16 @@ export const songToFactorio = (
     return instrumentEvents
   })
 
-  const eventsGroupedByTime = groupBy(events, ({ time }) => time)
-
-  const combinatorValues: CombinatorValuePair[] = []
-  for (const eventGroupTime in eventsGroupedByTime) {
-    const eventGroup = eventsGroupedByTime[eventGroupTime]
-
-    const evenTrackEvents: Event[] = []
-    const oddTrackEvents: Event[] = []
-
-    eventGroup.forEach((event) => {
-      if (event.track % 2 === 0) evenTrackEvents.push(event)
-      else oddTrackEvents.push(event)
-    })
-
-    while (evenTrackEvents.length > 0 || oddTrackEvents.length > 0) {
-      let packedDataValue = 0
-
-      if (evenTrackEvents.length > 0) {
-        const event = evenTrackEvents.pop() as Event
-        packedDataValue += event.noteValue + (event.track << 6)
-      }
-
-      if (oddTrackEvents.length > 0) {
-        const event = oddTrackEvents.pop() as Event
-        packedDataValue +=
-          (event.track << (6 + 8)) + (event.noteValue << (6 + 8 + 8))
-      }
-
-      combinatorValues.push({
-        ticks: parseInt(eventGroupTime),
-        speakerData: packedDataValue,
-      })
-    }
-  }
+  const combinatorValues: CombinatorValuePair[] = events.map(
+    ({ time, track, pitch, volume }) => ({
+      ticks: time,
+      // Bit packing the three values into one 32 bit integer as follows:
+      // 0000 0000 0000 0000 0000 0000 0000 0000
+      // -vvv vvv~ ~~~~ ~~~~ ~~~~ ~~~~ ~vvv vvvv
+      //  pitch  track                  volume
+      speakerData: volume | (track << 7) | (pitch << (7 + 18)),
+    }),
+  )
 
   return toBlueprint({
     song,

@@ -1,30 +1,11 @@
 import { PianoRoll, PixiProvider } from '@/app/components/piano-roll'
 import React, { Dispatch, useCallback, useMemo, useRef, useState } from 'react'
 import { Settings } from '@/app/components/select-stage'
-import { autoCluster, kMeansClustering } from '@/app/lib/kmeans'
-import { Note } from '@tonejs/midi/dist/Note'
 import { getOutOfRangeNotes, Song } from '@/app/lib/song'
 import { NumberInputWithLabel } from '@/app/components/number-input-with-label'
 import { TrackSettings } from './track-settings'
 import { OutOfRangeWarning } from '@/app/components/out-of-range-warning'
 import { ResultStage } from '@/app/components/result-stage'
-
-export const getVelocityValues = (
-  notes: Note[],
-  targetNumberOfClusters?: number,
-): number[] => {
-  const data = notes.map(({ velocity }) => velocity)
-
-  if (!targetNumberOfClusters) {
-    // Auto clustering tries to cluster the values into a "nice" number of clusters.
-    // To do this, it tries every cluster number until the mean difference improvement
-    //  is less than the threshold. Then groups that are too close together are merged.
-    // The resulting number of groups is the target number for a final k-means clustering.
-    return autoCluster({ data }).centers.toSorted()
-  }
-
-  return kMeansClustering(data, targetNumberOfClusters).centers.toSorted()
-}
 
 export type InstrumentStageProps = {
   song: Song

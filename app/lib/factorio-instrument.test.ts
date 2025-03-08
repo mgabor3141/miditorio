@@ -48,7 +48,6 @@ describe('Note conversion', () => {
         note,
         {
           octaveShift,
-          velocityValues: [],
           factorioInstruments: [instrumentName],
         },
         { globalNoteShift, speedMultiplier: 1 },

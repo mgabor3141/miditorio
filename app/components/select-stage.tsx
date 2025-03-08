@@ -8,7 +8,6 @@ import { midiToSong, Song } from '@/app/lib/song'
 
 export type TrackSettings = {
   factorioInstruments: (FactorioInstrumentName | undefined)[]
-  velocityValues: number[]
   octaveShift: number
 
   /**

@@ -8,7 +8,6 @@ import {
   getFactorioInstrument,
   HigherOrLower,
 } from '@/app/lib/factorio-instrument'
-import { getVelocityValues } from '@/app/components/instrument-stage'
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
 import { assignInstruments } from './instrument-assignment'
 
@@ -95,7 +94,7 @@ export const noteToFactorioNote = (
 
     if (factorioNoteResult.valid)
       // This note can be played by this instrument
-      return { ...factorioNoteResult, instrumentName: instrument.name }
+      return { ...factorioNoteResult, instrument }
 
     higherOrLower = factorioNoteResult.outOfRangeDirection
   }
@@ -104,7 +103,7 @@ export const noteToFactorioNote = (
     valid: false,
     outOfRangeDirection: higherOrLower,
     factorioNote: undefined,
-    instrumentName: undefined,
+    instrument: undefined,
   }
 }
 
@@ -208,7 +207,6 @@ export const midiToSong = (originalMidi: Midi, filename: string): Song => {
     settings: {
       tracks: midi.tracks.map((track) => ({
         factorioInstruments: assignInstruments(track),
-        velocityValues: getVelocityValues(track.notes),
         octaveShift: 0,
       })),
       globalNoteShift: 0,

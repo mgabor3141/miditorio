@@ -55,6 +55,8 @@ export type Entity = {
         playback_volume: number
         playback_mode: PlaybackMode
         allow_polyphony: boolean
+        volume_controlled_by_signal: boolean
+        volume_signal_id: Signal
       }
     }
   | {

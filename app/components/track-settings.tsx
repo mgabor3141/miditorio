@@ -15,8 +15,6 @@ import {
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
 import { noteExtremesToString } from '../lib/song'
 import { NumberInputWithLabel } from './number-input-with-label'
-import { Histogram } from './histogram'
-import { getVelocityValues } from './instrument-stage'
 import { OutOfRangeWarning } from '@/app/components/out-of-range-warning'
 import { assignInstruments } from '../lib/instrument-assignment'
 
@@ -277,57 +275,6 @@ export const TrackSettings = ({
           )}
         </>
       )}
-      <h4>Configure dynamics</h4>
-      <div className="flex flex-col lg:flex-row gap-3">
-        <div className="text-justify my-3 flex-column">
-          <p>
-            The histogram shows the distribution of note velocities. You can
-            select how many velocity groups you would like to round velocity
-            values to.
-          </p>
-          <p>
-            Each programmable speaker is only able to play notes from a single
-            velocity group, so the more groups you add the more Speakers will be
-            included in the final blueprint.
-          </p>
-          <NumberInputWithLabel
-            labelBefore="Note velocity groups"
-            className="w-fit self-end"
-            value={trackSettings.velocityValues.length}
-            onChange={(value) => {
-              trackSettings.velocityValues = getVelocityValues(
-                track.notes,
-                Number(value),
-              )
-              onSettingsChanged(settings)
-            }}
-            width={16}
-            min={1}
-            max={32}
-          />
-        </div>
-
-        <div className="panel-inset !bg-[#0E0E0E] min-w-[400px] box-content flex-column self-center">
-          <div className="flex flex-space-between text-gray-500">
-            <span>quiet</span>
-            <span>loud</span>
-          </div>
-          <Histogram
-            data={Object.entries(
-              track.notes.reduce(
-                (acc, note) => {
-                  acc[note.velocity] = (acc[note.velocity] || 0) + 1
-                  return acc
-                },
-                {} as Record<string, number>,
-              ),
-            ).toSorted(([a], [b]) => Number(a) - Number(b))}
-            clusterCenters={trackSettings.velocityValues}
-            width={400}
-            height={150}
-          />
-        </div>
-      </div>
       {track.instrument.percussion && (
         <div>
           <h4>Assign Drumkit sounds</h4>
