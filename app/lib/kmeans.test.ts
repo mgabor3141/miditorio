@@ -3,7 +3,7 @@ import { autoCluster } from '@/app/lib/kmeans'
 import { readFile, readdir } from 'fs/promises'
 import { Midi } from '@tonejs/midi'
 
-describe('K-means', async () => {
+describe.sequential('K-means', async () => {
   const testFiles = (await readdir('test-data/')).filter(
     // Exclude files that are trivial to cluster
     (file) => !['bach.mid', 'sea.mid'].includes(file),
@@ -13,7 +13,7 @@ describe('K-means', async () => {
     expect(Math.random()).toMatchInlineSnapshot(`0.03475257847458124`)
   })
 
-  test.concurrent.for(testFiles)(
+  test.for(testFiles)(
     'auto clustering %s',
     { timeout: 60_000 },
     async (testFile, { expect }) => {
