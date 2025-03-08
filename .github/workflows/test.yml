@@ -1,0 +1,42 @@
+name: Test
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+env:
+  NEXT_PUBLIC_POSTHOG_HOST: ${{ vars.NEXT_PUBLIC_POSTHOG_HOST }}
+  NEXT_PUBLIC_POSTHOG_KEY: ${{ vars.NEXT_PUBLIC_POSTHOG_KEY }}
+
+jobs:
+  checks:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: |
+          corepack enable
+          yarn install --immutable
+
+      - name: Type check
+        run: yarn tsc
+
+      - name: Check Lint & Format
+        run: yarn lint:check
+
+      - name: Run tests
+        run: yarn test
+
+      - name: Run build
+        run: yarn build

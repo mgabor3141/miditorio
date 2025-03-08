@@ -27,7 +27,9 @@ export type SelectStageProps = {
   setSong: Dispatch<Song | undefined>
 }
 
-const useDragAndDrop = (onFile: (file: ArrayBuffer, fileName: string) => Promise<void>) => {
+const useDragAndDrop = (
+  onFile: (file: ArrayBuffer, fileName: string) => Promise<void>,
+) => {
   const [isDragging, setIsDragging] = useState(false)
 
   useEffect(() => {
@@ -89,21 +91,24 @@ export const SelectStage = ({ setSong }: SelectStageProps) => {
   const postHog = usePostHog()
   const [loadingMessage, setLoadingMessage] = useState('')
 
-  const processFile = useCallback(async (file: ArrayBuffer, fileName: string) => {
-    postHog.capture('Selected midi file', {
-      'File Name': fileName,
-    })
-    setSong(undefined)
-
-    requestAnimationFrame(() => {
-      setLoadingMessage('Loading file...')
-      requestAnimationFrame(() => {
-        const song = new Midi(file.slice(0))
-        setSong(midiToSong(song, fileName))
-        setLoadingMessage('')
+  const processFile = useCallback(
+    async (file: ArrayBuffer, fileName: string) => {
+      postHog.capture('Selected midi file', {
+        'File Name': fileName,
       })
-    })
-  }, [postHog, setSong])
+      setSong(undefined)
+
+      requestAnimationFrame(() => {
+        setLoadingMessage('Loading file...')
+        requestAnimationFrame(() => {
+          const song = new Midi(file.slice(0))
+          setSong(midiToSong(song, fileName))
+          setLoadingMessage('')
+        })
+      })
+    },
+    [postHog, setSong],
+  )
 
   const { openFilePicker } = useFilePicker({
     accept: ['audio/midi', 'audio/x-midi'],

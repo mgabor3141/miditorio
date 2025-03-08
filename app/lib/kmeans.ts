@@ -239,7 +239,7 @@ export function roundToNearestClusterCenter(
   clusterCenters: number[],
 ): { closestCenter: number; closestCenterNumber: number } {
   // Find the cluster center that is closest to the input value
-  clusterCenters.sort()
+  clusterCenters.sort((a, b) => a - b)
   let closestCenterNumber = 0
   let minDistance = Math.abs(value - clusterCenters[0])
 
