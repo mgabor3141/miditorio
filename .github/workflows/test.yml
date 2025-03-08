@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: ['main']
 
+env:
+  NEXT_PUBLIC_POSTHOG_HOST: ${{ vars.NEXT_PUBLIC_POSTHOG_HOST }}
+  NEXT_PUBLIC_POSTHOG_KEY: ${{ vars.NEXT_PUBLIC_POSTHOG_KEY }}
+
 jobs:
   checks:
     name: Lint and Test
