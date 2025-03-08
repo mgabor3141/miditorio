@@ -1,11 +1,17 @@
 import { BlueprintSection } from '@/app/lib/blueprint/blueprint'
 import { Speakers } from '@/app/lib/song-to-factorio'
-import { Entity, Wire } from '@/app/lib/factorio-blueprint-schema'
+import { Entity, PlaybackMode, Wire } from '@/app/lib/factorio-blueprint-schema'
 import { localEntityNumberToAbsolute } from '@/app/lib/utils'
 import { getFactorioInstrument } from '@/app/lib/factorio-instrument'
 export const getSpeakerSection = (
   entitiesSoFar: number,
-  { speakers }: { speakers: Speakers },
+  {
+    speakers,
+    playbackMode,
+  }: {
+    speakers: Speakers
+    playbackMode: PlaybackMode
+  },
 ): {
   keyEntities: {
     firstSpeakerCombinatorEntity: number
@@ -49,7 +55,7 @@ export const getSpeakerSection = (
           },
           parameters: {
             playback_volume: instrument.volumeCorrection * volume,
-            playback_mode: 'global',
+            playback_mode: playbackMode,
             allow_polyphony: true,
           },
         },
