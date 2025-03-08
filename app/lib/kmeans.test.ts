@@ -46,7 +46,7 @@ describe.sequential('K-means', async () => {
             average:
               clusters.reduce((acc, v) => acc + v, 0) / numberOfTestsToAverage,
             median: clusters
-              .toSorted()
+              .toSorted((a, b) => a - b)
               .at(Math.floor(numberOfTestsToAverage / 2)),
             mode: Object.entries(groupBy(clusters)).toSorted(
               ([_1, v1], [_2, v2]) => v2.length - v1.length,

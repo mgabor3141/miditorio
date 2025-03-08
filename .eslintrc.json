@@ -1,5 +1,8 @@
 {
   "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
+  "parserOptions": {
+    "project": ["tsconfig.json"]
+  },
   "rules": {
     "@typescript-eslint/no-unused-vars": [
       "error",
@@ -8,6 +11,7 @@
         "varsIgnorePattern": "^_"
       }
     ],
+    "@typescript-eslint/require-array-sort-compare": "error",
     "@next/next/no-img-element": "off"
   }
 }

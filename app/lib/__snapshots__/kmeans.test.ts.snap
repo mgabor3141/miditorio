@@ -16,7 +16,7 @@ exports[`K-means > auto clustering hall.mid 1`] = `
     "_trackNotes": 727,
     "average": 8.82,
     "max": 10,
-    "median": 8,
+    "median": 9,
     "min": 6,
     "mode": "9",
   },

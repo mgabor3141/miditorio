@@ -20,10 +20,12 @@ export const getVelocityValues = (
     // To do this, it tries every cluster number until the mean difference improvement
     //  is less than the threshold. Then groups that are too close together are merged.
     // The resulting number of groups is the target number for a final k-means clustering.
-    return autoCluster({ data }).centers.toSorted()
+    return autoCluster({ data }).centers.toSorted((a, b) => a - b)
   }
 
-  return kMeansClustering(data, targetNumberOfClusters).centers.toSorted()
+  return kMeansClustering(data, targetNumberOfClusters).centers.toSorted(
+    (a, b) => a - b,
+  )
 }
 
 export type InstrumentStageProps = {
