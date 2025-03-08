@@ -48,7 +48,7 @@ describe('Song to Blueprint', async () => {
         const processedSong = midiToSong(song, testFile)
 
         expect(
-          songToFactorio(processedSong, signals).blueprint,
+          songToFactorio(processedSong, signals, 'global').blueprint,
         ).toMatchSnapshot()
       },
     )
