@@ -41,8 +41,8 @@ describe.sequential('K-means', async () => {
           return {
             _trackName: name.trim(),
             _trackNotes: notes.length,
-            min: clusters.reduce((a, b) => Math.min(a, b)),
-            max: clusters.reduce((a, b) => Math.max(a, b)),
+            min: clusters.reduce((a, b) => Math.min(a, b), Number.MAX_VALUE),
+            max: clusters.reduce((a, b) => Math.max(a, b), Number.MIN_VALUE),
             average:
               clusters.reduce((acc, v) => acc + v, 0) / numberOfTestsToAverage,
             median: clusters
