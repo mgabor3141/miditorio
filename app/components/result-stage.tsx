@@ -31,7 +31,7 @@ const versionOptions: Record<Version, string> = {
 }
 
 const playbackModeOptions: Record<PlaybackMode, [string, string]> = {
-  global: ['Global', 'The song plays everywhere'],
+  global: ['Universe', 'The song plays everywhere'],
   surface: ['Surface', "The song plays on the speakers' surface"],
   local: [
     'Local - not recommended for large songs',
