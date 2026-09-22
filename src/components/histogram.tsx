@@ -2,7 +2,7 @@ import React from 'react'
 import { Group } from '@visx/group'
 import { Bar, Line } from '@visx/shape'
 import { scaleLinear } from '@visx/scale'
-import { roundToNearestClusterCenter } from '@/app/lib/kmeans'
+import { roundToNearestClusterCenter } from '@/src/lib/kmeans'
 
 const BAR_WIDTH = 3
 

@@ -3,11 +3,11 @@ import {
   CombinatorValuePair,
   RawSignal,
   toBlueprint,
-} from '@/app/lib/blueprint/blueprint'
-import { roundToNearestClusterCenter } from '@/app/lib/kmeans'
+} from '@/src/lib/blueprint/blueprint'
+import { roundToNearestClusterCenter } from '@/src/lib/kmeans'
 import groupBy from 'lodash.groupby'
-import { FactorioInstrumentName } from '@/app/lib/data/factorio-instruments-by-id'
-import { noteToFactorioNote, Song } from '@/app/lib/song'
+import { FactorioInstrumentName } from '@/src/lib/data/factorio-instruments-by-id'
+import { noteToFactorioNote, Song } from '@/src/lib/song'
 import { PlaybackMode } from './factorio-blueprint-schema'
 
 type FactorioNote = number

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { autoCluster } from '@/app/lib/kmeans'
+import { autoCluster } from '@/src/lib/kmeans'
 import { readFile, readdir } from 'fs/promises'
 import { Midi } from '@tonejs/midi'
 import groupBy from 'lodash.groupby'

@@ -1,14 +1,14 @@
 import { Midi } from '@tonejs/midi'
 import { Note } from '@tonejs/midi/dist/Note'
-import { Settings, TrackSettings } from '@/app/components/select-stage'
+import { Settings, TrackSettings } from '@/src/components/select-stage'
 import { Midi as ToneMidi } from 'tone'
-import { capitalize } from '@/app/lib/utils'
+import { capitalize } from '@/src/lib/utils'
 import {
   FactorioNoteResultWithInstrument,
   getFactorioInstrument,
   HigherOrLower,
-} from '@/app/lib/factorio-instrument'
-import { getVelocityValues } from '@/app/components/instrument-stage'
+} from '@/src/lib/factorio-instrument'
+import { getVelocityValues } from '@/src/components/instrument-stage'
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
 import { assignInstruments } from './instrument-assignment'
 

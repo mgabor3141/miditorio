@@ -1,4 +1,4 @@
-import { invert } from '@/app/lib/utils'
+import { invert } from '@/src/lib/utils'
 
 // General Midi Level 2 Percussion: notes and names
 

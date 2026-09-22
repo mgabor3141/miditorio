@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import { Frequency, isArray } from 'tone'
-import { getFactorioInstrument } from '@/app/lib/factorio-instrument'
-import type { FactorioInstrumentName } from '@/app/lib/data/factorio-instruments-by-id'
+import { getFactorioInstrument } from '@/src/lib/factorio-instrument'
+import type { FactorioInstrumentName } from '@/src/lib/data/factorio-instruments-by-id'
 import type { Note } from 'tone/build/esm/core/type/Units'
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
 

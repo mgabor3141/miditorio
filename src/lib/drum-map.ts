@@ -1,7 +1,7 @@
-import { FactorioDrumSound } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
+import { FactorioDrumSound } from '@/src/lib/data/factorio-drumkit-sounds-by-id'
 import { MidiNote } from 'tone/build/esm/core/type/NoteUnits'
-import { gmPercussionToFactorioDrumkit } from '@/app/lib/data/gm-percussion-to-factorio-drumkit'
-import { noteToGmPercussion } from '@/app/lib/data/gm-percussion-note-names'
+import { gmPercussionToFactorioDrumkit } from '@/src/lib/data/gm-percussion-to-factorio-drumkit'
+import { noteToGmPercussion } from '@/src/lib/data/gm-percussion-note-names'
 
 export type DrumMap = (note: MidiNote) => FactorioDrumSound | undefined
 

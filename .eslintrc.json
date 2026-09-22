@@ -1,8 +1,21 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
-  "parserOptions": {
-    "project": ["tsconfig.json"]
+  "root": true,
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2022": true
   },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["tsconfig.json"],
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": ["plugin:@typescript-eslint/recommended", "prettier"],
   "rules": {
     "@typescript-eslint/no-unused-vars": [
       "error",
@@ -11,7 +24,21 @@
         "varsIgnorePattern": "^_"
       }
     ],
-    "@typescript-eslint/require-array-sort-compare": "error",
-    "@next/next/no-img-element": "off"
-  }
+    "@typescript-eslint/require-array-sort-compare": "error"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.d.ts"],
+      "rules": {
+        "@typescript-eslint/triple-slash-reference": [
+          "error",
+          {
+            "path": "always",
+            "types": "always",
+            "lib": "always"
+          }
+        ]
+      }
+    }
+  ]
 }

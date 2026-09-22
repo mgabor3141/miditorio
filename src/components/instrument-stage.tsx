@@ -1,13 +1,13 @@
-import { PianoRoll, PixiProvider } from '@/app/components/piano-roll'
+import { PianoRoll, PixiProvider } from '@/src/components/piano-roll'
 import React, { Dispatch, useCallback, useMemo, useRef, useState } from 'react'
-import { Settings } from '@/app/components/select-stage'
-import { autoCluster, kMeansClustering } from '@/app/lib/kmeans'
+import { Settings } from '@/src/components/select-stage'
+import { autoCluster, kMeansClustering } from '@/src/lib/kmeans'
 import { Note } from '@tonejs/midi/dist/Note'
-import { getOutOfRangeNotes, Song } from '@/app/lib/song'
-import { NumberInputWithLabel } from '@/app/components/number-input-with-label'
+import { getOutOfRangeNotes, Song } from '@/src/lib/song'
+import { NumberInputWithLabel } from '@/src/components/number-input-with-label'
 import { TrackSettings } from './track-settings'
-import { OutOfRangeWarning } from '@/app/components/out-of-range-warning'
-import { ResultStage } from '@/app/components/result-stage'
+import { OutOfRangeWarning } from '@/src/components/out-of-range-warning'
+import { ResultStage } from '@/src/components/result-stage'
 
 export const getVelocityValues = (
   notes: Note[],

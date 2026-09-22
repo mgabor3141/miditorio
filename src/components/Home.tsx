@@ -1,15 +1,13 @@
-'use client'
-
 import { useEffect, useState } from 'react'
-import { SelectStage } from './components/select-stage'
-import { InstrumentStage } from '@/app/components/instrument-stage'
-import { Song } from '@/app/lib/song'
+import { SelectStage } from './select-stage'
+import { InstrumentStage } from '@/src/components/instrument-stage'
+import { Song } from '@/src/lib/song'
 import { usePostHog } from 'posthog-js/react'
-import { Info } from '@/app/components/info'
+import { Info } from '@/src/components/info'
 
 export type Stage = 'select' | 'instrument'
 
-export default function Home() {
+export function Home() {
   const postHog = usePostHog()
   const [flowStage, setFlowStage] = useState<Stage>('select')
   const [song, setSong] = useState<Song | undefined>(undefined)

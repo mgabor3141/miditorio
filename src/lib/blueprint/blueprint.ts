@@ -1,11 +1,11 @@
-import { encodeBlueprint } from '@/app/lib/utils'
-import { Speakers } from '@/app/lib/song-to-factorio'
-import { Entity, PlaybackMode, Wire } from '@/app/lib/factorio-blueprint-schema'
-import { getSpeakerSection } from '@/app/lib/blueprint/speaker-section'
-import { getStaticBlueprintSection } from '@/app/lib/blueprint/static-blueprint-section'
-import { getDataSection } from '@/app/lib/blueprint/data-section'
+import { encodeBlueprint } from '@/src/lib/utils'
+import { Speakers } from '@/src/lib/song-to-factorio'
+import { Entity, PlaybackMode, Wire } from '@/src/lib/factorio-blueprint-schema'
+import { getSpeakerSection } from '@/src/lib/blueprint/speaker-section'
+import { getStaticBlueprintSection } from '@/src/lib/blueprint/static-blueprint-section'
+import { getDataSection } from '@/src/lib/blueprint/data-section'
 
-import { Song } from '@/app/lib/song'
+import { Song } from '@/src/lib/song'
 
 // This is a reserved signal because of the playback circuit
 const RESERVED_SIGNALS = ['signal-green']

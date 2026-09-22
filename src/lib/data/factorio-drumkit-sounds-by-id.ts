@@ -1,4 +1,4 @@
-import { invert } from '@/app/lib/utils'
+import { invert } from '@/src/lib/utils'
 
 export const signalToFactorioDrumSound = {
   '1': 'Kick 1',

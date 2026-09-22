@@ -15,7 +15,7 @@
 }
 
 body {
-  background: url(assets/background.png) no-repeat top center fixed;
+  background: url('/background.png') no-repeat top center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

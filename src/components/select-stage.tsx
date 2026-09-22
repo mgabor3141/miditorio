@@ -2,9 +2,9 @@ import { Dispatch, useCallback, useEffect, useState } from 'react'
 import { useFilePicker } from 'use-file-picker'
 import { Midi } from '@tonejs/midi'
 import { usePostHog } from 'posthog-js/react'
-import { FactorioInstrumentName } from '@/app/lib/data/factorio-instruments-by-id'
-import { DrumMapOverrides } from '@/app/lib/drum-map'
-import { midiToSong, Song } from '@/app/lib/song'
+import { FactorioInstrumentName } from '@/src/lib/data/factorio-instruments-by-id'
+import { DrumMapOverrides } from '@/src/lib/drum-map'
+import { midiToSong, Song } from '@/src/lib/song'
 
 export type TrackSettings = {
   factorioInstruments: (FactorioInstrumentName | undefined)[]

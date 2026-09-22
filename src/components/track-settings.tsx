@@ -17,7 +17,7 @@ import { noteExtremesToString } from '../lib/song'
 import { NumberInputWithLabel } from './number-input-with-label'
 import { Histogram } from './histogram'
 import { getVelocityValues } from './instrument-stage'
-import { OutOfRangeWarning } from '@/app/components/out-of-range-warning'
+import { OutOfRangeWarning } from '@/src/components/out-of-range-warning'
 import { assignInstruments } from '../lib/instrument-assignment'
 
 const NONE = 'None'

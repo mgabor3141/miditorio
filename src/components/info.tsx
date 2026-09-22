@@ -1,6 +1,6 @@
-import GitHub from '@/app/assets/icons/github.svg'
-import YouTube from '@/app/assets/icons/youtube.svg'
-import KoFi from '@/app/assets/icons/kofi.svg'
+import GitHub from '@/src/assets/icons/github.svg?react'
+import YouTube from '@/src/assets/icons/youtube.svg?react'
+import KoFi from '@/src/assets/icons/kofi.svg?react'
 
 export const Info = () => (
   <main

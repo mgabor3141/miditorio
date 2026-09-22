@@ -7,8 +7,8 @@ on:
     branches: ['main']
 
 env:
-  NEXT_PUBLIC_POSTHOG_HOST: ${{ vars.NEXT_PUBLIC_POSTHOG_HOST }}
-  NEXT_PUBLIC_POSTHOG_KEY: ${{ vars.NEXT_PUBLIC_POSTHOG_KEY }}
+  PUBLIC_POSTHOG_HOST: ${{ vars.PUBLIC_POSTHOG_HOST }}
+  PUBLIC_POSTHOG_KEY: ${{ vars.PUBLIC_POSTHOG_KEY }}
 
 jobs:
   checks:
@@ -30,7 +30,7 @@ jobs:
           yarn install --immutable
 
       - name: Type check
-        run: yarn tsc
+        run: yarn astro check
 
       - name: Check Lint & Format
         run: yarn lint:check

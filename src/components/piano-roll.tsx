@@ -17,9 +17,9 @@ import {
   useState,
 } from 'react'
 import { Midi, Track } from '@tonejs/midi'
-import { gmInstrumentFamilies } from '@/app/lib/data/gm-instrument-families'
-import { Settings } from '@/app/components/select-stage'
-import { AdditionalInfo, expandNoteExtremesToMinimum } from '@/app/lib/song'
+import { gmInstrumentFamilies } from '@/src/lib/data/gm-instrument-families'
+import { Settings } from '@/src/components/select-stage'
+import { AdditionalInfo, expandNoteExtremesToMinimum } from '@/src/lib/song'
 
 const PixiContext = createContext<Application>(null!)
 

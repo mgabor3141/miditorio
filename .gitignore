@@ -12,8 +12,9 @@ node_modules
 # testing
 /coverage
 
-# next.js
-/.next/
+# astro
+/dist/
+/.astro/
 /out/
 
 # production
@@ -36,7 +37,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
 
 # env
 .env

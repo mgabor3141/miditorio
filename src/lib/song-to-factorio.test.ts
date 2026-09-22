@@ -1,11 +1,11 @@
 import { afterAll, beforeAll, describe, MockInstance, test, vi } from 'vitest'
-import { songToFactorio, songToFactorioData } from '@/app/lib/song-to-factorio'
+import { songToFactorio, songToFactorioData } from '@/src/lib/song-to-factorio'
 import { Midi } from '@tonejs/midi'
 import { readFile } from 'node:fs/promises'
-import signals from '@/app/lib/data/signals.json'
-import * as utils from '@/app/lib/utils'
+import signals from '@/src/lib/data/signals.json'
+import * as utils from '@/src/lib/utils'
 import stringify from 'json-stable-stringify'
-import { midiToSong } from '@/app/lib/song'
+import { midiToSong } from '@/src/lib/song'
 import { readdir } from 'fs/promises'
 
 describe('Song to Blueprint', async () => {

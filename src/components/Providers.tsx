@@ -1,4 +1,3 @@
-'use client'
 import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
 import React from 'react'
@@ -7,13 +6,13 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 
 if (typeof window !== 'undefined') {
   if (
-    !process.env.NEXT_PUBLIC_POSTHOG_KEY ||
-    !process.env.NEXT_PUBLIC_POSTHOG_HOST
+    !import.meta.env.PUBLIC_POSTHOG_KEY ||
+    !import.meta.env.PUBLIC_POSTHOG_HOST
   ) {
     console.error('Posthog env vars not set')
   } else {
-    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+    posthog.init(import.meta.env.PUBLIC_POSTHOG_KEY, {
+      api_host: import.meta.env.PUBLIC_POSTHOG_HOST,
       person_profiles: 'identified_only',
       persistence: 'memory',
     })

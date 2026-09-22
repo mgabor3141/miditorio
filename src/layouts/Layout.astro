@@ -1,0 +1,28 @@
+---
+import '@fontsource/titillium-web/400.css'
+import '@fontsource/titillium-web/700.css'
+import '@/src/styles/globals.css'
+import '@/src/styles/factorio.css'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const {
+  title = 'Miditorio – Factorio music converter',
+  description = 'Create Factorio blueprints from any song!',
+} = Astro.props
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body class="antialiased font-titillium"><slot /></body>
+</html>

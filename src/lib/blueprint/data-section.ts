@@ -1,9 +1,9 @@
 import {
   BlueprintSection,
   CombinatorValuePair,
-} from '@/app/lib/blueprint/blueprint'
-import { arrayChunks, localEntityNumberToAbsolute } from '@/app/lib/utils'
-import { Entity, Filter, Wire } from '@/app/lib/factorio-blueprint-schema'
+} from '@/src/lib/blueprint/blueprint'
+import { arrayChunks, localEntityNumberToAbsolute } from '@/src/lib/utils'
+import { Entity, Filter, Wire } from '@/src/lib/factorio-blueprint-schema'
 
 export const getDataSection = (
   entitiesSoFar: number,

@@ -4,17 +4,17 @@ import {
 } from 'tone/build/esm/core/type/NoteUnits'
 import { Frequency } from 'tone'
 import { Instrument } from '@tonejs/midi/dist/Instrument'
-import { gmInstrumentFamilies } from '@/app/lib/data/gm-instrument-families'
+import { gmInstrumentFamilies } from '@/src/lib/data/gm-instrument-families'
 import { Note } from '@tonejs/midi/dist/Note'
 import {
   FactorioInstrumentId,
   FactorioInstrumentName,
   factorioInstrumentNameToId,
-} from '@/app/lib/data/factorio-instruments-by-id'
-import { factorioDrumSoundToNoteNumber } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
-import { defaultDrumMap, drumMapWithOverrides } from '@/app/lib/drum-map'
-import { NoteExtremes } from '@/app/lib/song'
-import { Settings, TrackSettings } from '@/app/components/select-stage'
+} from '@/src/lib/data/factorio-instruments-by-id'
+import { factorioDrumSoundToNoteNumber } from '@/src/lib/data/factorio-drumkit-sounds-by-id'
+import { defaultDrumMap, drumMapWithOverrides } from '@/src/lib/drum-map'
+import { NoteExtremes } from '@/src/lib/song'
+import { Settings, TrackSettings } from '@/src/components/select-stage'
 
 export type HigherOrLower = 'higher' | 'lower'
 

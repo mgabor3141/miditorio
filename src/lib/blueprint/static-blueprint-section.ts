@@ -1,8 +1,8 @@
-import { BlueprintSection } from '@/app/lib/blueprint/blueprint'
-import { Entity } from '@/app/lib/factorio-blueprint-schema'
-import { localEntityNumberToAbsolute } from '@/app/lib/utils'
+import { BlueprintSection } from '@/src/lib/blueprint/blueprint'
+import { Entity } from '@/src/lib/factorio-blueprint-schema'
+import { localEntityNumberToAbsolute } from '@/src/lib/utils'
 import packageJson from '@/package.json'
-import { Song } from '@/app/lib/song'
+import { Song } from '@/src/lib/song'
 
 export const getStaticBlueprintSection = (
   entitiesSoFar: number,

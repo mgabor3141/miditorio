@@ -1,8 +1,8 @@
 .yarn/releases/* linguist-vendored
-app/factorio.css linguist-vendored
+src/styles/factorio.css linguist-vendored
 test-data/* linguist-vendored
 
 yarn.lock linguist-generated
-app/lib/data/* linguist-generated
+src/lib/data/* linguist-generated
 tools/data/* linguist-generated
 **/*.snap linguist-generated

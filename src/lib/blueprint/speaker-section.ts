@@ -1,8 +1,8 @@
-import { BlueprintSection } from '@/app/lib/blueprint/blueprint'
-import { Speakers } from '@/app/lib/song-to-factorio'
-import { Entity, PlaybackMode, Wire } from '@/app/lib/factorio-blueprint-schema'
-import { localEntityNumberToAbsolute } from '@/app/lib/utils'
-import { getFactorioInstrument } from '@/app/lib/factorio-instrument'
+import { BlueprintSection } from '@/src/lib/blueprint/blueprint'
+import { Speakers } from '@/src/lib/song-to-factorio'
+import { Entity, PlaybackMode, Wire } from '@/src/lib/factorio-blueprint-schema'
+import { localEntityNumberToAbsolute } from '@/src/lib/utils'
+import { getFactorioInstrument } from '@/src/lib/factorio-instrument'
 export const getSpeakerSection = (
   entitiesSoFar: number,
   {

@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react'
-import { songToFactorio } from '@/app/lib/song-to-factorio'
-import signals from '@/app/lib/data/signals.json'
-import signalsDlc from '@/app/lib/data/signals-dlc.json'
+import { songToFactorio } from '@/src/lib/song-to-factorio'
+import signals from '@/src/lib/data/signals.json'
+import signalsDlc from '@/src/lib/data/signals-dlc.json'
 import { usePostHog } from 'posthog-js/react'
-import { Song } from '@/app/lib/song'
-import { PlaybackMode } from '@/app/lib/factorio-blueprint-schema'
+import { Song } from '@/src/lib/song'
+import { PlaybackMode } from '@/src/lib/factorio-blueprint-schema'
 
 /**
  * @param text

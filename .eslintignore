@@ -1,0 +1,14 @@
+# Build output
+dist
+.astro
+
+# Yarn / generated
+.yarn
+.pnp.*
+
+# Next-specific config not linted (Astro config handled by astro check)
+*.mjs
+
+# Vendored data / tooling scripts (not part of the app type surface)
+tools
+test-data

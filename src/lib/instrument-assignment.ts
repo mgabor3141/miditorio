@@ -5,7 +5,7 @@ import {
   toFactorioInstrument,
 } from './factorio-instrument'
 import { Track } from '@tonejs/midi'
-import { Settings, TrackSettings } from '@/app/components/select-stage'
+import { Settings, TrackSettings } from '@/src/components/select-stage'
 
 export const assignInstruments = (
   track: Track,

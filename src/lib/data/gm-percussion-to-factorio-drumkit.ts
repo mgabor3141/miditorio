@@ -1,5 +1,5 @@
-import { gmPercussionToNote } from '@/app/lib/data/gm-percussion-note-names'
-import { factorioDrumSoundToNoteNumber } from '@/app/lib/data/factorio-drumkit-sounds-by-id'
+import { gmPercussionToNote } from '@/src/lib/data/gm-percussion-note-names'
+import { factorioDrumSoundToNoteNumber } from '@/src/lib/data/factorio-drumkit-sounds-by-id'
 
 export const gmPercussionToFactorioDrumkit: Partial<
   Record<
