@@ -89,7 +89,11 @@ export const toBlueprint = ({
 
   const {
     keyEntities: { firstSpeakerCombinator, secondSpeakerCombinator },
-  } = getSpeakerSection(builder, { speakers, playbackMode })
+  } = getSpeakerSection(builder, {
+    speakers,
+    playbackMode,
+    noteSignals: signals,
+  })
   const {
     keyEntities: { playCombinator, dataToArithmeticConnection },
   } = getStaticBlueprintSection(builder, {
