@@ -1,39 +1,33 @@
-import {
-  BlueprintSection,
-  CombinatorValuePair,
-} from '@/src/lib/blueprint/blueprint'
-import { arrayChunks, localEntityNumberToAbsolute } from '@/src/lib/utils'
+import { arrayChunks } from '@/src/lib/utils'
 import { Entity, Filter, Wire } from '@/src/lib/factorio-blueprint-schema'
+import { BlueprintBuilder, EntityRef, PORT } from '@/src/lib/blueprint/build'
+import { CombinatorValuePair } from '@/src/lib/blueprint/blueprint'
 
 export const getDataSection = (
-  entitiesSoFar: number,
+  builder: BlueprintBuilder,
   {
     combinatorValues,
     signals,
-    playCombinatorEntity,
-    dataToArithmeticConnectionEntity,
+    playCombinator,
+    dataToArithmeticConnection,
   }: {
     combinatorValues: CombinatorValuePair[]
     signals: Omit<Filter, 'count' | 'index'>[]
-    playCombinatorEntity: number
-    dataToArithmeticConnectionEntity: number
+    playCombinator: EntityRef
+    dataToArithmeticConnection: EntityRef
   },
-): BlueprintSection => {
-  const en = localEntityNumberToAbsolute(entitiesSoFar)
-
-  const entities: Entity[] = [],
-    wires: Wire[] = []
+): { entities: Entity[]; wires: Wire[] } => {
+  // Handles for cross-chunk wiring, replacing `entity_number - 4`.
+  const timeDeciders: Entity[] = []
+  const clocks: Entity[] = []
 
   arrayChunks(combinatorValues, signals.length).forEach(
     (combinatorValueChunk, chunkIndex, chunks) => {
-      const timeCombinatorNumber = en(chunkIndex * 4 + 1)
-      const dataCombinatorNumber = en(chunkIndex * 4 + 2)
+      let timeCombinator: Entity | undefined
+      let dataCombinator: Entity | undefined
 
       new Array(2).fill(undefined).forEach((_, isDataCombinator) => {
-        entities.push({
-          entity_number: isDataCombinator
-            ? dataCombinatorNumber
-            : timeCombinatorNumber,
+        const combinator = builder.entity({
           name: 'constant-combinator',
           position: { x: -5, y: 0 - chunkIndex * 2 + isDataCombinator },
           direction: 4,
@@ -57,121 +51,149 @@ export const getDataSection = (
             : `Timing data${chunks.length > 1 ? ` (part ${chunkIndex + 1}/${chunks.length})` : ''}\n\n` +
               'Each signal value is a point in time where one or more events happen. Each signal has a corresponding signal in the other combinator whose value contains the information for those events.',
         })
+        if (isDataCombinator) {
+          dataCombinator = combinator
+        } else {
+          timeCombinator = combinator
+        }
       })
 
-      const timeDeciderCombinatorNumber = en(chunkIndex * 4 + 3)
-      const clockCombinatorNumber = en(chunkIndex * 4 + 4)
-      entities.push(
-        {
-          entity_number: timeDeciderCombinatorNumber,
-          name: 'decider-combinator',
-          position: {
-            x: -3,
-            y: 0.5 - chunkIndex * 2,
-          },
-          direction: 4,
-          control_behavior: {
-            decider_conditions: {
-              conditions: [
-                {
-                  first_signal: {
-                    type: 'virtual',
-                    name: 'signal-each',
-                  },
-                  second_signal: {
-                    type: 'virtual',
-                    name: 'signal-green',
-                  },
-                  comparator: '=',
-                  first_signal_networks: {
-                    red: true,
-                    green: false,
-                  },
-                },
-              ],
-              outputs: [
-                {
-                  signal: {
-                    type: 'virtual',
-                    name: 'signal-each',
-                  },
-                  networks: {
-                    red: false,
-                    green: true,
-                  },
-                },
-              ],
-            },
-          },
-          player_description:
-            'Let each signal through on the [color=green]green wire[/color] where the value of that same signal on the [color=red]red wire[/color] is equal to the [virtual-signal=signal-green] (time) signal.\n\nThis makes [virtual-signal=signal-green] a reserved signal and must not be present in the memory.\n\nOutput is any number of signals, where each signal contains one or two events, bit packed. Each event is made up of an instrument address and a note value.',
+      const timeDecider = builder.entity({
+        name: 'decider-combinator',
+        position: {
+          x: -3,
+          y: 0.5 - chunkIndex * 2,
         },
-        {
-          entity_number: clockCombinatorNumber,
-          name: 'decider-combinator',
-          position: {
-            x: -3,
-            y: 1.5 - chunkIndex * 2,
-          },
-          direction: 4,
-          control_behavior: {
-            decider_conditions: {
-              conditions: [
-                {
-                  first_signal: {
-                    type: 'virtual',
-                    name: 'signal-green',
-                  },
-                  comparator: '>',
-                  first_signal_networks: {
-                    red: false,
-                    green: true,
-                  },
+        direction: 4,
+        control_behavior: {
+          decider_conditions: {
+            conditions: [
+              {
+                first_signal: {
+                  type: 'virtual',
+                  name: 'signal-each',
                 },
-              ],
-              outputs: [
-                {
-                  signal: {
-                    type: 'virtual',
-                    name: 'signal-everything',
-                  },
+                second_signal: {
+                  type: 'virtual',
+                  name: 'signal-green',
                 },
-              ],
-            },
+                comparator: '=',
+                first_signal_networks: {
+                  red: true,
+                  green: false,
+                },
+              },
+            ],
+            outputs: [
+              {
+                signal: {
+                  type: 'virtual',
+                  name: 'signal-each',
+                },
+                networks: {
+                  red: false,
+                  green: true,
+                },
+              },
+            ],
           },
-          player_description:
-            'Clock\n\n[virtual-signal=signal-green] is the time (number of ticks) since the start of the song.',
         },
+        player_description:
+          'Let each signal through on the [color=green]green wire[/color] where the value of that same signal on the [color=red]red wire[/color] is equal to the [virtual-signal=signal-green] (time) signal.\n\nThis makes [virtual-signal=signal-green] a reserved signal and must not be present in the memory.\n\nOutput is any number of signals, where each signal contains one or two events, bit packed. Each event is made up of an instrument address and a note value.',
+      })
+
+      const clock = builder.entity({
+        name: 'decider-combinator',
+        position: {
+          x: -3,
+          y: 1.5 - chunkIndex * 2,
+        },
+        direction: 4,
+        control_behavior: {
+          decider_conditions: {
+            conditions: [
+              {
+                first_signal: {
+                  type: 'virtual',
+                  name: 'signal-green',
+                },
+                comparator: '>',
+                first_signal_networks: {
+                  red: false,
+                  green: true,
+                },
+              },
+            ],
+            outputs: [
+              {
+                signal: {
+                  type: 'virtual',
+                  name: 'signal-everything',
+                },
+              },
+            ],
+          },
+        },
+        player_description:
+          'Clock\n\n[virtual-signal=signal-green] is the time (number of ticks) since the start of the song.',
+      })
+      timeDeciders.push(timeDecider)
+      clocks.push(clock)
+
+      // Data combinator to time decider, green wire
+      builder.wire(
+        dataCombinator!,
+        PORT.combInputGreen,
+        timeDecider,
+        PORT.combInputGreen,
       )
-
-      wires.push(
-        // Data combinator to time decider, green wire
-        [dataCombinatorNumber, 2, timeDeciderCombinatorNumber, 2],
-
-        // Time combinator to time decider, red wire
-        [timeCombinatorNumber, 1, timeDeciderCombinatorNumber, 1],
-
-        // Clock out to time decider in, green
-        [clockCombinatorNumber, 4, timeDeciderCombinatorNumber, 2],
-
-        // Clock feedback
-        [clockCombinatorNumber, 3, clockCombinatorNumber, 1],
+      // Time combinator to time decider, red wire
+      builder.wire(
+        timeCombinator!,
+        PORT.combInputRed,
+        timeDecider,
+        PORT.combInputRed,
       )
+      // Clock out to time decider in, green
+      builder.wire(
+        clock,
+        PORT.combOutputGreen,
+        timeDecider,
+        PORT.combInputGreen,
+      )
+      // Clock feedback
+      builder.wire(clock, PORT.combOutputRed, clock, PORT.combInputRed)
 
       if (chunkIndex === 0) {
-        wires.push(
-          [timeDeciderCombinatorNumber, 4, dataToArithmeticConnectionEntity, 2],
-          [playCombinatorEntity, 2, clockCombinatorNumber, 2],
+        builder.wire(
+          timeDecider,
+          PORT.combOutputGreen,
+          dataToArithmeticConnection,
+          PORT.combInputGreen,
+        )
+        builder.wire(
+          playCombinator,
+          PORT.combInputGreen,
+          clock,
+          PORT.combInputGreen,
         )
       } else {
-        // Wires to previous chunk
-        wires.push(
-          [timeDeciderCombinatorNumber, 4, timeDeciderCombinatorNumber - 4, 4],
-          [clockCombinatorNumber, 2, clockCombinatorNumber - 4, 2],
+        // Wires to previous chunk, via handles instead of `- 4`
+        builder.wire(
+          timeDecider,
+          PORT.combOutputGreen,
+          timeDeciders[chunkIndex - 1],
+          PORT.combOutputGreen,
+        )
+        builder.wire(
+          clock,
+          PORT.combInputGreen,
+          clocks[chunkIndex - 1],
+          PORT.combInputGreen,
         )
       }
     },
   )
 
-  return { entities, wires }
+  return builder.build()
 }

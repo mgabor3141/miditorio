@@ -1,187 +1,213 @@
-import { BlueprintSection } from '@/src/lib/blueprint/blueprint'
-import { Entity } from '@/src/lib/factorio-blueprint-schema'
-import { localEntityNumberToAbsolute } from '@/src/lib/utils'
-import packageJson from '@/package.json'
+import { BlueprintBuilder, EntityRef, PORT } from '@/src/lib/blueprint/build'
 import { Song } from '@/src/lib/song'
+import packageJson from '@/package.json'
 
 export const getStaticBlueprintSection = (
-  entitiesSoFar: number,
+  builder: BlueprintBuilder,
   {
     song,
-    firstSpeakerCombinatorEntity,
-    secondSpeakerCombinatorEntity,
+    firstSpeakerCombinator,
+    secondSpeakerCombinator,
   }: {
     song: Song
-    firstSpeakerCombinatorEntity: number
-    secondSpeakerCombinatorEntity: number
+    firstSpeakerCombinator: EntityRef
+    secondSpeakerCombinator: EntityRef
   },
 ): {
   keyEntities: {
-    playCombinatorEntity: number
-    dataToArithmeticConnectionEntity: number
+    playCombinator: EntityRef
+    dataToArithmeticConnection: EntityRef
   }
-  blueprintSection: BlueprintSection
 } => {
-  const en = localEntityNumberToAbsolute(entitiesSoFar)
+  const playCombinator = builder.entity({
+    name: 'constant-combinator',
+    position: {
+      x: -3,
+      y: 2.5,
+    },
+    direction: 8,
+    control_behavior: {
+      sections: {
+        sections: [
+          {
+            index: 1,
+            filters: [
+              {
+                index: 1,
+                type: 'virtual',
+                name: 'signal-green',
+                quality: 'normal',
+                comparator: '=',
+                count: 1,
+              },
+            ],
+          },
+        ],
+      },
+      is_on: false,
+    },
+    player_description:
+      `[item=programmable-speaker] [font=heading-1]${song.midi.name}[/font]` +
+      '\n\nToggle this combinator to play or reset' +
+      '\n\nConverted using Miditorio' +
+      `\nversion ${packageJson.version}`,
+  })
 
-  const playCombinatorEntity = en(1)
-  const dataToArithmeticConnectionEntity = en(4)
+  // Get note value for event 2 (integer divide)
+  const noteValueEvent2 = builder.entity({
+    name: 'arithmetic-combinator',
+    position: {
+      x: -1,
+      y: -1.5,
+    },
+    direction: 4,
+    control_behavior: {
+      arithmetic_conditions: {
+        first_signal: {
+          type: 'virtual',
+          name: 'signal-each',
+        },
+        second_constant: 4194304,
+        operation: '/',
+        output_signal: {
+          type: 'virtual',
+          name: 'signal-each',
+        },
+      },
+    },
+    player_description:
+      'Get note value for event 2 from each signal\n\nResult: 6 bits\n0000 1111 1100 0000 0000 0000 0000 0000\n\nOperation: Integer divide by\n0000 0000 0100 0000 0000 0000 0000 0000',
+  })
 
-  const entities: Entity[] = [
-    {
-      entity_number: playCombinatorEntity,
-      name: 'constant-combinator',
-      position: {
-        x: -3,
-        y: 2.5,
-      },
-      direction: 8,
-      control_behavior: {
-        sections: {
-          sections: [
-            {
-              index: 1,
-              filters: [
-                {
-                  index: 1,
-                  type: 'virtual',
-                  name: 'signal-green',
-                  quality: 'normal',
-                  comparator: '=',
-                  count: 1,
-                },
-              ],
-            },
-          ],
-        },
-        is_on: false,
-      },
-      player_description:
-        `[item=programmable-speaker] [font=heading-1]${song.midi.name}[/font]` +
-        '\n\nToggle this combinator to play or reset' +
-        '\n\nConverted using Miditorio' +
-        `\nversion ${packageJson.version}`,
+  // Get instrument address for event 2 (AND)
+  const instrumentAddressEvent2 = builder.entity({
+    name: 'arithmetic-combinator',
+    position: {
+      x: -1,
+      y: -0.5,
     },
-    {
-      entity_number: en(2),
-      name: 'arithmetic-combinator',
-      position: {
-        x: -1,
-        y: -1.5,
-      },
-      direction: 4,
-      control_behavior: {
-        arithmetic_conditions: {
-          first_signal: {
-            type: 'virtual',
-            name: 'signal-each',
-          },
-          second_constant: 4194304,
-          operation: '/',
-          output_signal: {
-            type: 'virtual',
-            name: 'signal-each',
-          },
+    direction: 4,
+    control_behavior: {
+      arithmetic_conditions: {
+        first_signal: {
+          type: 'virtual',
+          name: 'signal-each',
+        },
+        second_constant: 4177920,
+        operation: 'AND',
+        output_signal: {
+          type: 'virtual',
+          name: 'signal-each',
         },
       },
-      player_description:
-        'Get note value for event 2 from each signal\n\nResult: 6 bits\n0000 1111 1100 0000 0000 0000 0000 0000\n\nOperation: Integer divide by\n0000 0000 0100 0000 0000 0000 0000 0000',
     },
-    {
-      entity_number: en(3),
-      name: 'arithmetic-combinator',
-      position: {
-        x: -1,
-        y: -0.5,
-      },
-      direction: 4,
-      control_behavior: {
-        arithmetic_conditions: {
-          first_signal: {
-            type: 'virtual',
-            name: 'signal-each',
-          },
-          second_constant: 4177920,
-          operation: 'AND',
-          output_signal: {
-            type: 'virtual',
-            name: 'signal-each',
-          },
+    player_description:
+      'Get instrument address for event 2 from each signal\n\nResult: 8 bits\n0000 0000 0011 1111 1100 0000 0000 0000\n\nResult is not shifted to zero, instruments check against the unshifted number',
+  })
+
+  // Get instrument address for event 1 (AND): the data -> arithmetic connection
+  const dataToArithmeticConnection = builder.entity({
+    name: 'arithmetic-combinator',
+    position: {
+      x: -1,
+      y: 0.5,
+    },
+    direction: 4,
+    control_behavior: {
+      arithmetic_conditions: {
+        first_signal: {
+          type: 'virtual',
+          name: 'signal-each',
+        },
+        second_constant: 16320,
+        operation: 'AND',
+        output_signal: {
+          type: 'virtual',
+          name: 'signal-each',
         },
       },
-      player_description:
-        'Get instrument address for event 2 from each signal\n\nResult: 8 bits\n0000 0000 0011 1111 1100 0000 0000 0000\n\nResult is not shifted to zero, instruments check against the unshifted number',
     },
-    {
-      entity_number: dataToArithmeticConnectionEntity,
-      name: 'arithmetic-combinator',
-      position: {
-        x: -1,
-        y: 0.5,
-      },
-      direction: 4,
-      control_behavior: {
-        arithmetic_conditions: {
-          first_signal: {
-            type: 'virtual',
-            name: 'signal-each',
-          },
-          second_constant: 16320,
-          operation: 'AND',
-          output_signal: {
-            type: 'virtual',
-            name: 'signal-each',
-          },
+    player_description:
+      'Get instrument address for event 1 from each signal\n\nResult: 8 bits\n0000 0000 0000 0000 0011 1111 1100 0000\n\nResult is not shifted to zero, instruments check against the unshifted number',
+  })
+
+  // Get note value for event 1 (modulo)
+  const noteValueEvent1 = builder.entity({
+    name: 'arithmetic-combinator',
+    position: {
+      x: -1,
+      y: 1.5,
+    },
+    direction: 4,
+    control_behavior: {
+      arithmetic_conditions: {
+        first_signal: {
+          type: 'virtual',
+          name: 'signal-each',
+        },
+        second_constant: 64,
+        operation: '%',
+        output_signal: {
+          type: 'virtual',
+          name: 'signal-each',
         },
       },
-      player_description:
-        'Get instrument address for event 1 from each signal\n\nResult: 8 bits\n0000 0000 0000 0000 0011 1111 1100 0000\n\nResult is not shifted to zero, instruments check against the unshifted number',
     },
-    {
-      entity_number: en(5),
-      name: 'arithmetic-combinator',
-      position: {
-        x: -1,
-        y: 1.5,
-      },
-      direction: 4,
-      control_behavior: {
-        arithmetic_conditions: {
-          first_signal: {
-            type: 'virtual',
-            name: 'signal-each',
-          },
-          second_constant: 64,
-          operation: '%',
-          output_signal: {
-            type: 'virtual',
-            name: 'signal-each',
-          },
-        },
-      },
-      player_description:
-        'Get note value for event 1 from each signal\n\nResult: 6 bits\n0000 0000 0000 0000 0000 0000 0011 1111\n\nOperation: Modulo\n0000 0000 0000 0000 0000 0000 0100 0000',
-    },
-  ]
+    player_description:
+      'Get note value for event 1 from each signal\n\nResult: 6 bits\n0000 0000 0000 0000 0000 0000 0011 1111\n\nOperation: Modulo\n0000 0000 0000 0000 0000 0000 0100 0000',
+  })
+
+  // Arithmetic combinator left sides (green input chain)
+  builder.wire(
+    noteValueEvent2,
+    PORT.combInputGreen,
+    instrumentAddressEvent2,
+    PORT.combInputGreen,
+  )
+  builder.wire(
+    instrumentAddressEvent2,
+    PORT.combInputGreen,
+    dataToArithmeticConnection,
+    PORT.combInputGreen,
+  )
+  builder.wire(
+    dataToArithmeticConnection,
+    PORT.combInputGreen,
+    noteValueEvent1,
+    PORT.combInputGreen,
+  )
+
+  // To first speaker
+  builder.wire(
+    noteValueEvent2,
+    PORT.combOutputGreen,
+    firstSpeakerCombinator,
+    PORT.combInputGreen,
+  )
+  builder.wire(
+    instrumentAddressEvent2,
+    PORT.combOutputRed,
+    firstSpeakerCombinator,
+    PORT.combInputRed,
+  )
+  // To second speaker
+  builder.wire(
+    dataToArithmeticConnection,
+    PORT.combOutputRed,
+    secondSpeakerCombinator,
+    PORT.combInputRed,
+  )
+  builder.wire(
+    noteValueEvent1,
+    PORT.combOutputGreen,
+    secondSpeakerCombinator,
+    PORT.combInputGreen,
+  )
 
   return {
     keyEntities: {
-      playCombinatorEntity,
-      dataToArithmeticConnectionEntity,
-    },
-    blueprintSection: {
-      entities,
-      wires: [
-        // Arithmetic combinator left sides
-        [en(2), 2, en(3), 2],
-        [en(3), 2, en(4), 2],
-        [en(4), 2, en(5), 2],
-
-        [en(2), 4, firstSpeakerCombinatorEntity, 2], // To first speaker green
-        [en(3), 3, firstSpeakerCombinatorEntity, 1], // To first speaker red
-        [en(4), 3, secondSpeakerCombinatorEntity, 1], // To second speaker red
-        [en(5), 4, secondSpeakerCombinatorEntity, 2], // To second speaker green
-      ],
+      playCombinator,
+      dataToArithmeticConnection,
     },
   }
 }

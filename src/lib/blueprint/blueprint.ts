@@ -1,9 +1,10 @@
 import { encodeBlueprint } from '@/src/lib/utils'
 import { Speakers } from '@/src/lib/song-to-factorio'
-import { Entity, PlaybackMode, Wire } from '@/src/lib/factorio-blueprint-schema'
+import { PlaybackMode } from '@/src/lib/factorio-blueprint-schema'
 import { getSpeakerSection } from '@/src/lib/blueprint/speaker-section'
 import { getStaticBlueprintSection } from '@/src/lib/blueprint/static-blueprint-section'
 import { getDataSection } from '@/src/lib/blueprint/data-section'
+import { createBuilder } from '@/src/lib/blueprint/build'
 
 import { Song } from '@/src/lib/song'
 
@@ -19,7 +20,7 @@ const prepareSignals = (signals: RawSignal[]) => {
     .flatMap((signal) =>
       qualities.map((quality) => ({
         ...signal,
-        comparator: '=',
+        comparator: '=' as const,
         quality,
       })),
     )
@@ -40,21 +41,20 @@ export type RawSignal = {
 }
 
 export type BlueprintSection = {
-  entities: Entity[]
-  wires: Wire[]
+  entities: import('@/src/lib/factorio-blueprint-schema').Entity[]
+  wires: import('@/src/lib/factorio-blueprint-schema').Wire[]
 }
-
-export const mergeBlueprintSections = (
-  ...blueprints: BlueprintSection[]
-): BlueprintSection => ({
-  entities: blueprints.flatMap((blueprint) => blueprint.entities),
-  wires: blueprints.flatMap((blueprint) => blueprint.wires),
-})
 
 export type BlueprintResult = {
   blueprint: string
   warnings: string[]
 }
+
+// Our blueprints target the Factorio version the generator was written for.
+// (The library-backed approach's newer VERSION/pako encoder are deliberately
+// not adopted; we keep our version and the fflate encode.)
+const BLUEPRINT_VERSION = 281483568218115
+
 export const toBlueprint = ({
   song,
   combinatorValues,
@@ -82,41 +82,27 @@ export const toBlueprint = ({
     )
   }
 
+  // A single builder owns the global entity_number counter: each section adds
+  // into it in order, so callers pass entity handles instead of doing
+  // `entitiesSoFar + local` arithmetic or `- 4` cross-section references.
+  const builder = createBuilder()
+
   const {
-    blueprintSection: speakerBlueprintSection,
-    keyEntities: {
-      firstSpeakerCombinatorEntity,
-      secondSpeakerCombinatorEntity,
-    },
-  } = getSpeakerSection(0, { speakers, playbackMode })
+    keyEntities: { firstSpeakerCombinator, secondSpeakerCombinator },
+  } = getSpeakerSection(builder, { speakers, playbackMode })
   const {
-    blueprintSection: staticBlueprintSection,
-    keyEntities: { playCombinatorEntity, dataToArithmeticConnectionEntity },
-  } = getStaticBlueprintSection(speakerBlueprintSection.entities.length, {
+    keyEntities: { playCombinator, dataToArithmeticConnection },
+  } = getStaticBlueprintSection(builder, {
     song,
-    firstSpeakerCombinatorEntity,
-    secondSpeakerCombinatorEntity,
+    firstSpeakerCombinator,
+    secondSpeakerCombinator,
   })
-
-  const speakerAndStaticBlueprint = mergeBlueprintSections(
-    speakerBlueprintSection,
-    staticBlueprintSection,
-  )
-
-  const dataSection = getDataSection(
-    speakerAndStaticBlueprint.entities.length,
-    {
-      combinatorValues,
-      signals,
-      playCombinatorEntity,
-      dataToArithmeticConnectionEntity,
-    },
-  )
-
-  const blueprint = mergeBlueprintSections(
-    speakerAndStaticBlueprint,
-    dataSection,
-  )
+  const blueprint = getDataSection(builder, {
+    combinatorValues,
+    signals,
+    playCombinator,
+    dataToArithmeticConnection,
+  })
 
   const finalBlueprint = {
     blueprint: {
@@ -131,7 +117,7 @@ export const toBlueprint = ({
       ],
       ...blueprint,
       item: 'blueprint',
-      version: 281483568218115,
+      version: BLUEPRINT_VERSION,
     },
   }
 
