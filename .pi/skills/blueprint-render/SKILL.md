@@ -28,14 +28,16 @@ or mis‑flags entities.
   position `y` occupies `y-1 … y+1`. (Sanity check against the generator: a
   speaker centered at `y=-2.5` and its combinator centered at `y=-1` are 1.5
   apart and sit **flush** exactly as in-game — only true under a center anchor.)
-- **Orientation uses Factorio's 8‑step direction enum.** These 4‑way entities
-  are stored as `0`=North, `4`=South, `8`=East, `12`=West (`direction` omitted ⇒
-  North). The combinator sprite sheet is exactly 8 frames, so the stride is 4.
-  **East/West (8/12) rotate a 1×2 combinator to a 2×1 (wide) box**; North/South
-  (0/absent/4) keep it tall. This governs *both* the footprint and the connector/
-  facing arrows (wires leave the facing edge). Do *not* use the compact `2/4/6`
-  mapping — `8` means East here, so a `2/6` switch leaves every wide entity
-  mis‑attached (falls through to North) and its box tall.
+- **Orientation uses Factorio's 4‑way direction enum with stride 4:**
+  **North=0, East=4, South=8, West=12** (`direction` omitted ⇒ North). This is
+  the *whole* enum the game stores (0/4/8/12 — **not** the compact 0/1/2/3, and
+  the intermediate 2/6/10/14 diagonals never appear on combinators). There is
+  **one** 1×2 combinator, just rotated: **East/West (4/12) lie it down to a 2×1
+  (wide) box; North/South (0/8/absent) keep it tall (1×2)**. This governs *both*
+  the footprint and the connector/facing arrows (wires leave the facing/output
+  end the yellow arrow points to). Reference scene (user-verified): facing
+  up/right/down/left ⇒ `dir` 0/4/8/12 ⇒ tall/wide/tall/wide. The easy traps:
+  assume `4`=South (it's **East**) or rotate on `8/12` (that's South/West).
 - **Overlap is a cell test, not an area test.** Combinators are 1×2 *selection*
   boxes but only ~0.7×1.3 *collision* boxes, and legal half‑tile‑offset stacks
   (e.g. the static arithmetic column at `y` spacing 1.0) tile fine in-game while

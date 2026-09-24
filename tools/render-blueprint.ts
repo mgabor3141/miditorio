@@ -78,12 +78,14 @@ const SELECTION: Record<string, { w: number; h: number }> = {
 // (Confirmed against the generator: a speaker centered at y=-2.5 and its
 // combinator centered at y=-1 are 1.5 apart and sit flush exactly as in-game
 // ONLY under a center anchor; a top-left anchor leaves a 0.5-tile gap.)
-// Direction uses Factorio's 8-step enum: 8=East, 12=West are the horizontal
-// facings that rotate a 1x2 combinator to 2x1; 4=South (and 0/absent=North) keep
-// it tall. NOTE: not 2/6 - those never appear in real combinator blueprints.
+// Factorio's 4-way direction enum has stride 4: North=0, East=4, South=8,
+// West=12. So the HORIZONTAL (wide, 2x1) facings are East/West = 4/12; North/
+// South (0/8, and 0 when the field is absent) stay tall. (Verified against the
+// user's reference scene: up/right/down/left == dir 0/4/8/12 -> tall/wide/
+// tall/wide.) NOT 2/6, and NOT 8/12 - 4 is East here.
 const footprint = (e: Entity): { w: number; h: number } => {
   const base = SELECTION[e.name] ?? { w: 1, h: 2 }
-  const horizontal = e.direction === 8 || e.direction === 12
+  const horizontal = e.direction === 4 || e.direction === 12
   return horizontal ? { w: base.h, h: base.w } : { w: base.w, h: base.h }
 }
 
@@ -244,18 +246,17 @@ const render = (
 
   // Which world edges carry connectors for a given facing. In blueprint coords
   // y grows downward, so "north" = the low-y edge. A combinator's inputs and
-  // outputs sit on opposite edges; facing east/west moves them to the east/west
-  // edges (this is what makes rotation *legible*: the wires leave the correct
-  // side). Factorio stores these 4-way entities on its 8-step direction enum as
-  // 0=North, 4=South, 8=East, 12=West (the combinator sprite sheet is exactly 8
-  // frames; and footprint() rotates on 8/12). NOTE: NOT the compact 2/4/6 - 8
-  // means East here, so a 2/6 switch leaves every wide entity mis-attached.
+  // outputs sit on opposite ends; the facing (output) end is the one the yellow
+  // arrow points to in Factorio. Factorio's 4-way direction enum has stride 4:
+  // North=0, East=4, South=8, West=12 (0 when the field is absent). So facing
+  // east(4)/west(12) puts the connectors on the east/west edges - matching
+  // footprint()'s rotate-on-4/12. NOTE: NOT 2/6, and NOT 8=south-as-east.
   const dirSides = (dir: number) => {
     switch (dir) {
       case 4:
-        return { out: 'south', in: 'north', arrow: [0, 1] }
-      case 8:
         return { out: 'east', in: 'west', arrow: [1, 0] }
+      case 8:
+        return { out: 'south', in: 'north', arrow: [0, 1] }
       case 12:
         return { out: 'west', in: 'east', arrow: [-1, 0] }
       default:
