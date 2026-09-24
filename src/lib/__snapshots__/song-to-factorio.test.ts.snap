@@ -116,7 +116,7 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - bach.mid 1`] = `
         "direction": 4,
         "entity_number": 4,
         "name": "arithmetic-combinator",
-        "player_description": "Get note value for event 2 from each signal\\n\\nResult: 6 bits\\n0000 1111 1100 0000 0000 0000 0000 0000\\n\\nOperation: Integer divide by\\n0000 0000 0100 0000 0000 0000 0000 0000",
+        "player_description": "Get note value for event 2 from each signal (can be negative)\\n\\nResult: top bits (8 bits, and sign bit used)\\n1011 1111 1100 0000 0000 0000 0000 0000\\n\\nOperation: Integer divide by\\n0000 0000 0100 0000 0000 0000 0000 0000",
         "position": {
           "x": -1,
           "y": -1.5
@@ -177,18 +177,18 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - bach.mid 1`] = `
               "name": "signal-each",
               "type": "virtual"
             },
-            "operation": "%",
+            "operation": "AND",
             "output_signal": {
               "name": "signal-each",
               "type": "virtual"
             },
-            "second_constant": 64
+            "second_constant": 63
           }
         },
         "direction": 4,
         "entity_number": 7,
         "name": "arithmetic-combinator",
-        "player_description": "Get note value for event 1 from each signal\\n\\nResult: 6 bits\\n0000 0000 0000 0000 0000 0000 0011 1111\\n\\nOperation: Modulo\\n0000 0000 0000 0000 0000 0000 0100 0000",
+        "player_description": "Get note value for event 1 from each signal\\n\\nResult: 6 bits\\n0000 0000 0000 0000 0000 0000 0011 1111\\n\\nOperation: AND\\n0000 0000 0000 0000 0000 0000 0011 1111",
         "position": {
           "x": -1,
           "y": 1.5
@@ -9384,7 +9384,7 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - hall.mid 1`] = `
         "direction": 4,
         "entity_number": 100,
         "name": "arithmetic-combinator",
-        "player_description": "Get note value for event 2 from each signal\\n\\nResult: 6 bits\\n0000 1111 1100 0000 0000 0000 0000 0000\\n\\nOperation: Integer divide by\\n0000 0000 0100 0000 0000 0000 0000 0000",
+        "player_description": "Get note value for event 2 from each signal (can be negative)\\n\\nResult: top bits (8 bits, and sign bit used)\\n1011 1111 1100 0000 0000 0000 0000 0000\\n\\nOperation: Integer divide by\\n0000 0000 0100 0000 0000 0000 0000 0000",
         "position": {
           "x": -1,
           "y": -1.5
@@ -9445,18 +9445,18 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - hall.mid 1`] = `
               "name": "signal-each",
               "type": "virtual"
             },
-            "operation": "%",
+            "operation": "AND",
             "output_signal": {
               "name": "signal-each",
               "type": "virtual"
             },
-            "second_constant": 64
+            "second_constant": 63
           }
         },
         "direction": 4,
         "entity_number": 103,
         "name": "arithmetic-combinator",
-        "player_description": "Get note value for event 1 from each signal\\n\\nResult: 6 bits\\n0000 0000 0000 0000 0000 0000 0011 1111\\n\\nOperation: Modulo\\n0000 0000 0000 0000 0000 0000 0100 0000",
+        "player_description": "Get note value for event 1 from each signal\\n\\nResult: 6 bits\\n0000 0000 0000 0000 0000 0000 0011 1111\\n\\nOperation: AND\\n0000 0000 0000 0000 0000 0000 0011 1111",
         "position": {
           "x": -1,
           "y": 1.5
@@ -30794,7 +30794,7 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - lune.mid 1`] = `
         "direction": 4,
         "entity_number": 94,
         "name": "arithmetic-combinator",
-        "player_description": "Get note value for event 2 from each signal\\n\\nResult: 6 bits\\n0000 1111 1100 0000 0000 0000 0000 0000\\n\\nOperation: Integer divide by\\n0000 0000 0100 0000 0000 0000 0000 0000",
+        "player_description": "Get note value for event 2 from each signal (can be negative)\\n\\nResult: top bits (8 bits, and sign bit used)\\n1011 1111 1100 0000 0000 0000 0000 0000\\n\\nOperation: Integer divide by\\n0000 0000 0100 0000 0000 0000 0000 0000",
         "position": {
           "x": -1,
           "y": -1.5
@@ -30855,18 +30855,18 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - lune.mid 1`] = `
               "name": "signal-each",
               "type": "virtual"
             },
-            "operation": "%",
+            "operation": "AND",
             "output_signal": {
               "name": "signal-each",
               "type": "virtual"
             },
-            "second_constant": 64
+            "second_constant": 63
           }
         },
         "direction": 4,
         "entity_number": 97,
         "name": "arithmetic-combinator",
-        "player_description": "Get note value for event 1 from each signal\\n\\nResult: 6 bits\\n0000 0000 0000 0000 0000 0000 0011 1111\\n\\nOperation: Modulo\\n0000 0000 0000 0000 0000 0000 0100 0000",
+        "player_description": "Get note value for event 1 from each signal\\n\\nResult: 6 bits\\n0000 0000 0000 0000 0000 0000 0011 1111\\n\\nOperation: AND\\n0000 0000 0000 0000 0000 0000 0011 1111",
         "position": {
           "x": -1,
           "y": 1.5
@@ -52180,7 +52180,7 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - sea.mid 1`] = `
         "direction": 4,
         "entity_number": 104,
         "name": "arithmetic-combinator",
-        "player_description": "Get note value for event 2 from each signal\\n\\nResult: 6 bits\\n0000 1111 1100 0000 0000 0000 0000 0000\\n\\nOperation: Integer divide by\\n0000 0000 0100 0000 0000 0000 0000 0000",
+        "player_description": "Get note value for event 2 from each signal (can be negative)\\n\\nResult: top bits (8 bits, and sign bit used)\\n1011 1111 1100 0000 0000 0000 0000 0000\\n\\nOperation: Integer divide by\\n0000 0000 0100 0000 0000 0000 0000 0000",
         "position": {
           "x": -1,
           "y": -1.5
@@ -52241,18 +52241,18 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - sea.mid 1`] = `
               "name": "signal-each",
               "type": "virtual"
             },
-            "operation": "%",
+            "operation": "AND",
             "output_signal": {
               "name": "signal-each",
               "type": "virtual"
             },
-            "second_constant": 64
+            "second_constant": 63
           }
         },
         "direction": 4,
         "entity_number": 107,
         "name": "arithmetic-combinator",
-        "player_description": "Get note value for event 1 from each signal\\n\\nResult: 6 bits\\n0000 0000 0000 0000 0000 0000 0011 1111\\n\\nOperation: Modulo\\n0000 0000 0000 0000 0000 0000 0100 0000",
+        "player_description": "Get note value for event 1 from each signal\\n\\nResult: 6 bits\\n0000 0000 0000 0000 0000 0000 0011 1111\\n\\nOperation: AND\\n0000 0000 0000 0000 0000 0000 0011 1111",
         "position": {
           "x": -1,
           "y": 1.5
@@ -124810,7 +124810,7 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - toto.mid 1`] = `
         "direction": 4,
         "entity_number": 158,
         "name": "arithmetic-combinator",
-        "player_description": "Get note value for event 2 from each signal\\n\\nResult: 6 bits\\n0000 1111 1100 0000 0000 0000 0000 0000\\n\\nOperation: Integer divide by\\n0000 0000 0100 0000 0000 0000 0000 0000",
+        "player_description": "Get note value for event 2 from each signal (can be negative)\\n\\nResult: top bits (8 bits, and sign bit used)\\n1011 1111 1100 0000 0000 0000 0000 0000\\n\\nOperation: Integer divide by\\n0000 0000 0100 0000 0000 0000 0000 0000",
         "position": {
           "x": -1,
           "y": -1.5
@@ -124871,18 +124871,18 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - toto.mid 1`] = `
               "name": "signal-each",
               "type": "virtual"
             },
-            "operation": "%",
+            "operation": "AND",
             "output_signal": {
               "name": "signal-each",
               "type": "virtual"
             },
-            "second_constant": 64
+            "second_constant": 63
           }
         },
         "direction": 4,
         "entity_number": 161,
         "name": "arithmetic-combinator",
-        "player_description": "Get note value for event 1 from each signal\\n\\nResult: 6 bits\\n0000 0000 0000 0000 0000 0000 0011 1111\\n\\nOperation: Modulo\\n0000 0000 0000 0000 0000 0000 0100 0000",
+        "player_description": "Get note value for event 1 from each signal\\n\\nResult: 6 bits\\n0000 0000 0000 0000 0000 0000 0011 1111\\n\\nOperation: AND\\n0000 0000 0000 0000 0000 0000 0011 1111",
         "position": {
           "x": -1,
           "y": 1.5

@@ -76,7 +76,7 @@ export const getStaticBlueprintSection = (
       },
     },
     player_description:
-      'Get note value for event 2 from each signal\n\nResult: 6 bits\n0000 1111 1100 0000 0000 0000 0000 0000\n\nOperation: Integer divide by\n0000 0000 0100 0000 0000 0000 0000 0000',
+      'Get note value for event 2 from each signal (can be negative)\n\nResult: top bits (8 bits, and sign bit used)\n1011 1111 1100 0000 0000 0000 0000 0000\n\nOperation: Integer divide by\n0000 0000 0100 0000 0000 0000 0000 0000',
   })
 
   // Get instrument address for event 2 (AND)
@@ -131,7 +131,9 @@ export const getStaticBlueprintSection = (
       'Get instrument address for event 1 from each signal\n\nResult: 8 bits\n0000 0000 0000 0000 0011 1111 1100 0000\n\nResult is not shifted to zero, instruments check against the unshifted number',
   })
 
-  // Get note value for event 1 (modulo)
+  // Get note value for event 1 (AND, not modulo: once event 2's note value can
+  // use the sign bit the packed `each` may be negative, and `% 64` would then
+  // yield a negative low value; `AND 63` always masks the low 6 bits cleanly.)
   const noteValueEvent1 = builder.entity({
     name: 'arithmetic-combinator',
     position: {
@@ -145,8 +147,8 @@ export const getStaticBlueprintSection = (
           type: 'virtual',
           name: 'signal-each',
         },
-        second_constant: 64,
-        operation: '%',
+        second_constant: 63,
+        operation: 'AND',
         output_signal: {
           type: 'virtual',
           name: 'signal-each',
@@ -154,7 +156,7 @@ export const getStaticBlueprintSection = (
       },
     },
     player_description:
-      'Get note value for event 1 from each signal\n\nResult: 6 bits\n0000 0000 0000 0000 0000 0000 0011 1111\n\nOperation: Modulo\n0000 0000 0000 0000 0000 0000 0100 0000',
+      'Get note value for event 1 from each signal\n\nResult: 6 bits\n0000 0000 0000 0000 0000 0000 0011 1111\n\nOperation: AND\n0000 0000 0000 0000 0000 0000 0011 1111',
   })
 
   // Arithmetic combinator left sides (green input chain)
