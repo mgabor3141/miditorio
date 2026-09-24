@@ -27,6 +27,10 @@ export const PORT = {
   // input red/green, but named separately for clarity at the call site).
   speakerRed: 1,
   speakerGreen: 2,
+  // constant-combinator output connectors (a constant combinator has only one
+  // red and one green connector; numeric id matches the input-side id).
+  constantRed: 1,
+  constantGreen: 2,
 } as const
 
 /** Anything that carries an entity_number: a real handle or a forward ref. */

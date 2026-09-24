@@ -11,12 +11,15 @@ import {
   type EntityRef,
 } from '@/src/lib/blueprint/build'
 
-// Signals that carry the timing/playback circuit and must never be reused as a
-// per-voice "note value" carrier on the shared speaker bus.
+// Signals that carry the timing/playback circuit or the shared volume memory,
+// and must never be reused as a per-voice "note value" carrier on the shared
+// speaker bus (the volume memory emits signal-A/signal-B onto that same bus).
 const RESERVED_NOTE_SIGNALS = new Set([
   'signal-green',
   'signal-each',
   'signal-everything',
+  'signal-A',
+  'signal-B',
 ])
 
 /**

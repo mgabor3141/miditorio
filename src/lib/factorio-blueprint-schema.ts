@@ -62,12 +62,10 @@ export type Entity = {
       control_behavior: {
         decider_conditions: {
           conditions: CircuitCondition[]
-          outputs: [
-            {
-              signal: Signal
-              networks?: Networks
-            },
-          ]
+          outputs: {
+            signal: Signal
+            networks?: Networks
+          }[]
         }
       }
     }

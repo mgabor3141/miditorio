@@ -17,6 +17,7 @@ export const getStaticBlueprintSection = (
   keyEntities: {
     playCombinator: EntityRef
     dataToArithmeticConnection: EntityRef
+    volumeMemory: EntityRef
   }
 } => {
   const playCombinator = builder.entity({
@@ -159,6 +160,56 @@ export const getStaticBlueprintSection = (
       'Get note value for event 1 from each signal\n\nResult: 6 bits\n0000 0000 0000 0000 0000 0000 0011 1111\n\nOperation: AND\n0000 0000 0000 0000 0000 0000 0011 1111',
   })
 
+  // Shared volume memory (one decider for ALL volume-controlled speakers).
+  // While the play button drives `signal-green` (non-zero) on the RED network,
+  // it copies that value to `signal-A`/`signal-B`, which ride the shared speaker
+  // green bus and become each speaker's `volume_signal_id`. Kept next to the
+  // play button because its red input is fed directly from there (red-wire
+  // reach is limited, so this physical distance matters).
+  const volumeMemory = builder.entity({
+    name: 'decider-combinator',
+    position: {
+      x: -2,
+      y: 0.5,
+    },
+    direction: 4,
+    control_behavior: {
+      decider_conditions: {
+        conditions: [
+          {
+            first_signal: {
+              type: 'virtual',
+              name: 'signal-green',
+            },
+            comparator: '≠',
+            first_signal_networks: {
+              red: true,
+              green: false,
+            },
+          },
+        ],
+        outputs: [
+          {
+            signal: {
+              type: 'virtual',
+              name: 'signal-A',
+            },
+          },
+          {
+            signal: {
+              type: 'virtual',
+              name: 'signal-B',
+            },
+          },
+        ],
+      },
+    },
+    player_description:
+      'Shared volume memory for all speakers\n\n' +
+      'While the play button is on (signal-green != 0 on red), copies it to\n' +
+      'signal-A / signal-B on the speaker green bus.',
+  })
+
   // Arithmetic combinator left sides (green input chain)
   builder.wire(
     noteValueEvent2,
@@ -206,10 +257,36 @@ export const getStaticBlueprintSection = (
     PORT.combInputGreen,
   )
 
+  // Volume memory wiring.
+  // (1) Play button RED output -> memory RED input. Kept short on purpose.
+  builder.wire(
+    playCombinator,
+    PORT.constantRed,
+    volumeMemory,
+    PORT.combInputRed,
+  )
+  // (2) Memory GREEN output joins the speaker green bus (via the first speaker
+  //     combinator's green output connector, which is on that same net).
+  builder.wire(
+    volumeMemory,
+    PORT.combOutputGreen,
+    firstSpeakerCombinator,
+    PORT.combOutputGreen,
+  )
+  // (3) Self-bridge the memory's green input to its green output so its green
+  //     network is one net with the speaker bus.
+  builder.wire(
+    volumeMemory,
+    PORT.combInputGreen,
+    volumeMemory,
+    PORT.combOutputGreen,
+  )
+
   return {
     keyEntities: {
       playCombinator,
       dataToArithmeticConnection,
+      volumeMemory,
     },
   }
 }
