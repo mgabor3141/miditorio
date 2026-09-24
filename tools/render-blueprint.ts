@@ -9,7 +9,7 @@ import { inflateSync } from 'node:zlib'
  * top-down SVG schematic: a tile grid, one labeled footprint box per entity,
  * and the red / green circuit wires with Factorio's characteristic routing.
  * It also runs two structural checks that we used to do by eye:
- *   - footprint OVERLAP detection (entities occupying the same tile), and
+ *   - footprint OVERLAP detection (entities sharing grid area), and
  *   - per-color NET reachability (e.g. "does the shared green net reach all
  *     speakers?").
  *
@@ -61,48 +61,62 @@ const decodeBlueprint = (raw: string): Blueprint => {
 // Geometry / footprints
 // ---------------------------------------------------------------------------
 
-/** Width x height in tiles, keyed by entity name. Directions that rotate a
- *  1x2 combinator (east/west = 2/6) are swapped to 2x1. */
-const footprint = (e: Entity): { w: number; h: number } => {
-  const horizontal = e.direction === 2 || e.direction === 6
-  let w = 1
-  let h = 1
-  switch (e.name) {
-    case 'constant-combinator':
-      w = 1
-      h = 1
-      break
-    case 'programmable-speaker':
-      w = 1
-      h = 2
-      break
-    case 'arithmetic-combinator':
-    case 'decider-combinator':
-    case 'logistic-combinator':
-    default:
-      w = 1
-      h = 2
-      if (horizontal) {
-        w = 2
-        h = 1
-      }
-  }
-  return { w, h }
+// Selection-box sizes from base/prototypes/entity/circuit-network.lua, in
+// tiles (the selection box is centered on position and is 1 wide x 2 tall for
+// the 1x2 combinators; 1x1 for constant combinator and speaker). These are the
+// occupied footprint dimensions.
+const SELECTION: Record<string, { w: number; h: number }> = {
+  'arithmetic-combinator': { w: 1, h: 2 },
+  'decider-combinator': { w: 1, h: 2 },
+  'logistic-combinator': { w: 1, h: 2 },
+  'constant-combinator': { w: 1, h: 1 },
+  'programmable-speaker': { w: 1, h: 1 },
 }
 
-type Box = { e: Entity; cx: number; cy: number; w: number; h: number }
+// Factorio renders a blueprint with each entity's POSITION at the CENTER of its
+// selection box, so a tall 1x2 combinator at position y occupies y-1 .. y+1.
+// (Confirmed against the generator: a speaker centered at y=-2.5 and its
+// combinator centered at y=-1 are 1.5 apart and sit flush exactly as in-game
+// ONLY under a center anchor; a top-left anchor leaves a 0.5-tile gap.)
+// Direction uses Factorio's 8-step enum: 8=East, 12=West are the horizontal
+// facings that rotate a 1x2 combinator to 2x1; 4=South (and 0/absent=North) keep
+// it tall. NOTE: not 2/6 - those never appear in real combinator blueprints.
+const footprint = (e: Entity): { w: number; h: number } => {
+  const base = SELECTION[e.name] ?? { w: 1, h: 2 }
+  const horizontal = e.direction === 8 || e.direction === 12
+  return horizontal ? { w: base.h, h: base.w } : { w: base.w, h: base.h }
+}
+
+// Box = occupied rectangle in Factorio world coords (y grows downward), centered
+// on the entity position. Edges land on integer/half-integer tile boundaries.
+type Box = {
+  e: Entity
+  x0: number
+  y0: number
+  x1: number
+  y1: number
+}
 const boxOf = (e: Entity): Box => {
   const { w, h } = footprint(e)
-  return { e, cx: e.position.x, cy: e.position.y, w, h }
+  return {
+    e,
+    x0: e.position.x - w / 2,
+    y0: e.position.y - h / 2,
+    x1: e.position.x + w / 2,
+    y1: e.position.y + h / 2,
+  }
 }
 
-// A placement MISTAKE is two entities claiming the same grid reference cell.
-// Adjacent stacks (1 tile apart) are valid in Factorio and must NOT be flagged,
-// so we key each entity to its grid cell (floor of its position) and compare
-// cells, not center-boxes. Entities are laid out on a half-tile grid, so floor
-// maps every entity to a stable cell; a genuine double-placement collides.
-const cellOf = (e: Entity): string =>
-  `${Math.floor(e.position.x)},${Math.floor(e.position.y)}`
+// A placement MISTAKE is two entities claiming the SAME integer anchor cell
+// (e.g. a double-placed combinator). We deliberately do NOT test footprint-area
+// overlap: Factorio combinators are 1x2 SELECTION boxes but only 0.7x1.3
+// COLLISION boxes, and half-tile-offset stacks of them tile legally while their
+// selection rectangles interpenetrate - so an area test false-flags the legal
+// static columns we emit (verified against real, in-game-correct output). Keying
+// each entity to its anchor cell flags genuine double-placements with zero false
+// positives on those stacks. Only two entities sharing an integer (floor) tile is
+// reported.
+const cellOf = (b: Box): string => `${Math.floor(b.e.position.x)},${Math.floor(b.e.position.y)}`
 
 // ---------------------------------------------------------------------------
 // Wiring (net colors + Factorio L-routing)
@@ -157,10 +171,10 @@ const render = (
 
   const boxes = entities.map(boxOf)
 
-  // ---- overlap detection: two entities sharing a grid cell ----
+  // ---- overlap detection: two entities on the same integer anchor cell ----
   const byCell = new Map<string, number[]>()
   for (const b of boxes) {
-    const c = cellOf(b.e)
+    const c = cellOf(b)
     ;(byCell.get(c) ?? byCell.set(c, []).get(c)!).push(b.e.entity_number)
   }
   const overlapWith = new Map<number, number[]>()
@@ -211,10 +225,10 @@ const render = (
   }
 
   // ---- geometry bounds -> viewBox ----
-  const xs = boxes.map((b) => b.cx - b.w / 2)
-  const ys = boxes.map((b) => b.cy - b.h / 2)
-  const xe = boxes.map((b) => b.cx + b.w / 2)
-  const ye = boxes.map((b) => b.cy + b.h / 2)
+  const xs = boxes.map((b) => b.x0)
+  const ys = boxes.map((b) => b.y0)
+  const xe = boxes.map((b) => b.x1)
+  const ye = boxes.map((b) => b.y1)
   const minX = Math.floor(Math.min(...xs)) - 1
   const minY = Math.floor(Math.min(...ys)) - 1
   const maxX = Math.ceil(Math.max(...xe)) + 1
@@ -226,6 +240,51 @@ const render = (
   const H = gh * PX + PAD
   const ox = (x: number) => (x - minX) * PX
   const oy = (y: number) => (y - minY) * PX + PAD
+  const entBox = new Map(boxes.map((b) => [b.e.entity_number, b]))
+
+  // Which world edges carry connectors for a given facing. In blueprint coords
+  // y grows downward, so "north" = the low-y edge. A combinator's inputs and
+  // outputs sit on opposite edges; facing east/west moves them to the east/west
+  // edges (this is what makes rotation *legible*: the wires leave the correct
+  // side). Direction 0 = north, 2 = east, 4 = south, 6 = west (default north).
+  const dirSides = (dir: number) => {
+    switch (dir) {
+      case 2:
+        return { out: 'east', in: 'west', arrow: [1, 0] }
+      case 4:
+        return { out: 'south', in: 'north', arrow: [0, 1] }
+      case 6:
+        return { out: 'west', in: 'east', arrow: [-1, 0] }
+      default:
+        return { out: 'north', in: 'south', arrow: [0, -1] }
+    }
+  }
+  const portKind = (connector: number): 'in' | 'out' =>
+    connector === 1 || connector === 2 ? 'in' : 'out'
+
+  // Anchor point (px) for a given entity's connector: on the correct edge for
+  // its facing, offset along that edge so red/green connectors don't overlap.
+  const connectorPx = (n: number, connector: number): [number, number] => {
+    const b = entBox.get(n)!
+    const sides = dirSides(b.e.direction ?? 0)
+    const side = sides[portKind(connector)]
+    // 0 = red connector, 1 = green connector -> two slots along the edge.
+    const slot = connector === 1 || connector === 3 ? 0.35 : 0.65
+    const x0 = ox(b.x0)
+    const y0 = oy(b.y0)
+    const x1 = ox(b.x1)
+    const y1 = oy(b.y1)
+    switch (side) {
+      case 'north':
+        return [x0 + (x1 - x0) * slot, y0]
+      case 'south':
+        return [x0 + (x1 - x0) * slot, y1]
+      case 'west':
+        return [x0, y0 + (y1 - y0) * slot]
+      default:
+        return [x1, y0 + (y1 - y0) * slot] // east
+    }
+  }
 
   const parts: string[] = []
   parts.push(
@@ -259,16 +318,14 @@ const render = (
       `<line x1="0" y1="${y * PX + PAD}" x2="${W}" y2="${y * PX + PAD}" stroke="#2c2c2c"/>`,
     )
 
-  // wires (drawn beneath entities). Red routes H-then-V, green V-then-H.
+  // wires (drawn beneath entities): connect each endpoint's real connector
+  // (correct edge for its facing) with Factorio's L routing — red routes
+  // horizontal-then-vertical, green vertical-then-horizontal.
   const wireColor = { red: '#e03030', green: '#37b037' }
-  for (const [a, ap, b] of wires) {
-    const ea = byNum.get(a)!
-    const eb = byNum.get(b)!
+  for (const [a, ap, b, bp2] of wires) {
     const color = netColor(ap)
-    const x1 = ox(ea.position.x)
-    const y1 = oy(ea.position.y)
-    const x2 = ox(eb.position.x)
-    const y2 = oy(eb.position.y)
+    const [x1, y1] = connectorPx(a, ap)
+    const [x2, y2] = connectorPx(b, bp2)
     const mid =
       color === 'red'
         ? `M${x1} ${y1} H${x2} V${y2}`
@@ -280,10 +337,10 @@ const render = (
 
   // entities
   for (const b of boxes) {
-    const x = ox(b.cx - b.w / 2)
-    const y = oy(b.cy - b.h / 2)
-    const w = b.w * PX
-    const h = b.h * PX
+    const x = ox(b.x0)
+    const y = oy(b.y0)
+    const w = (b.x1 - b.x0) * PX
+    const h = (b.y1 - b.y0) * PX
     const a = abbr(b.e.name)
     const isOverlap = overlapWith.has(b.e.entity_number)
     const stroke = isOverlap ? '#ff3b3b' : '#0d0d0d'
@@ -302,6 +359,30 @@ const render = (
       parts.push(
         `<text x="${x + w / 2}" y="${y + h - 4}" width="${w - 4}" fill="#f7f7a0" font-family="monospace" font-size="8" text-anchor="middle" textLength="${Math.min(w - 4, hp.length * 5)}" lengthAdjust="spacingAndGlyphs">${esc(hp)}</text>`,
       )
+    // facing arrow drawn just OUTSIDE the output edge (in empty grid space, so
+    // it never covers the centered label). Points outward toward where the
+    // output wires leave -> facing is legible even when rotation doesn't change
+    // the footprint shape (e.g. a speaker).
+    const [ax, ay] = dirSides(b.e.direction ?? 0).arrow
+    const cx = x + w / 2
+    const cy = y + h / 2
+    const hx = w / 2
+    const hy = h / 2
+    const edge = cx + ax * hx + ax * 2 // on the output edge, nudged outward
+    const edgey = cy + ay * hy + ay * 2
+    const s = 7 // arrow size
+    const tipx = edge + ax * s
+    const tipy = edgey + ay * s
+    const px = -ay
+    const py = ax
+    const bw = 4.5
+    const bx1 = edge + px * bw
+    const by1 = edgey + py * bw
+    const bx2 = edge - px * bw
+    const by2 = edgey - py * bw
+    parts.push(
+      `<polygon points="${tipx},${tipy} ${bx1},${by1} ${bx2},${by2}" fill="#ffd24a" stroke="#3a2c00" stroke-width="0.8"/>`,
+    )
   }
 
   parts.push('</svg>')

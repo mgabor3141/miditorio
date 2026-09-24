@@ -11,10 +11,36 @@ top-down schematic: a tile grid, one labeled box per entity (type +
 `entity_number` + a hint from its `player_description`), and the red/green wires
 with Factorio's routing. It also runs two structural checks we used to do by eye:
 
-- **Overlap** — two entities claiming the same grid cell (a placement mistake).
+- **Overlap** — two entities on the same integer anchor cell (a placement
+  mistake). See *Coordinate & orientation model* for why this is a cell test,
+  not an area test.
 - **Net reachability** — e.g. "does the shared green net reach all speakers?"
 
 It needs no game sprites. PNG output uses the system `rsvg-convert` (librsvg).
+
+## Coordinate & orientation model
+
+Getting these right is the whole ballgame; a wrong assumption silently mis‑sizes
+or mis‑flags entities.
+
+- **`position` = CENTER of the footprint.** Factorio renders each entity with its
+  position at the *center* of its selection box, so a tall 1×2 combinator at
+  position `y` occupies `y-1 … y+1`. (Sanity check against the generator: a
+  speaker centered at `y=-2.5` and its combinator centered at `y=-1` are 1.5
+  apart and sit **flush** exactly as in-game — only true under a center anchor.)
+- **Orientation uses Factorio's 8‑step direction enum.** Real combinator
+  blueprints store `4` = South and `8`/`12` = East/West (and omit `direction`,
+  i.e. North). **East/West (8/12) rotate a 1×2 combinator to a 2×1 (wide) box**;
+  North/South (0/absent/4) keep it tall. Do *not* test `direction===2||6` — those
+  values never appear in these blueprints, so that check silently leaves every
+  box tall.
+- **Overlap is a cell test, not an area test.** Combinators are 1×2 *selection*
+  boxes but only ~0.7×1.3 *collision* boxes, and legal half‑tile‑offset stacks
+  (e.g. the static arithmetic column at `y` spacing 1.0) tile fine in-game while
+  their selection rectangles interpenetrate. An area/overlap test therefore
+  false‑flags the generator's legal columns. The tool keys each entity to its
+  integer `floor(position)` cell and flags only two entities claiming the same
+  cell — genuine double‑placements, zero false positives on real output.
 
 ## When to use
 
