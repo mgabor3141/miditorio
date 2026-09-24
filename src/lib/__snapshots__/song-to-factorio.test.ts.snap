@@ -231,7 +231,7 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - bach.mid 1`] = `
         "name": "decider-combinator",
         "player_description": "Shared volume memory for all speakers\\n\\nWhile the play button is on (signal-green != 0 on red), copies it to\\nsignal-A / signal-B on the speaker green bus.",
         "position": {
-          "x": -2,
+          "x": -1,
           "y": 2.5
         }
       },
@@ -9558,7 +9558,7 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - hall.mid 1`] = `
         "name": "decider-combinator",
         "player_description": "Shared volume memory for all speakers\\n\\nWhile the play button is on (signal-green != 0 on red), copies it to\\nsignal-A / signal-B on the speaker green bus.",
         "position": {
-          "x": -2,
+          "x": -1,
           "y": 2.5
         }
       },
@@ -31027,7 +31027,7 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - lune.mid 1`] = `
         "name": "decider-combinator",
         "player_description": "Shared volume memory for all speakers\\n\\nWhile the play button is on (signal-green != 0 on red), copies it to\\nsignal-A / signal-B on the speaker green bus.",
         "position": {
-          "x": -2,
+          "x": -1,
           "y": 2.5
         }
       },
@@ -52472,7 +52472,7 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - sea.mid 1`] = `
         "name": "decider-combinator",
         "player_description": "Shared volume memory for all speakers\\n\\nWhile the play button is on (signal-green != 0 on red), copies it to\\nsignal-A / signal-B on the speaker green bus.",
         "position": {
-          "x": -2,
+          "x": -1,
           "y": 2.5
         }
       },
@@ -125161,7 +125161,7 @@ exports[`Song to Blueprint > Blueprint raw JSON > consistency - toto.mid 1`] = `
         "name": "decider-combinator",
         "player_description": "Shared volume memory for all speakers\\n\\nWhile the play button is on (signal-green != 0 on red), copies it to\\nsignal-A / signal-B on the speaker green bus.",
         "position": {
-          "x": -2,
+          "x": -1,
           "y": 2.5
         }
       },

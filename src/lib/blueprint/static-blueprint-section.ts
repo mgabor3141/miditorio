@@ -163,13 +163,14 @@ export const getStaticBlueprintSection = (
   // Shared volume memory (one decider for ALL volume-controlled speakers).
   // While the play button drives `signal-green` (non-zero) on the RED network,
   // it copies that value to `signal-A`/`signal-B`, which ride the shared speaker
-  // green bus and become each speaker's `volume_signal_id`. Placed directly to
-  // the right of the play button (same row) so its red input is a short, direct
-  // link to the play button, and clear of the `x=-1` arithmetic stack.
+  // green bus and become each speaker's `volume_signal_id`. Placed on the play
+  // button's row, two columns to its right, directly above the arithmetic stack
+  // (top at y=1.5) — clear of it in the y direction and a short, direct red link
+  // back to the play button.
   const volumeMemory = builder.entity({
     name: 'decider-combinator',
     position: {
-      x: -2,
+      x: -1,
       y: 2.5,
     },
     direction: 4,
