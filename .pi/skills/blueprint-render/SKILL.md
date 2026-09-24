@@ -7,12 +7,16 @@ description: Render a Miditorio blueprint string to a top-down SVG/PNG schematic
 
 `tools/render-blueprint.ts` is a **zero-dependency** helper (uses only `node:*`)
 that decodes a Miditorio blueprint string (`0` + base64 + zlib) and draws a
-top-down schematic: a tile grid, one labeled box per entity (type +
-`entity_number` + a hint from its `player_description`), and the red/green wires
-with Factorio's routing. It also runs two structural checks we used to do by eye:
+top-down schematic: a tile grid with **coordinate rulers on the top and left
+edges** (integer Factorio world coords, so you can read an entity's position off
+the image), and one box per entity showing its **type abbreviation +
+`entity_number`** (fill colour also encodes type; see below). `player_description`
+hints are not drawn — the number is enough. A cyan arrow inside each box marks
+its facing/output edge (omitted on speakers, which have no facing). It also runs
+two structural checks we used to do by eye:
 
 - **Overlap** — two entities on the same integer anchor cell (a placement
-  mistake). See *Coordinate & orientation model* for why this is a cell test,
+  mistake). See _Coordinate & orientation model_ for why this is a cell test,
   not an area test.
 - **Net reachability** — e.g. "does the shared green net reach all speakers?"
 
@@ -24,22 +28,22 @@ Getting these right is the whole ballgame; a wrong assumption silently mis‑siz
 or mis‑flags entities.
 
 - **`position` = CENTER of the footprint.** Factorio renders each entity with its
-  position at the *center* of its selection box, so a tall 1×2 combinator at
+  position at the _center_ of its selection box, so a tall 1×2 combinator at
   position `y` occupies `y-1 … y+1`. (Sanity check against the generator: a
   speaker centered at `y=-2.5` and its combinator centered at `y=-1` are 1.5
   apart and sit **flush** exactly as in-game — only true under a center anchor.)
 - **Orientation uses Factorio's 4‑way direction enum with stride 4:**
   **North=0, East=4, South=8, West=12** (`direction` omitted ⇒ North). This is
-  the *whole* enum the game stores (0/4/8/12 — **not** the compact 0/1/2/3, and
+  the _whole_ enum the game stores (0/4/8/12 — **not** the compact 0/1/2/3, and
   the intermediate 2/6/10/14 diagonals never appear on combinators). There is
   **one** 1×2 combinator, just rotated: **East/West (4/12) lie it down to a 2×1
-  (wide) box; North/South (0/8/absent) keep it tall (1×2)**. This governs *both*
+  (wide) box; North/South (0/8/absent) keep it tall (1×2)**. This governs _both_
   the footprint and the connector/facing arrows (wires leave the facing/output
   end the yellow arrow points to). Reference scene (user-verified): facing
   up/right/down/left ⇒ `dir` 0/4/8/12 ⇒ tall/wide/tall/wide. The easy traps:
   assume `4`=South (it's **East**) or rotate on `8/12` (that's South/West).
-- **Overlap is a cell test, not an area test.** Combinators are 1×2 *selection*
-  boxes but only ~0.7×1.3 *collision* boxes, and legal half‑tile‑offset stacks
+- **Overlap is a cell test, not an area test.** Combinators are 1×2 _selection_
+  boxes but only ~0.7×1.3 _collision_ boxes, and legal half‑tile‑offset stacks
   (e.g. the static arithmetic column at `y` spacing 1.0) tile fine in-game while
   their selection rectangles interpenetrate. An area/overlap test therefore
   false‑flags the generator's legal columns. The tool keys each entity to its
@@ -118,9 +122,12 @@ networks: red net: 5 net(s), largest 2 ent | green net: largest net 11 ent · sp
 overlaps: none
 ```
 
-Legend: **ARC** arithmetic, **DEC** decider/logistic, **CON** constant
-combinator, **SPK** programmable speaker. Red wires route horizontal‑then‑vertical,
-green vertical‑then‑horizontal.
+Box types (abbreviation + fill): **ARC** arithmetic = blue, **DEC**
+decider/logistic = yellow, **CON** constant combinator = red, **SPK**
+programmable speaker = orange. A **cyan** arrow inside a box marks its facing /
+output edge (never yellow — DEC is yellow now); speakers have no arrow. There is
+no on‑image legend; the abbreviation is printed on every box. Red wires route
+horizontal‑then‑vertical, green vertical‑then‑horizontal.
 
 ## Exit codes (for automation / CI)
 

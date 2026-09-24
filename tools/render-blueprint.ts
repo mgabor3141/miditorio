@@ -118,7 +118,8 @@ const boxOf = (e: Entity): Box => {
 // each entity to its anchor cell flags genuine double-placements with zero false
 // positives on those stacks. Only two entities sharing an integer (floor) tile is
 // reported.
-const cellOf = (b: Box): string => `${Math.floor(b.e.position.x)},${Math.floor(b.e.position.y)}`
+const cellOf = (b: Box): string =>
+  `${Math.floor(b.e.position.x)},${Math.floor(b.e.position.y)}`
 
 // ---------------------------------------------------------------------------
 // Wiring (net colors + Factorio L-routing)
@@ -141,20 +142,14 @@ const ABBR: Record<string, string> = {
   'programmable-speaker': 'SPK',
 }
 const FILL: Record<string, string> = {
-  ARC: '#6b5a1e',
-  DEC: '#1f5c78',
+  ARC: '#1f5c78', // arithmetic = blue
+  DEC: '#c9a227', // decider = yellow
   LGC: '#3f7a3f',
   CON: '#7a2f2f',
   SPK: '#9a6a1a',
 }
 const abbr = (name: string): string =>
   ABBR[name] ?? name.replace(/-/g, '').slice(0, 3).toUpperCase()
-
-// First line of player_description, shortened — a hint label under the box.
-const hint = (e: Entity): string => {
-  const d = (e.player_description ?? '').split('\n')[0].trim()
-  return d.length > 15 ? d.slice(0, 14) + '…' : d
-}
 
 // ---------------------------------------------------------------------------
 // SVG assembly
@@ -237,10 +232,11 @@ const render = (
   const maxY = Math.ceil(Math.max(...ye)) + 1
   const gw = maxX - minX
   const gh = maxY - minY
-  const PAD = 44 // title + legend band height; the world is drawn below it
-  const W = gw * PX
+  const PAD = 40 // top band: title line + x-coordinate ruler (world below)
+  const LGUT = 30 // left gutter for the y-coordinate ruler
+  const W = gw * PX + LGUT
   const H = gh * PX + PAD
-  const ox = (x: number) => (x - minX) * PX
+  const ox = (x: number) => (x - minX) * PX + LGUT
   const oy = (y: number) => (y - minY) * PX + PAD
   const entBox = new Map(boxes.map((b) => [b.e.entity_number, b]))
 
@@ -296,30 +292,32 @@ const render = (
   )
   parts.push(`<rect width="${W}" height="${H}" fill="#202020"/>`)
   parts.push(
-    `<text x="8" y="18" fill="#eee" font-family="sans-serif" font-size="14" font-weight="bold">miditorio schematic · ${entities.length} ent · ${wires.length} wires</text>`,
+    `<text x="8" y="16" fill="#eee" font-family="sans-serif" font-size="13" font-weight="bold">miditorio · ${entities.length} ent · ${wires.length} wires</text>`,
   )
-  const legend = Object.entries(ABBR)
-    .map(([name, a]) => ({ a, c: FILL[a], name }))
-    .filter((l) => entities.some((e) => e.name === l.name))
-  // legend on its own row below the title, left-aligned (no overlap with title)
-  legend.forEach((l, i) => {
-    const lx = 8 + i * 52
-    parts.push(
-      `<rect x="${lx}" y="26" width="12" height="12" fill="${l.c}" stroke="#0d0d0d"/>`,
-    )
-    parts.push(
-      `<text x="${lx + 15}" y="36" fill="#ccc" font-family="sans-serif" font-size="11">${l.a}</text>`,
-    )
-  })
+  // (legend dropped: box fill + abbreviation already identify each type.)
 
-  // tile grid
+  // tile grid (offset right by the y-axis gutter)
   for (let x = 0; x <= gw; x++)
     parts.push(
-      `<line x1="${x * PX}" y1="${PAD}" x2="${x * PX}" y2="${H}" stroke="#2c2c2c"/>`,
+      `<line x1="${x * PX + LGUT}" y1="${PAD}" x2="${x * PX + LGUT}" y2="${H}" stroke="#2c2c2c"/>`,
     )
   for (let y = 0; y <= gh; y++)
     parts.push(
-      `<line x1="0" y1="${y * PX + PAD}" x2="${W}" y2="${y * PX + PAD}" stroke="#2c2c2c"/>`,
+      `<line x1="${LGUT}" y1="${y * PX + PAD}" x2="${W}" y2="${y * PX + PAD}" stroke="#2c2c2c"/>`,
+    )
+
+  // coordinate rulers along the grid edges: integer world coords, so you can
+  // read an entity's Factorio position straight off the schematic. Vertical
+  // grid line at world x gets its x label on top; horizontal line at world y
+  // gets its y label in the left gutter.
+  const AX = '#8a8a8a'
+  for (let x = 0; x <= gw; x++)
+    parts.push(
+      `<text x="${x * PX + LGUT}" y="${PAD - 4}" fill="${AX}" font-family="monospace" font-size="9" text-anchor="middle">${minX + x}</text>`,
+    )
+  for (let y = 0; y <= gh; y++)
+    parts.push(
+      `<text x="${LGUT - 5}" y="${y * PX + PAD + 10}" fill="${AX}" font-family="monospace" font-size="9" text-anchor="end">${minY + y}</text>`,
     )
 
   // wires (drawn beneath entities): connect each endpoint's real connector
@@ -352,52 +350,35 @@ const render = (
     parts.push(
       `<rect x="${x + 1}" y="${y + 1}" width="${w - 2}" height="${h - 2}" rx="4" fill="${FILL[a] ?? '#444'}" stroke="${stroke}" stroke-width="${sw}"/>`,
     )
-    // Labels. On a tall box (h>=48px) the abbreviation + number form a top
-    // block and the hint sits at the bottom without colliding. On a 1x1 tile
-    // (h~32px) there is room for only two lines, so we DROP the hint (it is
-    // truncated anyway) and centre abbreviation + number - otherwise the number
-    // and the hint baseline land on the same pixel and overlap.
+    // Labels: type abbreviation + entity number only. player_description hints
+    // were pure noise (and truncated); the number is enough to identify a box
+    // alongside its colour/abbreviation. Centred as a block.
     const cxl = x + w / 2
-    const showHint = h >= 48 && !!hint(b.e)
-    const abbrY = showHint ? y + h / 2 - 12 : y + h / 2 - 2
-    const numY = showHint ? y + h / 2 : y + h / 2 + 12
     parts.push(
-      `<text x="${cxl}" y="${abbrY}" fill="#fff" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle">${a}</text>`,
+      `<text x="${cxl}" y="${y + h / 2 - 3}" fill="#fff" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle">${a}</text>`,
     )
     parts.push(
-      `<text x="${cxl}" y="${numY}" fill="#ddd" font-family="monospace" font-size="10" text-anchor="middle">${b.e.entity_number}</text>`,
+      `<text x="${cxl}" y="${y + h / 2 + 11}" fill="#ddd" font-family="monospace" font-size="10" text-anchor="middle">${b.e.entity_number}</text>`,
     )
-    if (showHint)
-      parts.push(
-        `<text x="${cxl}" y="${y + h - 6}" width="${w - 4}" fill="#f7f7a0" font-family="monospace" font-size="8" text-anchor="middle" textLength="${Math.min(w - 4, hint(b.e).length * 5)}" lengthAdjust="spacingAndGlyphs">${esc(hint(b.e))}</text>`,
-      )
-    // Facing arrow. A 1x2 vs 2x1 combinator box ALREADY encodes facing (and the
-    // output connector marks the output end), so an arrow there is redundant -
-    // and on a 1x1 tile a lone arrow reads like a wire PORT, colliding with the
-    // red/green ports. Draw the arrow ONLY where facing is otherwise invisible:
-    // square (1x1) footprints (speaker / constant). It points outward to the
-    // output/facing end.
-    const rotatable = b.x1 - b.x0 !== b.y1 - b.y0
-    if (!rotatable) {
+    // Facing arrow, drawn INSIDE the box near the output edge, pointing at that
+    // edge. Skipped for programmable speakers, which have no meaningful facing.
+    // Cyan (not yellow): DEC boxes are now yellow, so a yellow arrow vanished on
+    // them; cyan has contrast on yellow/blue/red alike.
+    if (b.e.name !== 'programmable-speaker') {
       const [ax, ay] = dirSides(b.e.direction ?? 0).arrow
       const cx = x + w / 2
       const cy = y + h / 2
-      const hx = w / 2
-      const hy = h / 2
-      const edge = cx + ax * hx + ax * 2 // on the output edge, nudged outward
-      const edgey = cy + ay * hy + ay * 2
-      const s = 7 // arrow size
-      const tipx = edge + ax * s
-      const tipy = edgey + ay * s
+      const inset = 5 // tip distance inside the output edge
+      const depth = 12 // base distance inside the box from the edge
+      const hw = 4 // half base width
+      const tipx = cx + ax * (w / 2 - inset)
+      const tipy = cy + ay * (h / 2 - inset)
+      const basex = cx + ax * (w / 2 - depth)
+      const basey = cy + ay * (h / 2 - depth)
       const px = -ay
       const py = ax
-      const bw = 4.5
-      const bx1 = edge + px * bw
-      const by1 = edgey + py * bw
-      const bx2 = edge - px * bw
-      const by2 = edgey - py * bw
       parts.push(
-        `<polygon points="${tipx},${tipy} ${bx1},${by1} ${bx2},${by2}" fill="#ffd24a" stroke="#3a2c00" stroke-width="0.8"/>`,
+        `<polygon points="${tipx},${tipy} ${basex + px * hw},${basey + py * hw} ${basex - px * hw},${basey - py * hw}" fill="#43d6e0" stroke="#062a2e" stroke-width="1"/>`,
       )
     }
   }
@@ -412,9 +393,6 @@ const render = (
     warnings: { overlaps: warnList, nets: netReport.join('  |  ') },
   }
 }
-
-const esc = (s: string): string =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
 // ---------------------------------------------------------------------------
 // CLI
