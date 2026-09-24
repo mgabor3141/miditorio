@@ -13,7 +13,8 @@
     "test:update": "vitest run --update",
     "lint": "prettier --write . && eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint:check": "eslint . --ext .js,.jsx,.ts,.tsx --max-warnings=0 && prettier --check .",
-    "parse-signals": "NODE_OPTIONS=\"\" node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types tools/process-factorio-signals.ts"
+    "parse-signals": "NODE_OPTIONS=\"\" node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types tools/process-factorio-signals.ts",
+    "render-bp": "NODE_OPTIONS=\"\" node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types tools/render-blueprint.ts"
   },
   "dependencies": {
     "@astrojs/react": "^4.0.0",
