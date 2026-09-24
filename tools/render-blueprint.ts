@@ -246,14 +246,17 @@ const render = (
   // y grows downward, so "north" = the low-y edge. A combinator's inputs and
   // outputs sit on opposite edges; facing east/west moves them to the east/west
   // edges (this is what makes rotation *legible*: the wires leave the correct
-  // side). Direction 0 = north, 2 = east, 4 = south, 6 = west (default north).
+  // side). Factorio stores these 4-way entities on its 8-step direction enum as
+  // 0=North, 4=South, 8=East, 12=West (the combinator sprite sheet is exactly 8
+  // frames; and footprint() rotates on 8/12). NOTE: NOT the compact 2/4/6 - 8
+  // means East here, so a 2/6 switch leaves every wide entity mis-attached.
   const dirSides = (dir: number) => {
     switch (dir) {
-      case 2:
-        return { out: 'east', in: 'west', arrow: [1, 0] }
       case 4:
         return { out: 'south', in: 'north', arrow: [0, 1] }
-      case 6:
+      case 8:
+        return { out: 'east', in: 'west', arrow: [1, 0] }
+      case 12:
         return { out: 'west', in: 'east', arrow: [-1, 0] }
       default:
         return { out: 'north', in: 'south', arrow: [0, -1] }
