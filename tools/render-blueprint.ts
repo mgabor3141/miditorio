@@ -352,41 +352,54 @@ const render = (
     parts.push(
       `<rect x="${x + 1}" y="${y + 1}" width="${w - 2}" height="${h - 2}" rx="4" fill="${FILL[a] ?? '#444'}" stroke="${stroke}" stroke-width="${sw}"/>`,
     )
+    // Labels. On a tall box (h>=48px) the abbreviation + number form a top
+    // block and the hint sits at the bottom without colliding. On a 1x1 tile
+    // (h~32px) there is room for only two lines, so we DROP the hint (it is
+    // truncated anyway) and centre abbreviation + number - otherwise the number
+    // and the hint baseline land on the same pixel and overlap.
+    const cxl = x + w / 2
+    const showHint = h >= 48 && !!hint(b.e)
+    const abbrY = showHint ? y + h / 2 - 12 : y + h / 2 - 2
+    const numY = showHint ? y + h / 2 : y + h / 2 + 12
     parts.push(
-      `<text x="${x + w / 2}" y="${y + h / 2 - 2}" fill="#fff" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle">${a}</text>`,
+      `<text x="${cxl}" y="${abbrY}" fill="#fff" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle">${a}</text>`,
     )
     parts.push(
-      `<text x="${x + w / 2}" y="${y + h / 2 + 12}" fill="#ddd" font-family="monospace" font-size="10" text-anchor="middle">${b.e.entity_number}</text>`,
+      `<text x="${cxl}" y="${numY}" fill="#ddd" font-family="monospace" font-size="10" text-anchor="middle">${b.e.entity_number}</text>`,
     )
-    const hp = hint(b.e)
-    if (hp)
+    if (showHint)
       parts.push(
-        `<text x="${x + w / 2}" y="${y + h - 4}" width="${w - 4}" fill="#f7f7a0" font-family="monospace" font-size="8" text-anchor="middle" textLength="${Math.min(w - 4, hp.length * 5)}" lengthAdjust="spacingAndGlyphs">${esc(hp)}</text>`,
+        `<text x="${cxl}" y="${y + h - 6}" width="${w - 4}" fill="#f7f7a0" font-family="monospace" font-size="8" text-anchor="middle" textLength="${Math.min(w - 4, hint(b.e).length * 5)}" lengthAdjust="spacingAndGlyphs">${esc(hint(b.e))}</text>`,
       )
-    // facing arrow drawn just OUTSIDE the output edge (in empty grid space, so
-    // it never covers the centered label). Points outward toward where the
-    // output wires leave -> facing is legible even when rotation doesn't change
-    // the footprint shape (e.g. a speaker).
-    const [ax, ay] = dirSides(b.e.direction ?? 0).arrow
-    const cx = x + w / 2
-    const cy = y + h / 2
-    const hx = w / 2
-    const hy = h / 2
-    const edge = cx + ax * hx + ax * 2 // on the output edge, nudged outward
-    const edgey = cy + ay * hy + ay * 2
-    const s = 7 // arrow size
-    const tipx = edge + ax * s
-    const tipy = edgey + ay * s
-    const px = -ay
-    const py = ax
-    const bw = 4.5
-    const bx1 = edge + px * bw
-    const by1 = edgey + py * bw
-    const bx2 = edge - px * bw
-    const by2 = edgey - py * bw
-    parts.push(
-      `<polygon points="${tipx},${tipy} ${bx1},${by1} ${bx2},${by2}" fill="#ffd24a" stroke="#3a2c00" stroke-width="0.8"/>`,
-    )
+    // Facing arrow. A 1x2 vs 2x1 combinator box ALREADY encodes facing (and the
+    // output connector marks the output end), so an arrow there is redundant -
+    // and on a 1x1 tile a lone arrow reads like a wire PORT, colliding with the
+    // red/green ports. Draw the arrow ONLY where facing is otherwise invisible:
+    // square (1x1) footprints (speaker / constant). It points outward to the
+    // output/facing end.
+    const rotatable = b.x1 - b.x0 !== b.y1 - b.y0
+    if (!rotatable) {
+      const [ax, ay] = dirSides(b.e.direction ?? 0).arrow
+      const cx = x + w / 2
+      const cy = y + h / 2
+      const hx = w / 2
+      const hy = h / 2
+      const edge = cx + ax * hx + ax * 2 // on the output edge, nudged outward
+      const edgey = cy + ay * hy + ay * 2
+      const s = 7 // arrow size
+      const tipx = edge + ax * s
+      const tipy = edgey + ay * s
+      const px = -ay
+      const py = ax
+      const bw = 4.5
+      const bx1 = edge + px * bw
+      const by1 = edgey + py * bw
+      const bx2 = edge - px * bw
+      const by2 = edgey - py * bw
+      parts.push(
+        `<polygon points="${tipx},${tipy} ${bx1},${by1} ${bx2},${by2}" fill="#ffd24a" stroke="#3a2c00" stroke-width="0.8"/>`,
+      )
+    }
   }
 
   parts.push('</svg>')
