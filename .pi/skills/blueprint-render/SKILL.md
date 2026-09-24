@@ -28,12 +28,14 @@ or mis‑flags entities.
   position `y` occupies `y-1 … y+1`. (Sanity check against the generator: a
   speaker centered at `y=-2.5` and its combinator centered at `y=-1` are 1.5
   apart and sit **flush** exactly as in-game — only true under a center anchor.)
-- **Orientation uses Factorio's 8‑step direction enum.** Real combinator
-  blueprints store `4` = South and `8`/`12` = East/West (and omit `direction`,
-  i.e. North). **East/West (8/12) rotate a 1×2 combinator to a 2×1 (wide) box**;
-  North/South (0/absent/4) keep it tall. Do *not* test `direction===2||6` — those
-  values never appear in these blueprints, so that check silently leaves every
-  box tall.
+- **Orientation uses Factorio's 8‑step direction enum.** These 4‑way entities
+  are stored as `0`=North, `4`=South, `8`=East, `12`=West (`direction` omitted ⇒
+  North). The combinator sprite sheet is exactly 8 frames, so the stride is 4.
+  **East/West (8/12) rotate a 1×2 combinator to a 2×1 (wide) box**; North/South
+  (0/absent/4) keep it tall. This governs *both* the footprint and the connector/
+  facing arrows (wires leave the facing edge). Do *not* use the compact `2/4/6`
+  mapping — `8` means East here, so a `2/6` switch leaves every wide entity
+  mis‑attached (falls through to North) and its box tall.
 - **Overlap is a cell test, not an area test.** Combinators are 1×2 *selection*
   boxes but only ~0.7×1.3 *collision* boxes, and legal half‑tile‑offset stacks
   (e.g. the static arithmetic column at `y` spacing 1.0) tile fine in-game while
